@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Remera",
+    "description": "Este es un producto prueba",
+    "price": 4570,
+    "thumbnail": "Sin imagen",
+    "code": "a1233",
+    "stock": 25,
+    "id": 1
+  },
+  {
+    "title": "Campera",
+    "description": "Este es un producto prueba",
+    "price": 12000,
+    "thumbnail": "Sin imagen",
+    "code": "fd273",
+    "stock": 25,
+    "id": 2
+  },
+  {
+    "title": "Medias",
+    "description": "Este es un producto prueba",
+    "price": 2500,
+    "thumbnail": "Sin imagen",
+    "code": "gh213",
+    "stock": 25,
+    "id": 3
+  },
+  {
+    "title": "Pantalon",
+    "description": "Este es un producto prueba",
+    "price": 7000,
+    "thumbnail": "Sin imagen",
+    "code": "jh183",
+    "stock": 25,
+    "id": 4
+  },
+  {
+    "title": "Buzo",
+    "description": "Este es un producto prueba",
+    "price": 9750,
+    "thumbnail": "Sin imagen",
+    "code": "fg768",
+    "stock": 25,
+    "id": 5
+  }
+]
