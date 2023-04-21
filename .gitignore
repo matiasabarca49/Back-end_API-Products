@@ -1,0 +1,4 @@
+#Archivos o carpetas ignorados
+
+#Modulos
+/node_modules
