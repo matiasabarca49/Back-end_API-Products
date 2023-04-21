@@ -20,14 +20,16 @@ app.get("/products", (req,res) =>{
     if (req.query.limit){
         products.splice(req.query.limit)
     }
-    res.send(products)
+    res.send({productos: products})
 })
 
 
 app.get("/products/:id", (req,res) =>{
     const products = productManager.getProducts()
     const productFound = products.find( product => product.id === parseFloat(req.params.id))
-    res.send(productFound)
+    productFound
+        ? res.send({producto: productFound})
+        : res.send({error: "Producto no encontrado"})
 })
 
 

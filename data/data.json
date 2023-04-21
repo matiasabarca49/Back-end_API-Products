@@ -43,5 +43,50 @@
     "code": "fg768",
     "stock": 25,
     "id": 5
+  },
+  {
+    "title": "Chomba",
+    "description": "Este es un producto prueba",
+    "price": 7750,
+    "thumbnail": "Sin imagen",
+    "code": "fc768",
+    "stock": 25,
+    "id": 6
+  },
+  {
+    "title": "Jean",
+    "description": "Este es un producto prueba",
+    "price": 23750,
+    "thumbnail": "Sin imagen",
+    "code": "f2x68",
+    "stock": 25,
+    "id": 7
+  },
+  {
+    "title": "Guantes",
+    "description": "Este es un producto prueba",
+    "price": 2300,
+    "thumbnail": "Sin imagen",
+    "code": "z3bn8",
+    "stock": 25,
+    "id": 8
+  },
+  {
+    "title": "Gorro",
+    "description": "Este es un producto prueba",
+    "price": 750,
+    "thumbnail": "Sin imagen",
+    "code": "l2798",
+    "stock": 25,
+    "id": 9
+  },
+  {
+    "title": "Pulsera",
+    "description": "Este es un producto prueba",
+    "price": 250,
+    "thumbnail": "Sin imagen",
+    "code": "1x768",
+    "stock": 25,
+    "id": 10
   }
 ]
