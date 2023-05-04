@@ -10,7 +10,7 @@ class ProductManager{
     //Metodo privado que verifica que el producto a agregar contenga todos los campos
     #checkProduct( product ){
         //Llaves que se controlaran en el producto a agregar
-        const info = ["title","description", "price", "thumbnail", "code", "stock"]
+        const info = ["title","description", "price", "thumbnail", "code", "stock","status","category"]
         //Se obtienen las keys del producto que se quiere agregar
         const infoInProduct = Object.keys(product)
         //Variable "productError" que nos permitirá agregar el producto o no en la base de datos
@@ -91,12 +91,12 @@ class ProductManager{
         return productFound ?  productFound :  "Not Found"
     }
 
-    updateProduct(ID, field, NewData){
+    updateProductByField(ID, field, NewData){
         this.#updateProducts()
         //Se verifica que exista un producto con el ID solicitado
         const aprovedId = this.products.find(product => product.id === parseFloat(ID))
         //Se verifica que el campo a modificar sea correcto
-        const keys = ["title","description", "price", "thumbnail", "code", "stock"]
+        const keys = ["title","description", "price", "thumbnail", "code", "stock","status","category"]
         const aprovedKeys = keys.includes(field)
         //Si el id y el campo es correcto se realizan los cambios
         if (aprovedKeys && aprovedId){
@@ -110,10 +110,29 @@ class ProductManager{
         }
     }
 
+    updateProduct(ID, productToChange){
+        this.#updateProducts()
+        const notApproved = this.#checkProduct(productToChange)
+        if (!notApproved){
+
+            const changeProducts = this.products.map(  product =>{
+                if (product.id === parseFloat(ID)){
+                    productToChange.id = parseFloat(ID)
+                    return productToChange
+                }
+                else {
+                    return product
+                }
+            } )
+            this.products = changeProducts
+            this.#writeInFile()
+        }
+    }
+
     deleteProduct(ID){
+        this.#updateProducts()
         const aprovedId = this.products.find(product => product.id === parseFloat(ID))
         if(aprovedId){
-            this.#updateProducts()
             this.products = this.products.filter(  producto => producto.id !== parseFloat(ID))
             this.#writeInFile()
         }
