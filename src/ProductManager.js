@@ -65,11 +65,13 @@ class ProductManager{
             this.products.push(product);
             //Sobreescribimos el archivo con el array que contiene el nuevo producto
             this.#writeInFile()
+            return product
         }  
         else{
             NotApproved && console.log( "Producto NO aprobado")
             productFound && console.log("Campo code repetido: ", productFound.code)
             console.error("NO FUE AGREADO\n========================")
+            return undefined
             
         }
     }
@@ -113,11 +115,13 @@ class ProductManager{
     updateProduct(ID, productToChange){
         this.#updateProducts()
         const notApproved = this.#checkProduct(productToChange)
-        if (!notApproved){
-
+        const productFound = this.products.find( product => product.id === parseFloat(ID))
+        if (!notApproved && productFound){
+            let productUpdated = {}
             const changeProducts = this.products.map(  product =>{
                 if (product.id === parseFloat(ID)){
                     productToChange.id = parseFloat(ID)
+                    productUpdated = productToChange
                     return productToChange
                 }
                 else {
@@ -126,6 +130,10 @@ class ProductManager{
             } )
             this.products = changeProducts
             this.#writeInFile()
+            return productToChange
+        } else{
+            console.log("Producto no aprobado o no existe")
+            return undefined
         }
     }
 

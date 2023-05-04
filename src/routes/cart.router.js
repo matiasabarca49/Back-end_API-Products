@@ -14,7 +14,12 @@ const cartManager = new CartManager('./data/carts.json')
 
 router.get("/:cid", (req,res)=>{
     const cart = cartManager.getCart(req.params.cid)
-    res.send({status:"Success", cart: cart})
+    if (cart){
+        res.send({status:"Success", cart: cart})
+    } else{
+        res.send({status:"Error", reason: "No existe carrito con ese id"})
+
+    }
 })
 
 /** 
@@ -23,12 +28,14 @@ router.get("/:cid", (req,res)=>{
 
 router.post("/", (req, res) =>{
     cartManager.addCart(req.body)
-    res.send({status: "Carrito Creado", producto: req.body})
+    res.send({status: "Success", producto: req.body})
 })
 
 router.post("/:cid/product/:pid", (req,res) => {
-    cartManager.addProductToCart(req.params.cid, req.params.pid)
-    res.send({status: "success"})
+    const productAdded = cartManager.addProductToCart(req.params.cid, req.params.pid)
+    productAdded
+        ?res.send({status: "Success", product: productAdded})
+        :res.send({status: "Error", reason: "El carrito no existe"})
 })
 
 

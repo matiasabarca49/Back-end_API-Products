@@ -29,7 +29,11 @@
       },
       {
         "product": 7,
-        "quantity": 1
+        "quantity": 3
+      },
+      {
+        "product": 1,
+        "quantity": 2
       }
     ]
   },
@@ -46,7 +50,7 @@
       },
       {
         "product": 3,
-        "quantity": 6
+        "quantity": 8
       }
     ]
   }

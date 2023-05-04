@@ -35,13 +35,20 @@ class CartManager{
     addProductToCart(CID, PID){
         this.#updateInFile()
         const cart = this.getCart(CID)
+        if (!cart){
+            return false
+        }  
         const productFound = cart.products.find( product => product.product === parseFloat(PID))
         if (productFound){
             productFound.quantity++
+            this.#writeInFile()
+            return productFound
         } else{
-            cart.products.push({product: parseFloat(PID), quantity: 1})
+            const newProduct = {product: parseFloat(PID), quantity: 1}
+            cart.products.push(newProduct)
+            this.#writeInFile()
+            return newProduct
         }
-        this.#writeInFile()
     }
 
     getCart(ID){
@@ -51,6 +58,7 @@ class CartManager{
             return cartFound
         } else{
             console.log("Carrito no encontrado")
+            return false
         }
     }
 

@@ -25,8 +25,8 @@ router.get("/:id", (req,res) =>{
     const products = productManager.getProducts()
     const productFound = products.find( product => product.id === parseFloat(req.params.id))
     productFound
-        ? res.send({producto: productFound})
-        : res.send({error: "Producto no encontrado"})
+        ? res.send({status: "Success", producto: productFound})
+        : res.send({status: "Error", reason: "Producto no encontrado"})
 })
 
 /**
@@ -34,8 +34,10 @@ router.get("/:id", (req,res) =>{
 **/
 
 router.post("/", (req, res) =>{
-    productManager.addProduct(req.body)
-    res.send({status: "Producto creado correctamente", producto: req.body})
+    const productAdded = productManager.addProduct(req.body)
+    productAdded
+        ?res.send({status: "Success", action: "Producto creado correctamente", producto: req.body})
+        :res.send({status: "Error", action: 'Campos Faltantes, mal escritos o  campo code repetido'})
 })
 
 /**
@@ -43,8 +45,11 @@ router.post("/", (req, res) =>{
 */
 
 router.put("/:id", (req,res)=>{
-    productManager.updateProduct( req.params.id, req.body )
-    res.send({status: "Producto actualizado correctamente"})
+   const productUpdated =  productManager.updateProduct( req.params.id, req.body )
+   productUpdated
+   ? res.send({status: "Success", action: "Producto actualizado correctamente", product: productUpdated})
+   : res.send({status: "Error", reason: "Al producto le faltan campos o no existe "})
+    
 })
 
 /**
@@ -53,7 +58,7 @@ router.put("/:id", (req,res)=>{
 
 router.delete("/:id", (req,res) => {
     productManager.deleteProduct(req.params.id)
-    res.send({status: "Producto borrado correctamente"})
+    res.send({status: "Success", action: "Producto borrado correctamente"})
 })
 
 
