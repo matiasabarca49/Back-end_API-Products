@@ -117,7 +117,9 @@ class ProductManager{
         const notApproved = this.#checkProduct(productToChange)
         const productFound = this.products.find( product => product.id === parseFloat(ID))
         if (!notApproved && productFound){
+            //Producto actualizado que va a retornar de la funcion
             let productUpdated = {}
+            //Creamos un nuevo array con el product actualizado con el metodo MAP
             const changeProducts = this.products.map(  product =>{
                 if (product.id === parseFloat(ID)){
                     productToChange.id = parseFloat(ID)
@@ -125,13 +127,16 @@ class ProductManager{
                     return productToChange
                 }
                 else {
+                    //En caso de que el ID no coincida retornamos el producto sin cambios
                     return product
                 }
             } )
+            //Al array de la clase instanciada le asignamos el nuevo array con los productos actualizados
             this.products = changeProducts
             this.#writeInFile()
             return productToChange
         } else{
+            //En caso de que el producto no fuera aprobado por campos errones o no concidiera se retornar un falsy
             console.log("Producto no aprobado o no existe")
             return undefined
         }
@@ -143,9 +148,11 @@ class ProductManager{
         if(aprovedId){
             this.products = this.products.filter(  producto => producto.id !== parseFloat(ID))
             this.#writeInFile()
+            return aprovedId
         }
         else{
             console.log("El ID no existe")
+            return undefined
         }
     }
 

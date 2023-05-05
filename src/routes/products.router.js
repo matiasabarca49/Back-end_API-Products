@@ -47,8 +47,8 @@ router.post("/", (req, res) =>{
 router.put("/:id", (req,res)=>{
    const productUpdated =  productManager.updateProduct( req.params.id, req.body )
    productUpdated
-   ? res.send({status: "Success", action: "Producto actualizado correctamente", product: productUpdated})
-   : res.send({status: "Error", reason: "Al producto le faltan campos o no existe "})
+    ? res.send({status: "Success", action: "Producto actualizado correctamente", product: productUpdated})
+    : res.send({status: "Error", reason: "Al producto le faltan campos o no existe "})
     
 })
 
@@ -57,8 +57,10 @@ router.put("/:id", (req,res)=>{
 */
 
 router.delete("/:id", (req,res) => {
-    productManager.deleteProduct(req.params.id)
-    res.send({status: "Success", action: "Producto borrado correctamente"})
+    const productDelete = productManager.deleteProduct(req.params.id)
+    productDelete
+     ?res.send({status: "Success", action: "Producto borrado correctamente", product: productDelete})
+     :res.send({status: "Error", reason: "El producto no existe"})
 })
 
 

@@ -53,5 +53,22 @@
         "quantity": 8
       }
     ]
+  },
+  {
+    "id": "cart-3",
+    "products": [
+      {
+        "product": 3,
+        "quantity": 2
+      },
+      {
+        "product": 1,
+        "quantity": 3
+      },
+      {
+        "product": 7,
+        "quantity": 5
+      }
+    ]
   }
 ]

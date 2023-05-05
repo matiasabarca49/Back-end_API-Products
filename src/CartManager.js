@@ -35,9 +35,11 @@ class CartManager{
     addProductToCart(CID, PID){
         this.#updateInFile()
         const cart = this.getCart(CID)
+        //si el carrinto no existe retonamos false para informar el error
         if (!cart){
             return false
-        }  
+        }
+        //si el producto ya existe se incrementa el campo quantity o se crea nuevo producto y se realiza un push  
         const productFound = cart.products.find( product => product.product === parseFloat(PID))
         if (productFound){
             productFound.quantity++
