@@ -1,4 +1,6 @@
 const express = require("express")
+const handlebars = require("express-handlebars")
+const ProductManager = require("./ProductManager.js")
 
 const app = express()
 
@@ -6,23 +8,36 @@ const app = express()
 app.use(express.json())
 //recibir datos complejos del navegador
 app.use(express.urlencoded({extended: true}))
+//Archivos estaticos
+app.use(express.static(__dirname + '/public'))
 
+
+//Handlebars
+app.engine('handlebars', handlebars.engine())
+app.set('views', __dirname + '/views')
+app.set('view engine', 'handlebars')
+
+//Routes
 const routeProducts = require('./routes/products.router.js')
 const routeCarts = require('./routes/cart.router.js')
+
 
 app.use("/api/products", routeProducts)
 app.use("/api/carts", routeCarts)
 
+
+//Vista Home
 app.get("/", (req,res) =>{
-    
-    res.send(`
-    <h1>Data desde el back-end</h1>
-    <p> <b>"/api/products"</b> para obtener todos los productos </p>
-    <p> <b>"/api/products/id"</b> para obtener un producto específico </p>
-    <p> <b>"/api/products?limit=X"</b> donde <b>X</b> es un número para obtener una cantidad especifica</p>
-    <p> <b>"/api/carts/cid"</b> para obtener carrito por ID </p>
-    ` )
+    const productManager = new ProductManager('./data/products.json')
+    const productsFromBase = productManager.getProducts()
+    res.render('home', { products: productsFromBase } )
 })
+
+//Productos en tiempo real
+app.get( "/realtimeproducts", (req,res) => {
+    res.render('realTimeProducts')
+})
+
 
 
 //Levantar el servidor para que empiece a escuchar

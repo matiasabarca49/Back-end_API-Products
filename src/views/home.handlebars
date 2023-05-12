@@ -1,0 +1,29 @@
+<main>
+    <h1>Data desde el back-end</h1>
+    <div class="container-fluid my-4">
+        <p> <b>"/api/products"</b> para obtener todos los productos </p>
+        <p> <b>"/api/products/id"</b> para obtener un producto específico </p>
+        <p> <b>"/api/products?limit=X"</b> donde <b>X</b> es un número para obtener una cantidad especifica</p>
+        <p> <b>"/api/carts/cid"</b> para obtener carrito por ID </p>
+    </div>
+    
+    <div class="container-fluid ">
+        <h2>Productos:</h2>
+        <div class="row gap-4 p-4 ms-4">
+            {{#each products }}
+                <div class=" col-2 col-xs-6 col-sm-4 card  mb-3 flex-grow-1" style="max-width: 18rem;">
+                    <div class="card-header bg-transparent ">
+                        <p class="card-text"><small class="text-body-secondary">{{this.category}}</small>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fs-4 text fw-bold">{{this.title}}</h5>
+                        <p class="card-text">{{this.description}}</p>
+                    </div>
+                    <div class="card-footer bg-transparent fs-4 text ">${{this.price}}</div>
+                </div>
+            {{/each}}
+        </div>
+        </div>
+    </div>
+</main>
+<script src="./js/home.js"></script>

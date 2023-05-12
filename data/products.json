@@ -108,5 +108,16 @@
     "id": 10,
     "status": true,
     "category": "Ropa"
+  },
+  {
+    "title": "Televisor Led 42 Pulgadas ",
+    "description": "Televisor SmartTV 42 Pulgadas Marca SamsonLife",
+    "price": 89000,
+    "thumbnail": "Sin imagen",
+    "code": "14fj8",
+    "stock": 15,
+    "id": 11,
+    "status": true,
+    "category": "Tecnología"
   }
 ]
