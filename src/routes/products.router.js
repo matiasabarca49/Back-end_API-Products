@@ -34,6 +34,7 @@ router.get("/:id", (req,res) =>{
 **/
 
 router.post("/", (req, res) =>{
+    console.log(req.body)
     const productAdded = productManager.addProduct(req.body)
     productAdded
         ?res.send({status: "Success", action: "Producto creado correctamente", producto: req.body})

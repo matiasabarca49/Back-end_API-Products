@@ -44,9 +44,15 @@ app.use("/api/carts", routeCarts)
  **/
 
 io.on( 'connection', (socket)=>{
-    socket.emit("updateProducts", productManager.getProducts())
-    socket.on('response', (data) =>{
+    //enviar al cliente los productos
+    console.log("Cliente Conectado")
+    socket.emit('sendProducts', productManager.getProducts())
+    //Agregar producto nuevo a base de datos
+    socket.on('newProductToBase', (data) =>{
         console.log(data)
+        productManager.addProduct(data)
+        io.sockets('sendProducts', productManager.getProducts())
+
     })
 } )
 

@@ -4,10 +4,9 @@ const render = (array)=>{
     contProducts.innerHTML= ""
     array.forEach(product => {
         const div = document.createElement('div')
-        div.className= " col-2 col-xs-6 col-sm-4 card  mb-3 flex-grow-1"
+        div.className= " col-2 col-6 col-sm-4 card  mb-3 flex-grow-1"
         div.style.maxWidth= "18rem"
         div.innerHTML= 
-
                     `
                         <div class="card-header bg-transparent ">
                             <p class="card-text"><small class="text-body-secondary">${product.category}</small>
@@ -16,19 +15,33 @@ const render = (array)=>{
                             <h5 class="card-title fs-4 text fw-bold">${product.title}</h5>
                             <p class="card-text">${product.description}</p>
                         </div>
-                        <div class="card-footer bg-transparent fs-4 text ">${product.price}</div>
+                        <div class="card-footer bg-transparent fs-4 text "> $ ${product.price}</div>
                     `
         contProducts.appendChild(div)
     });
 
 }
 
+const addProduct = (  )=>{
+    const newProduct ={
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        price: document.getElementById('price').value,
+        thumbnail: document.getElementById('thumbnail').value,
+        code: document.getElementById('code').value,
+        stock: document.getElementById('stock').value,
+        status: true,
+        category: document.getElementById('category').value
+    }
+    socket.emit('newProductToBase', newProduct )
+    return false
+}
+
 const socket = io()
 
-socket.on("updateProducts", (data) =>{
-    console.log(data)
+socket.on('sendProducts', (data)=>{
     render(data)
-    socket.emit('response', 'Hola soy el cliente' )
 })
+
 
 
