@@ -49,9 +49,8 @@ io.on( 'connection', (socket)=>{
     socket.emit('sendProducts', productManager.getProducts())
     //Agregar producto nuevo a base de datos
     socket.on('newProductToBase', (data) =>{
-        console.log(data)
         productManager.addProduct(data)
-        io.sockets('sendProducts', productManager.getProducts())
+        io.sockets.emit('sendProducts', productManager.getProducts())
 
     })
 } )
