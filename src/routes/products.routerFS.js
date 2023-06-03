@@ -1,22 +1,19 @@
 const express = require('express')
-const MongoManager = require("../dao/db.js")
+const ProductManager = require("../dao/fileManager/ProductManager")
 
 //Desestructuramos el objeto para obtener el constructor de Rutas
 const { Router } = express
 //Creamos una nueva instancia de Router
 const router = new Router()
 
-const mongoManager = new MongoManager("mongodb+srv://coderTest-1:jVd13ilZAKE7LUl8@cluster-mongo-coder-tes.qh8sdrt.mongodb.net/ecommerce")
-
-
+const productManager = new ProductManager("./data/products.json")
 
 
 /**
 * GET
 **/
-router.get("/", async (req,res) =>{
-    const products = await mongoManager.getProductFromDB()
-    console.log(products)
+router.get("/", (req,res) =>{
+    const products = productManager.getProducts()
     if (req.query.limit){
         products.splice(req.query.limit)
     }
@@ -24,9 +21,9 @@ router.get("/", async (req,res) =>{
 })
 
 
-router.get("/:id", async (req,res) =>{
-    const products = await mongoManager.getProductFromDB()
-    const productFound = products.find( product => product.id === req.params.id)
+router.get("/:id", (req,res) =>{
+    const products = productManager.getProducts()
+    const productFound = products.find( product => product.id === parseFloat(req.params.id))
     productFound
         ? res.send({status: "Success", producto: productFound})
         : res.send({status: "Error", reason: "Producto no encontrado"})
@@ -36,18 +33,12 @@ router.get("/:id", async (req,res) =>{
 * POST
 **/
 
-router.post("/", async (req, res) =>{
-    const productAdded = await mongoManager.addProductToMongo(req.body)
+router.post("/", (req, res) =>{
+    console.log(req.body)
+    const productAdded = productManager.addProduct(req.body)
     productAdded
-        ?res.status(201).send({status: "Success", action: "Producto agregado a DB correctamente", producto: productAdded})
-        :res.status(500).send({status: "Error", action: 'Campos Faltantes, mal escritos o  campo code repetido'})
-})
-
-router.post("/manyproducts", (req, res) =>{
-    const prs = mongoManager.addManyProductToMongo(req.body,res)
-    productAdded
-        ?res.status(201).send({status: "Success", action: "Producto agregado a DB correctamente", productos: prs})
-        :res.status(500).send({status: "Error", action: 'Campos Faltantes, mal escritos o  campo code repetido'})
+        ?res.send({status: "Success", action: "Producto creado correctamente", producto: req.body})
+        :res.send({status: "Error", action: 'Campos Faltantes, mal escritos o  campo code repetido'})
 })
 
 /**

@@ -1,0 +1,159 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  body{
+    background-color: #181a1b;
+  }
+  
+  /**
+  *Chat
+    **/
+     .containerPageChat{
+      width: 80vw;
+      height: 95vh;
+      margin: 1rem auto;
+      position: relative;
+      border-radius: 20px;
+      flex-grow: 1;
+    }
+  
+     .containerPageChat .sendMessage {
+      display: flex;
+      margin-top: 0.5rem;
+  
+    }
+    .containerPageChat .sendMessage input[type="text"]{
+      flex-grow: 2;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 20px;
+    }
+    .containerPageChat .sendMessage button{
+      background-color: #181a1b;
+      border: none;
+      padding: 0 0.5rem;
+      cursor: pointer;
+    }
+    .containerPageChat .sendMessage button img{
+      width: 30px;
+      filter: invert(100%);
+    }
+  
+    .welcome{
+      text-align: center;
+      border-bottom: 2px solid #fff;
+      background-color: #d0d0d0;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
+      height: 15%;
+    }
+  
+    .contChatsStyle{
+      height: 70%;
+      display: flex;
+      flex-direction: column;
+      /* justify-content: flex-end; */ /* No permitia que el overflow con scroll funcionara */
+      flex-grow: 2;
+      padding: 2rem;
+      position: relative;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      background-color: #f8f8f8;
+      border-bottom-right-radius: 20px;
+      border-bottom-left-radius: 20px;
+    }
+    .contChatsStyle .constMessage{
+      display: inline-block;
+      position: relative;
+      padding: 0.4rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      /* box-shadow: 0px 0px 7px black; */
+      box-shadow: 5px 5px 10px black;
+      max-width: 40%;
+    }
+  
+    .contChatsStyle .constMessage p{
+      margin: 0;
+      
+    }
+    .contChatsStyle .constMessage .autor{
+      align-self: flex-start;
+      font-size: 0.8rem;
+      font-weight: 300;
+      opacity: 0.7;
+      
+    }
+    .contChatsStyle .constMessage .dateMSG{
+      align-self: flex-end;
+      font-size: 0.7rem;
+      font-weight: 300;
+      margin-left: 15px;
+      opacity: 0.7;
+    }
+    
+  
+    .contChatsStyle .MyMessage{
+      background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+      color: #000;
+      align-self: flex-end;
+      border-top-right-radius: 0;
+      /* left: 90%; */
+    }
+  
+    .contChatsStyle .othersMessage{
+      /* background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%); */
+      background-color: #292c2e;
+      background-image: linear-gradient(160deg, #292c2e 0%, #2a2d2f 100%);
+      color: #fff;
+      align-self: flex-start;
+      border-top-left-radius: 0;
+    }
+  
+    form{
+     /*  border-top: 2px solid black; */
+      background-color: #181a1b;
+    }
+  
+    .msgOut{
+      width: 0px;
+      height: 0px;
+      position: absolute;
+      right: -15px;
+      top: 0;
+      border-bottom: 10px solid transparent;
+      border-top: 0px solid transparent;
+      border-left: 15px solid #c2e9fb;
+      font-size: 0px;
+      line-height: 0px;
+    }
+  
+    .msgIn{
+      position: absolute;
+      top: 0;
+      left: -15px;
+      width:0px;
+      height:0px;
+      border-bottom:10px solid transparent;  /* izquierda flecha */
+      border-top:0px solid transparent; /* derecha flecha */
+      border-right:15px solid #2a2d2f; /* base flecha y color*/
+      font-size:0px;
+      line-height:0px;;
+    }
+  
+    @media screen and (max-width: 762px) {
+      
+  
+       .containerPageChat{
+        width: 95vW;
+      }
+  
+       .containerPageChat .contChatsStyle .constMessage{
+        max-width: 80%;
+      }
+      
+    }
