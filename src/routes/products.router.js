@@ -19,7 +19,7 @@ const serviceMongo = new ServiceMongo()
 **/
 router.get("/", async (req,res) =>{
     const products = await serviceMongo.getDocuments(Product)
-    console.log(products)
+    /* console.log(products) */
     if (req.query.limit){
         products.splice(req.query.limit)
     }
