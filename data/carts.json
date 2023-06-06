@@ -3,19 +3,19 @@
     "id": "cart-0",
     "products": [
       {
-        "product": 1,
+        "product": "1",
         "quantity": 2
       },
       {
-        "product": 2,
+        "product": "2",
         "quantity": 1
       },
       {
-        "product": 15,
+        "product": "15",
         "quantity": 3
       },
       {
-        "product": 10,
+        "product": "10",
         "quantity": 1
       }
     ]
@@ -24,15 +24,15 @@
     "id": "cart-1",
     "products": [
       {
-        "product": 3,
+        "product": "3",
         "quantity": 2
       },
       {
-        "product": 7,
+        "product": "7",
         "quantity": 3
       },
       {
-        "product": 1,
+        "product": "1",
         "quantity": 2
       }
     ]
@@ -58,15 +58,15 @@
     "id": "cart-3",
     "products": [
       {
-        "product": 3,
+        "product": "3",
         "quantity": 2
       },
       {
-        "product": 1,
+        "product": "1",
         "quantity": 3
       },
       {
-        "product": 7,
+        "product": "7",
         "quantity": 5
       }
     ]

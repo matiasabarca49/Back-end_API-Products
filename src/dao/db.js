@@ -13,48 +13,6 @@ class MongoManager{
             .then(connect => console.log("Conexion a db exitosa"))
             .catch( err => console.log(err))
     }
-
-    async getProductFromDB(){
-        let productsFromDB 
-        await Product.find()
-            .then( products => {
-                productsFromDB = products
-            } )
-            .catch(error =>{
-                console.log(error)
-            })
-        /* console.log(productsFromDB) */
-        return productsFromDB
-    }
-
-    async addProductToMongo(newProduct,res){
-        
-        //Verificamos que el producto sea valido con el esquema
-        let productAdded 
-        const product = new Product(newProduct)
-        await product.save()
-            .then( pr => {
-                productAdded = pr
-            })
-            .catch( error => {
-                console.log(error)
-                productAdded = false
-            } )
-        return productAdded      
-    }
-
-    async addManyProductToMongo(arrayProducts){
-        let productsAdded
-        await Product.insertMany(arrayProducts)
-            .then( prs =>{
-                productsAdded = prs
-            } )
-            .catch( err =>{
-                console.log(err)
-                productsAdded = false
-            })
-        return productsAdded
-    }
 }
 
 

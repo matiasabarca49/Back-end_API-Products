@@ -1,23 +1,24 @@
 const express = require('express')
-const CartManager = require('../dao/fileManager/ProductManager')
+const ServiceMongo = require('../dao/dbService.js')
+const Cart = require('../dao/models/cartsModels.js')
 
 
 const { Router } = express
 
 const router = new Router()
 
-const cartManager = new CartManager('./data/carts.json')
+const serviceMongo = new ServiceMongo()
 
 /** 
  *  GET
  **/
 
-router.get("/:cid", (req,res)=>{
-    const cart = cartManager.getCart(req.params.cid)
+router.get("/:cid", async (req,res)=>{
+    const cart = await serviceMongo.getDocumentsByID(Cart ,req.params.cid)
     if (cart){
         res.send({status:"Success", cart: cart})
     } else{
-        res.send({status:"Error", reason: "No existe carrito con ese id"})
+        res.send({status:"Error", reason: "No existe carrito con ese id o problemas con DB"})
 
     }
 })
@@ -26,16 +27,18 @@ router.get("/:cid", (req,res)=>{
  *  POST
  **/
 
-router.post("/", (req, res) =>{
-    cartManager.addCart(req.body)
-    res.send({status: "Success", producto: req.body})
+router.post("/", async (req, res) =>{
+   const cartAdded = await serviceMongo.createNewDocument(Cart, req.body)
+   cartAdded
+    ?res.status(201).send({status: "Success", reason: "Cart agregado a DB",producto: cartAdded})
+    :res.status(500).send({status: "Error", reason: "Campos erroneos o problemas con DB o los datos no fueron validados"})
 })
 
-router.post("/:cid/product/:pid", (req,res) => {
-    const productAdded = cartManager.addProductToCart(req.params.cid, req.params.pid)
+router.post("/:cid/product/:pid", async (req,res) => {
+    const productAdded = await serviceMongo.addProductToCartInDB(Cart, req.params.cid, req.params.pid)
     productAdded
-        ?res.send({status: "Success", product: productAdded})
-        :res.send({status: "Error", reason: "El carrito no existe"})
+        ?res.status(201).send({status: "Success", product: productAdded})
+        :res.status(500).send({status: "Error", reason: "El carrito no existe"})
 })
 
 
