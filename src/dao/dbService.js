@@ -3,7 +3,7 @@ class ServiceMongo{
     constructor(){
 
     }
-
+    //"Model" hace referencia al "Schema" de una colección
     async getDocuments(Model){
         let documentsFromDB 
         await Model.find()
@@ -19,7 +19,7 @@ class ServiceMongo{
 
     async getDocumentsByID(Model, ID){
         let documentFromDB 
-        await Model.findById(ID)
+        await Model.findOne({_id: ID})
             .then( dt => {
                 documentFromDB = dt
             } )
@@ -63,7 +63,8 @@ class ServiceMongo{
         let documentUpdated
         await Model.updateOne({_id: ID}, toUpdate)
             .then( dt =>{
-                console.log(dt)
+                /* console.log(dt) */
+                //Devolvemos el documento actualizado utilizando el metodo creado "getDocumentByID"
                 documentUpdated= this.getDocumentsByID(Model, ID)
             } )
             .catch( err =>{
@@ -86,14 +87,19 @@ class ServiceMongo{
             } )
         return documentDeleted
     }
-
+    //Funcion que agrega un producto en un carrito que ya se encuentre en la DB
     async addProductToCartInDB(Model, IDCart, IDProduct){
+        //Obtenemos el carrito al que se quiere agregar productos
         const cart = await this.getDocumentsByID(Model, IDCart)
+        //Verificamos que el cart exista
         if (cart){
-            const productFound = cart.products.find( item => item.product === IDProduct )
+            //el "item.product._id.toString()" es debido al formato de id que entrega la DB
+            const productFound = cart.products.find( item => item.product._id.toString() === IDProduct )
+            //Se incrementa la cantidad si existe sino se agrega el producto al array
             productFound
                 ? productFound.quantity++
                 : cart.products = [...cart.products, {product: IDProduct, quantity: 1}]
+           //Se actualiza el cart con el metodo creado anteriormente. Este metodo ya no devuelve el documeto actualizado
            const cartUpdated = await this.updateDocument(Model, IDCart, {products: cart.products})
            return cartUpdated
         }
