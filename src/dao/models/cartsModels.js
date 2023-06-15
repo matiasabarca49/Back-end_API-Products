@@ -23,6 +23,8 @@ const cartSchema = new mongoose.Schema({
     }
 })
 
+
+//populations
 cartSchema.pre('find', function(){
     this.populate("products.product")
 })

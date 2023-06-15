@@ -18,12 +18,27 @@ const serviceMongo = new ServiceMongo()
 * GET
 **/
 router.get("/", async (req,res) =>{
-    const products = await serviceMongo.getDocuments(Product)
+    //En caso de que no se indiquen las querys por url, al metodo se pasan las por defecto
+    let dftLimit, dftPage, dftSort, dftQuery
+    req.query.limit && (dftLimit = req.query.limit)
+    req.query.page && (dftPage = req.query.page)
+    req.query.query && (dftQuery = {category: req.query.query})
+    req.query.sort && (dftSort = {price: req.query.sort})
+    const products = await serviceMongo.getPaginate(Product, dftQuery, dftLimit, dftPage, dftSort)
     /* console.log(products) */
-    if (req.query.limit){
-        products.splice(req.query.limit)
-    }
-    res.send({productos: products})
+    products
+        ? res.status(201).send({
+            status: "success",
+            payload: products.docs,
+            totalPages: products.totalPages,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage,
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevLink:products.hasPrevPage?`http://localhost:8080/api/products?page=${products.prevPage} ` : null,
+            nextLink:products.hasNextPage?`http://localhost:8080/api/products?page=${products.nextPage} `: null,
+            })
+        : res.status(500).send({status: "Error"})
 })
 
 

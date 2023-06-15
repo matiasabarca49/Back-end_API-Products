@@ -30,6 +30,20 @@ class ServiceMongo{
         return documentFromDB
     }
 
+    async getPaginate(Model, query ,lmit , pag , srt){
+        let documentsFromDB 
+        await Model.paginate(query || {} ,{limit: lmit || 10 , page: pag || 1, sort: srt || {}})
+            .then( dts => {
+                documentsFromDB = dts
+            } )
+            .catch(error =>{
+                console.log(error)
+                documentsFromDB = false
+            })
+        /* console.log(productsFromDB) */
+        return documentsFromDB
+    }
+
     async createNewDocument(Model, newProduct){
         
         //Verificamos que el documento sea valido con el esquema(modelo)
@@ -87,8 +101,13 @@ class ServiceMongo{
             } )
         return documentDeleted
     }
+
+    /**
+     * Métodos para el cart  
+     **/ 
+
     //Funcion que agrega un producto en un carrito que ya se encuentre en la DB
-    async addProductToCartInDB(Model, IDCart, IDProduct){
+    async addProductToCartInDB(Model, IDCart, IDProduct, quantty){
         //Obtenemos el carrito al que se quiere agregar productos
         const cart = await this.getDocumentsByID(Model, IDCart)
         //Verificamos que el cart exista
@@ -97,11 +116,23 @@ class ServiceMongo{
             const productFound = cart.products.find( item => item.product._id.toString() === IDProduct )
             //Se incrementa la cantidad si existe sino se agrega el producto al array
             productFound
-                ? productFound.quantity++
+                //Si la funcion recibe el parametro "quantty" endpoint(PUT), se modifica la cantidad por lo recibido si no se recibe endpoint(post), se  incrementa.
+                ? quantty? productFound.quantity = quantty : productFound.quantity++
                 : cart.products = [...cart.products, {product: IDProduct, quantity: 1}]
            //Se actualiza el cart con el metodo creado anteriormente. Este metodo ya no devuelve el documeto actualizado
            const cartUpdated = await this.updateDocument(Model, IDCart, {products: cart.products})
            return cartUpdated
+        }
+        else{
+            return false
+        }
+    }
+
+    async updateCartInDB(Model, IDCart, newCart){
+        const cart = await this.getDocumentsByID(Model, IDCart)
+        if (cart){
+            const cartUpdated = await this.updateDocument(Model, IDCart, {products: newCart})
+            return cartUpdated
         }
         else{
             return false

@@ -41,5 +41,30 @@ router.post("/:cid/product/:pid", async (req,res) => {
         :res.status(500).send({status: "Error", reason: "El carrito no existe"})
 })
 
+/** 
+ *  PUT
+ **/
+
+router.put("/:cid", async (req, res) => {
+    const newCart = req.body
+    const cartUpdated = await serviceMongo.updateCartInDB(Cart, req.params.cid, newCart)
+    cartUpdated
+        ?res.status(201).send( {status: "Success", cartUpdated: cartUpdated})
+        :res.status(500).send({ status: "Error", reason: "El carrito no existe" })
+})
+
+router.put("/:cid/product/:pid", async (req,res) => {
+    console.log(req.body.quantity)
+    const productAdded = await serviceMongo.addProductToCartInDB(Cart, req.params.cid, req.params.pid, req.body.quantity)
+    productAdded
+        ?res.status(201).send({status: "Success", product: productAdded})
+        :res.status(500).send({status: "Error", reason: "El carrito no existe"})
+})
+
+
+/** 
+ *  DELETE
+ **/
+
 
 module.exports = router
