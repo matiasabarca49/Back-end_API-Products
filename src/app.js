@@ -45,12 +45,17 @@ const routeCarts = require('./routes/cart.router.js')
 const routeChat = require('./routes/chat.router.js')
 const routeViewHome = require('./routes/pages/home.router.js')
 const routeViewRealTimeProducts = require('./routes/pages/realTimeProducts.router.js')
+const routeViewProducts = require('./routes/pages/products.router.js')
+const routeViewCart = require('./routes/pages/cartview.router.js')
+
 
 app.use("/api/products", routeProducts)
 app.use("/api/carts", routeCarts)
 app.use("/chat", routeChat)
 app.use("/", routeViewHome)
 app.use("/realtimeproducts", routeViewRealTimeProducts)
+app.use("/products", routeViewProducts)
+app.use("/carts", routeViewCart)
 
 /**
  * Websockets 

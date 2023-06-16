@@ -1,0 +1,26 @@
+<header>
+    <nav class="navbar bg-primary" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Tienda</a>
+        </div>
+    </nav>
+</header>
+<main class="container-fluid m-5">
+    <a class="btn btn-primary mb-4" href="http://localhost:8080/products"> Regresar </a>
+    <div class="row ">
+        <div  class="col-6 position-relative" id="thumbnail">
+            <h4 class="position-absolute text-body-tertiary mt-3 ms-3 p-2 bg-opacity-25 bg-body-tertiary rounded-5 shadow-lg" id="category"></h4>
+            <img src="../img/image.jpg" class="img-thumbnail" alt="...">
+        </div>
+        <div class="col-6">
+            <div>
+                <h1 id="title"></h1>
+                <h2 id="price"></h2>
+                <p id="description"></p>
+                <h5 class="text-body-tertiary" id="stock"></h5>
+                <button class="btn btn-success">Agregar al carrito</button>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="../js/productview.js"></script>

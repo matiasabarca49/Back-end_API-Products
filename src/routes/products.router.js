@@ -32,6 +32,7 @@ router.get("/", async (req,res) =>{
             payload: products.docs,
             totalPages: products.totalPages,
             prevPage: products.prevPage,
+            page: products.page,
             nextPage: products.nextPage,
             hasPrevPage: products.hasPrevPage,
             hasNextPage: products.hasNextPage,

@@ -66,5 +66,22 @@ router.put("/:cid/product/:pid", async (req,res) => {
  *  DELETE
  **/
 
+router.delete("/:cid/product/:pid", async (req, res) =>{
+    const { cid, pid } = req.params
+    const cartUpdated = await serviceMongo.deleteProductCartInDB( Cart, cid, pid )
+    cartUpdated
+        ?res.status(201).send({status: "Success", cartUpdated: cartUpdated})
+        :res.status(500).send({status: "Error", reason: "El carrito no existe o el producto no existe"})
+} )
+
+router.delete("/:cid", async (req, res) =>{
+    const { cid } = req.params
+    const cartUpdated = await serviceMongo.deleteFullCartInDB(Cart, cid)
+    cartUpdated
+        ?res.status(201).send({status: "Success", cartUpdated: cartUpdated})
+        :res.status(500).send({status: "Error", reason: "El carrito no existe"})
+
+})
+
 
 module.exports = router

@@ -13,7 +13,7 @@ class ServiceMongo{
             .catch(error =>{
                 console.log(error)
             })
-        /* console.log(productsFromDB) */
+        /* console.log(documentsFromDB) */
         return documentsFromDB
     }
 
@@ -44,11 +44,11 @@ class ServiceMongo{
         return documentsFromDB
     }
 
-    async createNewDocument(Model, newProduct){
+    async createNewDocument(Model, newDocument){
         
         //Verificamos que el documento sea valido con el esquema(modelo)
         let documentAdded 
-        const model = new Model(newProduct)
+        const model = new Model(newDocument)
         await model.save()
             .then( dt => {
                 documentAdded = dt
@@ -132,6 +132,39 @@ class ServiceMongo{
         const cart = await this.getDocumentsByID(Model, IDCart)
         if (cart){
             const cartUpdated = await this.updateDocument(Model, IDCart, {products: newCart})
+            return cartUpdated
+        }
+        else{
+            return false
+        }
+    }
+
+    async deleteProductCartInDB(Model, IDCart, IDProduct){
+        const cart = await this.getDocumentsByID(Model, IDCart)
+        if (cart){
+            let cartUpdated
+            const productFound = cart.products.find(  item => item.product._id.toString() === IDProduct )
+            productFound
+                ? cart.products = cart.products.filter( item => item.product._id.toString() !== IDProduct)  
+                : cartUpdated = false
+            const cartOnlyID= cart.products.map(  item => {
+                return {
+                    product: item.product._id.toString(),
+                    quantity: item.quantity
+                }
+            }  )
+            cartUpdated = await this.updateCartInDB(Model, IDCart, cartOnlyID) 
+            return cartUpdated
+        }
+        else{
+            return false
+        }  
+    }
+
+    async deleteFullCartInDB(Model, IDCart){
+        const cart = await this.getDocumentsByID(Model, IDCart)
+        if(cart){
+           const cartUpdated = await this.updateCartInDB(Model, IDCart, []) 
             return cartUpdated
         }
         else{
