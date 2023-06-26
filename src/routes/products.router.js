@@ -11,6 +11,7 @@ const { Router } = express
 //Creamos una nueva instancia de Router
 const router = new Router()
 
+//Instanciamos el administrador de la DB
 const serviceMongo = new ServiceMongo()
 
 

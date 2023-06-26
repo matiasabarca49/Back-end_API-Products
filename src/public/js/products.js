@@ -64,3 +64,4 @@ prevPag.addEventListener("click", ()=>{
     page && fetchProducts(page)
 })
 
+

@@ -22,6 +22,20 @@ const Message = require('./dao/models/messagesModels.js')
 /* const ProductManager = require("./dao/fileManager/ProductManager.js")
 const productManager = new ProductManager('./data/products.json') */
 
+//Sessions
+const session = require('express-session')
+const mongoSession = require('connect-mongo')
+
+app.use(session({
+    store: mongoSession.create({
+        mongoUrl: "mongodb+srv://coderTest-1:jVd13ilZAKE7LUl8@cluster-mongo-coder-tes.qh8sdrt.mongodb.net/ecommerce",
+        mongoOption: {useNewUrlParser: true, useUnifiedTopology: true}
+    }),
+    secret: "secretMongo49" ,
+    resave: true,
+    saveUninitialized: false
+}))
+
 //Parsear los datos que viene en formato JSON
 app.use(express.json())
 //recibir datos complejos del navegador
@@ -43,6 +57,7 @@ app.set('view engine', 'handlebars')
 const routeProducts = require('./routes/products.router.js')
 const routeCarts = require('./routes/cart.router.js')
 const routeChat = require('./routes/chat.router.js')
+const routeSessions = require('./routes/sessions.router.js')
 const routeViewHome = require('./routes/pages/home.router.js')
 const routeViewRealTimeProducts = require('./routes/pages/realTimeProducts.router.js')
 const routeViewProducts = require('./routes/pages/products.router.js')
@@ -51,6 +66,7 @@ const routeViewCart = require('./routes/pages/cartview.router.js')
 
 app.use("/api/products", routeProducts)
 app.use("/api/carts", routeCarts)
+app.use("/api/sessions", routeSessions)
 app.use("/chat", routeChat)
 app.use("/", routeViewHome)
 app.use("/realtimeproducts", routeViewRealTimeProducts)

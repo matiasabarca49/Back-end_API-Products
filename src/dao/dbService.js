@@ -30,6 +30,19 @@ class ServiceMongo{
         return documentFromDB
     }
 
+    async getDocumentsByFilter(Model, filter){
+        let documentFromDB 
+        await Model.findOne(filter)
+            .then( dt => {
+                documentFromDB = dt
+            } )
+            .catch(error =>{
+                console.log(error)
+            })
+        /* console.log(productsFromDB) */
+        return documentFromDB
+    }
+
     async getPaginate(Model, query ,lmit , pag , srt){
         let documentsFromDB 
         await Model.paginate(query || {} ,{limit: lmit || 10 , page: pag || 1, sort: srt || {}})

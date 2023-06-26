@@ -1,0 +1,28 @@
+<div class='container mt-5 mx-auto p-3 rounded bg-dark text-light w-50'>
+    <h1 class='text-center my-5'>REGISTER</h1>
+    <form  class="container" action="/api/sessions/register" method="post" >
+        <div class="d-flex gap-2">
+            <div class="flex-grow-1">
+                <label htmlFor="">First Name:</label>
+                <input class='w-100' type="text" name="name"/>
+            </div>
+            <div class="flex-grow-1">
+                <label htmlFor="">Last Name:</label>
+                <input class='w-100' type="text" name="lastName"/>
+             </div>
+        </div>
+        <div>
+            <label htmlFor="">Age:</label>
+            <input class='w-100' type="text" name="age"/>
+        </div>
+        <div>
+            <label htmlFor="">Email:</label>
+            <input class='w-100' type="text" name="email"/>
+        </div>
+        <div>
+            <label htmlFor="">Contraseña:</label>
+            <input class="w-100" type="password" name="password"/>
+        </div>
+        <button class='btn btn-primary mt-2'>Register</button>
+    </form>
+</div>
