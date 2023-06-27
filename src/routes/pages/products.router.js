@@ -9,7 +9,7 @@ router.get("/",(req,res)=>{
 })
 
 router.get("/productview", (req,res)=>{
-    res.render("productview")
+    res.render("productview", {userLoged: req.session})
 })
 
 

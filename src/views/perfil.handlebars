@@ -1,14 +1,25 @@
 <header>
-     <nav class="navbar bg-primary d-flex justify-content-around" data-bs-theme="dark">
+    <nav class="navbar bg-primary d-flex justify-content-around" data-bs-theme="dark">
         <div>
           <a class="navbar-brand" href="#">Tienda</a>
         </div>
-        <div class="d-flex gap-2">
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-white fs-5">{{userLoged.user}}</div>
+            {{#if userLoged.user}}
+                <div>
+                    <a class="btn btn-light" href="/products">Volver a productos</a>
+                </div>
+                <div>
+                    <a class="btn btn-danger" href="/api/sessions/logout">salir</a> 
+                </div>
+            {{/if}}
+            {{#unless userLoged.user}}
+                <div>
+                    <a class="btn btn-light" href="/api/sessions/login">Login</a>
+                </div>
+            {{/unless}}
             <div>
-                <a class="btn btn-light" href="/products">Volver a productos </a>
-            </div>
-            <div>
-                <a class="btn btn-danger" href="/api/sessions/logout">salir</a> 
+                <a class="btn" href="/"><img style="width: 30px; filter: invert(100%)" src="../../img/home.png" alt="home"></a>
             </div>
         </div>
     </nav>

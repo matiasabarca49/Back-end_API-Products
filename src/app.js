@@ -97,7 +97,7 @@ io.on( 'connection', async (socket)=>{
 
 //Levantar el servidor para que empiece a escuchar
 server.listen("8080", ()=>{ 
-    console.log("El servidor está escuchando")
+    console.log("El servidor está escuchando en el puerto 8080")
     //Conectar base de datos
     mongoManager.connect()
 })

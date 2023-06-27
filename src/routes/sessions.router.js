@@ -13,7 +13,7 @@ function checkLogin(req, res, next){
         next()
     }
     else{
-        res.send({status: "ERROR", reason: "no hay ningun usuario ingresado"})
+        res.redirect("/api/sessions/login")
     }
 }
 

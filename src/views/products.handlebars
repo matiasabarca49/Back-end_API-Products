@@ -5,11 +5,21 @@
         </div>
         <div class="d-flex align-items-center gap-2">
             <div class="text-white fs-5">{{userLoged.user}}</div>
+            {{#if userLoged.user}}
+                <div>
+                    <a class="btn btn-light" href="/api/sessions/perfil">Ver Perfil</a>
+                </div>
+                <div>
+                    <a class="btn btn-danger" href="/api/sessions/logout">salir</a> 
+                </div>
+            {{/if}}
+            {{#unless userLoged.user}}
+                <div>
+                    <a class="btn btn-light" href="/api/sessions/login">Login</a>
+                </div>
+            {{/unless}}
             <div>
-                <a class="btn btn-light" href="/api/sessions/perfil">Ver Perfil</a>
-            </div>
-            <div>
-                <a class="btn btn-danger" href="/api/sessions/logout">salir</a> 
+                <a class="btn" href="/"><img style="width: 30px; filter: invert(100%)" src="./img/home.png" alt="home"></a>
             </div>
         </div>
     </nav>

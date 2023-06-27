@@ -1,6 +1,6 @@
 <main>
     <h1>Data desde el back-end</h1>
-    <div class="container-fluid my-4">
+    {{!-- <div class="container-fluid my-4">
         <p> <b>"/api/products"</b> para obtener todos los productos </p>
         <p> <b>"/api/products/id"</b> para obtener un producto específico </p>
         <p> <b>"/api/products?limit=X"</b> donde <b>X</b> es un número para obtener una cantidad especifica</p>
@@ -9,10 +9,20 @@
         <p> <b>"/chat"</b> para acceder al chat de mensajes</p>
         <p> <b>"/products"</b> para acceder a la Tienda</p>
         <p> <b>"/cart/id"</b> para acceder a la vista del carrito <span><a href="http://localhost:8080/carts/648365507032c07d9e5a05fc">Ejemplo</a></span></p>
-    </div>
-    
+    </div> --}}
     <div class="container-fluid">
-        <h2>Productos:</h2>
+        <h2>Accesos:</h2>
+        <div class="mb-3 mt-3 ms-3">
+            <a class="btn btn-primary" href="/products"> Tienda </a>
+            <a class="btn btn-primary" href="/api/sessions/register"> Registrar Usuario </a>
+            <a class="btn btn-primary" href="/api/sessions/login"> Loguearse con un usuario existente </a>
+            <a class="btn btn-primary" href="/realtimeproducts"> Cargar productos en DB </a>
+            <a class="btn btn-primary" href="http://localhost:8080/carts/648365507032c07d9e5a05fc"> Vista Carrito </a>
+            <a class="btn btn-secondary" href="/chat"> Chat de Mensajes</a>
+        </div>
+    </div>
+    <div class="container-fluid mt-2">
+        <h2>Productos en la base de datos:</h2>
         <div class="row gap-4 p-4 ms-4">
             {{#each products }}
                 <div class=" col-2 col-6 col-sm-4 card  mb-3 flex-grow-1" style="max-width: 18rem;">
