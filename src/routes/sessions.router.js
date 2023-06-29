@@ -66,7 +66,7 @@ router.post("/register", async (req, res) =>{
 router.post("/login", async (req, res) =>{
     const { email, password } = req.body
     const userFound = await serviceMongo.getDocumentsByFilter(User, { email : email})
-    const checkPassword =  userFound.password === password
+    const checkPassword =  userFound?.password === password
     if (userFound && checkPassword){
         req.session.user = userFound.name
         req.session.lastName = userFound.lastName
@@ -75,9 +75,17 @@ router.post("/login", async (req, res) =>{
         req.session.rol = userFound.rol
         res.redirect("/products")
     }
+    else if(email === "adminCoder@coder.com" && password === "adminCod3r123" ){
+        req.session.admin = true
+        req.session.email = "adminCoder@coder.com"
+        req.session.user = "Administrador"
+        req.session.rol = "Admin"
+        res.redirect("/products")
+    }
     else{
         res.send({status: "ERROR", reason: "Email o Password erroneos"})
     }
+    
 })
   
 

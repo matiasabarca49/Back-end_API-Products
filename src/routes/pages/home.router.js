@@ -26,7 +26,16 @@ const reWrite = async () =>{
     return productsReWrited
 }
 
-router.get("/",  async (req, res) =>{
+function checkLogin(req, res, next){
+    if(req.session.user){
+        next()
+    }
+    else{
+        res.redirect("/api/sessions/login")
+    }
+}
+
+router.get("/", checkLogin,  async (req, res) =>{
     const products = await reWrite()
     res.render('home',{ products: products } )
 } )
