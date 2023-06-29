@@ -56,11 +56,11 @@ router.get("/logout", (req, res) =>{
 
 router.post("/register", async (req, res) =>{
     const user = req.body
-    user.rol = "Admin"
+    user.rol = "User"
     const userAdded =  await serviceMongo.createNewDocument(User, user)
     userAdded
         ?res.redirect("/api/sessions/login")
-        : res.send({status: "ERROR", reason: "El usuario no pudo ser creado"}) 
+        :res.send({status: "ERROR", reason: "El email ya existe o error al crear usuario"}) 
 })
 
 router.post("/login", async (req, res) =>{
