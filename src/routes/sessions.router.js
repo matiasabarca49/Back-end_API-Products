@@ -1,8 +1,10 @@
 const express = require('express')
+const passport = require('passport')
 const { Router } = express
 const router = new Router()
 const ServiceMongo = require('../dao/dbService.js')
 const User = require('../dao/models/usersModels.js')
+const { createHash, isValidPassword } = require('../utils/utils.js')
 
 //Instanciar el administrador de la DB
 const serviceMongo = new ServiceMongo()
@@ -50,43 +52,33 @@ router.get("/logout", (req, res) =>{
     })
 })
 
+router.get("/fail", (req,res)=>{
+    const {error} = req.query
+    error === "register" && res.render("register", {error: true})
+    error === "login" && res.render("login", {error: true})
+})
+
 /**
 * POST 
 **/
 
-router.post("/register", async (req, res) =>{
-    const user = req.body
-    user.rol = "User"
-    const userAdded =  await serviceMongo.createNewDocument(User, user)
-    userAdded
-        ?res.redirect("/api/sessions/login")
-        :res.send({status: "ERROR", reason: "El email ya existe o error al crear usuario"}) 
+router.post("/register", passport.authenticate('register',{failureRedirect: "/api/sessions/fail?error=register"}),
+(req, res) =>{
+    res.redirect("/api/sessions/login")
 })
 
-router.post("/login", async (req, res) =>{
-    const { email, password } = req.body
+//email === "adminCoder@coder.com" && password === "adminCod3r123" 
+router.post("/login", passport.authenticate("login", {failureRedirect: "/api/sessions/fail?error=login"}),
+async (req, res)=>{
+    const {email} = req.body
     const userFound = await serviceMongo.getDocumentsByFilter(User, { email : email})
-    const checkPassword =  userFound?.password === password
-    if (userFound && checkPassword){
-        req.session.user = userFound.name
-        req.session.lastName = userFound.lastName
-        req.session.email = userFound.email
-        req.session.age = userFound.age
-        req.session.rol = userFound.rol
-        res.redirect("/products")
-    }
-    else if(email === "adminCoder@coder.com" && password === "adminCod3r123" ){
-        req.session.admin = true
-        req.session.email = "adminCoder@coder.com"
-        req.session.user = "Administrador"
-        req.session.rol = "Admin"
-        res.redirect("/products")
-    }
-    else{
-        res.send({status: "ERROR", reason: "Email o Password erroneos"})
-    }
-    
+    req.session.user = userFound.name
+    req.session.lastName = userFound.lastName
+    req.session.email = userFound.email
+    req.session.age = userFound.age
+    req.session.rol = userFound.rol
+    userFound.rol === "Admin" && (req.session.admin = true)
+    res.redirect("/products")
 })
   
-
 module.exports = router

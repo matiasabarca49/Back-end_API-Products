@@ -42,6 +42,18 @@ const fetchProducts = (page)=>{
         renderBotonPage(data)
     })
 }
+const fetchProductsOpts = (opt, value)=>{
+    console.log("entre aqui")
+    //Obtenemos los productos de la pagina pasada por parametro
+    fetch(`http://localhost:8080/api/products?${opt}=${value}`)
+    .then( response => response.json())
+    .then( data => {
+        products = data
+        //Una vez obtenido los productos se llama la funcion que los renderiza en el DOM
+        renderProducts(data.payload)
+        renderBotonPage(data)
+    })
+}
 
 //Algoritmo Principal
 
@@ -64,4 +76,28 @@ prevPag.addEventListener("click", ()=>{
     page && fetchProducts(page)
 })
 
+//Evento "Todos" los productos
+const productAll = document.getElementById("productAll")
+productAll.addEventListener("click", ()=>{
+    fetchProductsOpts("page", 1)
+})
 
+//Eventos para orden de productos
+const ordenAsc = document.getElementById("productAsc")
+ordenAsc.addEventListener("click", ()=>{
+    fetchProductsOpts("sort", 1)
+})
+const ordenDesc = document.getElementById("productDesc")
+ordenDesc.addEventListener("click", ()=>{
+    fetchProductsOpts("sort", -1)
+})
+
+//Evento para filtrar por categoría
+const productRopa = document.getElementById("productRopa")
+productRopa.addEventListener("click", ()=>{
+    fetchProductsOpts("query", "Ropa")
+})
+const productTecno = document.getElementById("productTecno")
+productTecno.addEventListener("click", ()=>{
+    fetchProductsOpts("query", "Tecnología")
+})

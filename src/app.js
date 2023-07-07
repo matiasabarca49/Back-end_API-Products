@@ -22,6 +22,8 @@ const Message = require('./dao/models/messagesModels.js')
 /* const ProductManager = require("./dao/fileManager/ProductManager.js")
 const productManager = new ProductManager('./data/products.json') */
 
+
+
 //Sessions
 const session = require('express-session')
 const mongoSession = require('connect-mongo')
@@ -35,6 +37,15 @@ app.use(session({
     resave: true,
     saveUninitialized: false
 }))
+
+//Passport
+const passport = require('passport')
+const initializePassport = require('./config/passport.config.js')
+//Config de passport con estrategias
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
 
 //Parsear los datos que viene en formato JSON
 app.use(express.json())

@@ -28,7 +28,16 @@
     <div class="text-center fs-3">
         Bienvenido al Market {{userLoged.user}}
     </div>
-    <h2 class="mt-4">Productos:</h2>
+    <div class="mt-5 d-flex justify-content-between align-items-center">
+        <h2 >Productos:</h2>
+        <div>
+            <button class="btn text-primary" id="productAll">Todos</button>
+            <button class="btn text-primary" id="productRopa">Ropa</button>
+            <button class="btn text-primary" id="productTecno">Tecnología</button>
+            <button class="btn text-primary" id="productAsc">Ascendente</button>
+            <button class="btn text-primary" id="productDesc">Descendente</button>
+        </div>
+    </div>
     <div class="row gap-4 p-4 ms-4" id="products">
 
     </div>

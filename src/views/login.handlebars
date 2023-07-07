@@ -12,6 +12,9 @@
             <label htmlFor="">Contraseña:</label>
             <input class="w-100" type="password" name="password"/>
         </div>
+        {{#if error}}
+            <div class="text-danger">Constraseña o email erróneos</div>
+        {{/if}}
         <button class='btn btn-primary mt-2'>Login</button>
     </form>
 </div>
