@@ -2,3 +2,6 @@
 
 #Modulos
 /node_modules
+
+#dotenv
+.env

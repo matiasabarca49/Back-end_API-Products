@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express")
 const handlebars = require("express-handlebars")
 const { Server } = require('socket.io')
@@ -9,7 +10,7 @@ const io = new Server(server)
 
 //Inicio y conexion a DB
 const MongoManager = require('./dao/db.js')
-const mongoManager = new MongoManager("mongodb+srv://coderTest-1:jVd13ilZAKE7LUl8@cluster-mongo-coder-tes.qh8sdrt.mongodb.net/ecommerce")
+const mongoManager = new MongoManager(`mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD_DB}@cluster-mongo-coder-tes.qh8sdrt.mongodb.net/ecommerce`)
 
 //Metodos para trabajar en la DB
 const ServiceMongo = require('./dao/dbService.js')
@@ -30,10 +31,10 @@ const mongoSession = require('connect-mongo')
 
 app.use(session({
     store: mongoSession.create({
-        mongoUrl: "mongodb+srv://coderTest-1:jVd13ilZAKE7LUl8@cluster-mongo-coder-tes.qh8sdrt.mongodb.net/ecommerce",
+        mongoUrl: `mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD_DB}@cluster-mongo-coder-tes.qh8sdrt.mongodb.net/ecommerce`,
         mongoOption: {useNewUrlParser: true, useUnifiedTopology: true}
     }),
-    secret: "secretMongo49" ,
+    secret: process.env.SECRET_SESSIONS ,
     resave: true,
     saveUninitialized: false
 }))

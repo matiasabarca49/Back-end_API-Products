@@ -1,6 +1,6 @@
 # Repositorio de API Productos - Users - Mensajes
 
-Es una API que permite la obtención y administracion de productos para un market como tambien la obtención de los carritos de la DB. La app Utiliza MongoDB
+Es una API que permite la obtención y administracion de productos para un market como tambien la obtención de los carritos de la DB. La app Utiliza MongoDB  
 Para el Front-end, es utilizado Handlebars. Cuenta con vista de productos en DB, Tienda, Login, Register y Chat de mensajes
 
 Conceptos utilizados: NodeJS, Express, MongoDB, Mongoose, Paginate, Passport.
@@ -35,8 +35,7 @@ NOTA: Es posible que se requiera permisos de administrador para ejecutar los com
 Se puede descargar desde el propio Github en el apartado -> code-> Donwload ZIP o mediante el comando de clonación en una terminal:
 
 ```
-git clone https://github.com/matiasabarca49/Coder_Back-end_desafios.git
-```
+git clone https://github.com/matiasabarca49/Back-end_API-Products.git
 
 ## Instalación
 
