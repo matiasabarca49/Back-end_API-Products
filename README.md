@@ -3,7 +3,7 @@
 Es una API que permite la obtención y administracion de productos para un market como tambien la obtención de los carritos de la DB. La app Utiliza MongoDB  
 Para el Front-end, es utilizado Handlebars. Cuenta con vista de productos en DB, Tienda, Login, Register y Chat de mensajes
 
-Conceptos utilizados: NodeJS, Express, MongoDB, Mongoose, Paginate, Passport.
+Conceptos utilizados: NodeJS, Express, MongoDB, Mongoose, Paginate, Passport-local y Passport-Github.
 Estilado: Bootstrap y CSS
 
 ## Instalación y puesta en marcha
@@ -36,6 +36,7 @@ Se puede descargar desde el propio Github en el apartado -> code-> Donwload ZIP 
 
 ```
 git clone https://github.com/matiasabarca49/Back-end_API-Products.git
+```
 
 ## Instalación
 

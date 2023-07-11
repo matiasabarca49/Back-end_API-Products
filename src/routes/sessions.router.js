@@ -56,6 +56,7 @@ router.get("/fail", (req,res)=>{
     const {error} = req.query
     error === "register" && res.render("register", {error: true})
     error === "login" && res.render("login", {error: true})
+    error === "github" && res.render("login", { githubError: true })
 })
 
 /**
@@ -70,8 +71,8 @@ router.post("/register", passport.authenticate('register',{failureRedirect: "/ap
 //email === "adminCoder@coder.com" && password === "adminCod3r123" 
 router.post("/login", passport.authenticate("login", {failureRedirect: "/api/sessions/fail?error=login"}),
 async (req, res)=>{
-    const {email} = req.body
-    const userFound = await serviceMongo.getDocumentsByFilter(User, { email : email})
+    //Si se ejecuta la funcion es porque se logró el proceso de autenticación
+    const userFound = req.user
     req.session.user = userFound.name
     req.session.lastName = userFound.lastName
     req.session.email = userFound.email

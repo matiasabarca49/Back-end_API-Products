@@ -42,6 +42,8 @@ app.use(session({
 //Passport
 const passport = require('passport')
 const initializePassport = require('./config/passport.config.js')
+//Estrategia de autorizacion de terceros
+require('./config/passport.github.js')
 //Config de passport con estrategias
 initializePassport()
 app.use(passport.initialize())
@@ -74,13 +76,15 @@ const routeViewHome = require('./routes/pages/home.router.js')
 const routeViewRealTimeProducts = require('./routes/pages/realTimeProducts.router.js')
 const routeViewProducts = require('./routes/pages/products.router.js')
 const routeViewCart = require('./routes/pages/cartview.router.js')
+const routeGithubAuth = require('./routes/passport/github.passport.router.js')
 
 
 app.use("/api/products", routeProducts)
 app.use("/api/carts", routeCarts)
 app.use("/api/sessions", routeSessions)
-app.use("/chat", routeChat)
+app.use("/auth", routeGithubAuth)
 app.use("/", routeViewHome)
+app.use("/chat", routeChat)
 app.use("/realtimeproducts", routeViewRealTimeProducts)
 app.use("/products", routeViewProducts)
 app.use("/carts", routeViewCart)
