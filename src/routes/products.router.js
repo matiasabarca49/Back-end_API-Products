@@ -48,8 +48,8 @@ router.get("/:id", async (req,res) =>{
     const products = await serviceMongo.getDocuments(Product)
     const productFound = products.find( product => product.id === req.params.id)
     productFound
-        ? res.send({status: "Success", producto: productFound})
-        : res.send({status: "Error", reason: "Producto no encontrado"})
+        ? res.status(200).send({status: "Success", producto: productFound})
+        : res.status(404).send({status: "Error", reason: "Producto no encontrado"})
 })
 
 /**
@@ -60,14 +60,14 @@ router.post("/", async (req, res) =>{
     const productAdded = await serviceMongo.createNewDocument(Product, req.body)
     productAdded
         ?res.status(201).send({status: "Success", action: "Producto agregado a DB correctamente", producto: productAdded})
-        :res.status(500).send({status: "Error", action: 'Campos Faltantes, mal escritos o  campo code repetido'})
+        :res.status(400).send({status: "Error", action: 'Campos Faltantes, mal escritos o  campo code repetido'})
 })
 
 router.post("/manyproducts", async (req, res) =>{
     const prs = await serviceMongo.createManyDocuments(Product, req.body)
     productAdded
         ?res.status(201).send({status: "Success", action: "Producto agregado a DB correctamente", productos: prs})
-        :res.status(500).send({status: "Error", action: 'Campos Faltantes, mal escritos o  campo code repetido'})
+        :res.status(400).send({status: "Error", action: 'Campos Faltantes, mal escritos o  campo code repetido'})
 })
 
 /**
@@ -77,8 +77,8 @@ router.post("/manyproducts", async (req, res) =>{
 router.put("/:id", async (req,res)=>{
    const productUpdated = await serviceMongo.updateDocument(Product, req.params.id, req.body)
    productUpdated
-    ? res.send({status: "Success", action: "Producto actualizado correctamente", product: productUpdated})
-    : res.send({status: "Error", reason: "Al producto le faltan campos o no existe "})
+    ? res.status(200).send({status: "Success", action: "Producto actualizado correctamente", product: productUpdated})
+    : res.status(400).send({status: "Error", reason: "Al producto le faltan campos o no existe "})
     
 })
 
@@ -89,8 +89,8 @@ router.put("/:id", async (req,res)=>{
 router.delete("/:id", async (req,res) => {
     const productDelete = await serviceMongo.deleteDocument(Product, req.params.id)
     productDelete
-     ?res.send({status: "Success", action: "Producto borrado correctamente", product: productDelete})
-     :res.send({status: "Error", reason: "El producto no existe"})
+     ?res.status(200).send({status: "Success", action: "Producto borrado correctamente", product: productDelete})
+     :res.status(404).send({status: "Error", reason: "El producto no existe"})
 })
 
 

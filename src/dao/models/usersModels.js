@@ -26,8 +26,28 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum:["User","Admin"],
         required: true
+    },
+    carts:{
+        type:[
+            {
+                cart:{
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "carts"
+                }
+            }
+        ]
     }
 })
+
+
+//populations
+userSchema.pre('find', function(){
+    this.populate("carts.cart")
+})
+userSchema.pre('findOne', function(){
+    this.populate("carts.cart")
+})
+
 
 const User = mongoose.model("users", userSchema)
 

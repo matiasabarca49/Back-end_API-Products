@@ -33,4 +33,28 @@
         <h4>Email: {{userLoged.email}}</h4>
         <h4>Permisos a nivel de: {{userLoged.rol}}</h4>
     </div>
+    <div>
+        <h3>Compras:</h3>
+        <div id="compras">
+            {{#each userLoged.carts }}
+                <div class="p-2 d-flex justify-content-around align-items-center bg-secondary bg-gradient bg-opacity-10 rounded">
+                    <div>{{this.cart.dateCart}}</div>
+                    <div class="d-flex w-75 gap-1">
+                        {{#each this.cart.products}}
+                            <div class="col-2 col-6 col-sm-4 card  mb-3 flex-grow-1" style="max-width: 200px;">
+                                <div class="card-header bg-transparent ">
+                                    <p class="card-text"><small class="text-body-secondary">{{this.product.category}}</small>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title fs-4 text fw-bold">{{this.product.title}} x {{this.quantity}}</h5>
+                                </div>
+                                <div class="card-footer bg-transparent fs-4 text ">${{this.product.price}}</div>
+                            </div>
+                        {{/each}}
+                    </div>
+
+                </div>
+            {{/each}}
+        </div>
+    </div>
 </div>

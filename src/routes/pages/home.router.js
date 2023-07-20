@@ -1,42 +1,11 @@
 const express = require('express')
-const ServiceMongo = require('../../dao/dbService.js')
-const Product = require('../../dao/models/productsModels.js')
+const { reWriteDocsDB, checkLogin } = require('../../utils/utils.js')
 
 const { Router } = express
 const router = new Router()
-const serviceMongo =  new ServiceMongo()
-
-//Debido a un error o directiva de Handlebars los productos son reescritos para lograr que handlebars renderice
-const reWrite = async () =>{
-    const productsReWrited = []
-    const productsFromBase = await serviceMongo.getDocuments(Product)
-    productsFromBase.forEach( product => {
-        const productReWrited = {
-            title: product.title,
-            description: product.description,
-            price: product.price,
-            code: product.code,
-            stock: product.stock,
-            status: product.status,
-            category: product.category,
-            id: product.id
-        }
-        productsReWrited.push(productReWrited)
-    })
-    return productsReWrited
-}
-
-function checkLogin(req, res, next){
-    if(req.session.user){
-        next()
-    }
-    else{
-        res.redirect("/api/sessions/login")
-    }
-}
 
 router.get("/", checkLogin,  async (req, res) =>{
-    const products = await reWrite()
+    const products = await reWriteDocsDB()
     res.render('home',{ products: products } )
 } )
 

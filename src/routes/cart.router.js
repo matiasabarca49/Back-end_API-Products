@@ -16,9 +16,9 @@ const serviceMongo = new ServiceMongo()
 router.get("/:cid", async (req,res)=>{
     const cart = await serviceMongo.getDocumentsByID(Cart ,req.params.cid)
     if (cart){
-        res.send({status:"Success", cart: cart})
+        res.status(200).send({status:"Success", cart: cart})
     } else{
-        res.send({status:"Error", reason: "No existe carrito con ese id o problemas con DB"})
+        res.status(404).send({status:"Error", reason: "No existe carrito con ese id o problemas con DB"})
 
     }
 })
@@ -31,14 +31,14 @@ router.post("/", async (req, res) =>{
    const cartAdded = await serviceMongo.createNewDocument(Cart, req.body)
    cartAdded
     ?res.status(201).send({status: "Success", reason: "Cart agregado a DB",producto: cartAdded})
-    :res.status(500).send({status: "Error", reason: "Campos erroneos o problemas con DB o los datos no fueron validados"})
+    :res.status(400).send({status: "Error", reason: "Campos erroneos o los datos no fueron validados"})
 })
 
 router.post("/:cid/product/:pid", async (req,res) => {
     const productAdded = await serviceMongo.addProductToCartInDB(Cart, req.params.cid, req.params.pid)
     productAdded
         ?res.status(201).send({status: "Success", product: productAdded})
-        :res.status(500).send({status: "Error", reason: "El carrito no existe"})
+        :res.status(404).send({status: "Error", reason: "El carrito no existe"})
 })
 
 /** 
@@ -49,8 +49,8 @@ router.put("/:cid", async (req, res) => {
     const newCart = req.body
     const cartUpdated = await serviceMongo.updateCartInDB(Cart, req.params.cid, newCart)
     cartUpdated
-        ?res.status(201).send( {status: "Success", cartUpdated: cartUpdated})
-        :res.status(500).send({ status: "Error", reason: "El carrito no existe" })
+        ?res.status(200).send( {status: "Success", cartUpdated: cartUpdated})
+        :res.status(404).send({ status: "Error", reason: "El carrito no existe" })
 })
 
 router.put("/:cid/product/:pid", async (req,res) => {
@@ -58,7 +58,7 @@ router.put("/:cid/product/:pid", async (req,res) => {
     const productAdded = await serviceMongo.addProductToCartInDB(Cart, req.params.cid, req.params.pid, req.body.quantity)
     productAdded
         ?res.status(201).send({status: "Success", product: productAdded})
-        :res.status(500).send({status: "Error", reason: "El carrito no existe"})
+        :res.status(404).send({status: "Error", reason: "El carrito no existe"})
 })
 
 
