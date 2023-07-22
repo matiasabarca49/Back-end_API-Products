@@ -1,4 +1,3 @@
-
 const renderProducts = (array)=>{
     const contProducts = document.getElementById('contCart')
     contProducts.innerHTML= ""

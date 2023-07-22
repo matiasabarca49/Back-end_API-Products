@@ -1,7 +1,7 @@
 <header>
     <nav class="navbar bg-primary d-flex justify-content-around" data-bs-theme="dark">
         <div>
-          <a class="navbar-brand" href="#">Tienda</a>
+          <a class="navbar-brand" href="http://localhost:8080/products">Tienda</a>
         </div>
         <div class="d-flex align-items-center gap-2">
             <div class="text-white fs-5">{{userLoged.user}}</div>
@@ -21,6 +21,14 @@
             <div>
                 <a class="btn" href="/"><img style="width: 30px; filter: invert(100%)" src="./img/home.png" alt="home"></a>
             </div>
+        </div>
+        <div class="position-absolute" style="right:40px; top: 15px;">
+            <a href="http://localhost:8080/products/pay" type="button" class="btn btn-primary position-relative">
+                <img style="width: 30px; filter: invert(100%)" src="../img/cart.png" />
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="totalCountNav">
+                    
+                </span>
+            </a>
         </div>
     </nav>
 </header>
@@ -42,9 +50,17 @@
 
     </div>
     <div class="d-flex gap-4 justify-content-center align-items-center">
-        <div class="btn btn-primary" id="prevPag">prev</div>
-        <div id="currtPag"></div>
-        <div class="btn btn-primary" id="nextPag">next</div>
+        <ul class="pagination">
+            <li class="page-item">
+                <div class="btn page-link" id="prevPag">prev</div>
+            </li>
+            
+            <li class="page-item"><a class="page-link" id="currtPag"></a></li>
+            <li class="page-item">
+            <div class="btn page-link" id="nextPag">next</div>
+            </li>
+        </ul>
     </div>
 </main>
+<script src="./js/cart.js"></script>
 <script src="./js/products.js"></script>

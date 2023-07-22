@@ -57,6 +57,11 @@ const fetchProductsOpts = (opt, value)=>{
 
 //Algoritmo Principal
 
+const cart = JSON.parse(localStorage.getItem('cart')) || []
+localStorage.setItem('cart', JSON.stringify(cart))
+
+totalProducts(cart)
+
 let page = 1, limit, sort, query
 let products = []
 
