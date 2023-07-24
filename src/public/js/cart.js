@@ -7,14 +7,14 @@ const AddToCart = (product)=>{
         cart.push({product: product, quantity: 1})
     }
     console.log("agregado al carrito")
-    console.log(cart)
+    /* console.log(cart) */
     totalProducts(cart)
     localStorage.setItem('cart', JSON.stringify(cart))   
 }
 
 const totalProducts = (cart)=>{
     const cant = cart.reduce((acumlador, product) => acumlador + product.quantity, 0)
-    console.log(cant)
+    /* console.log(cant) */
     const totalCountNav = document.getElementById("totalCountNav")
     totalCountNav.innerText = cant
 }

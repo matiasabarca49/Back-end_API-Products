@@ -184,6 +184,18 @@ class ServiceMongo{
             return false
         }
     }
+
+    /**
+     * Métodos para Users  
+     **/ 
+
+    async updateCartFromUser(Model, IDUser, IDNewCart){
+        const user = await this.getDocumentsByID(Model, IDUser)
+        const updatedCarts = [...user.carts, {cart: IDNewCart}]
+        const updatedUser = await this.updateDocument(Model, IDUser, {carts: updatedCarts })
+        return updatedUser || false
+    }
 }
+
 
 module.exports = ServiceMongo

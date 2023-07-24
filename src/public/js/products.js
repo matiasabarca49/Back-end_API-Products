@@ -57,6 +57,18 @@ const fetchProductsOpts = (opt, value)=>{
 
 //Algoritmo Principal
 
+const isAfterPurchase = JSON.parse(localStorage.getItem('purchased')) || false
+console.log(isAfterPurchase)
+if(isAfterPurchase){
+    console.log(isAfterPurchase)
+    const contModal = document.getElementById("modalAfterPurchase")
+    contModal.style.display= "block"
+    setTimeout(()=>{
+        contModal.style.display= "none"
+        localStorage.setItem("purchased", false)
+    }, 5000)
+}
+
 const cart = JSON.parse(localStorage.getItem('cart')) || []
 localStorage.setItem('cart', JSON.stringify(cart))
 

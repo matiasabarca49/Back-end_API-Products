@@ -30,7 +30,7 @@ router.get("/:cid", async (req,res)=>{
 router.post("/", async (req, res) =>{
    const cartAdded = await serviceMongo.createNewDocument(Cart, req.body)
    cartAdded
-    ?res.status(201).send({status: "Success", reason: "Cart agregado a DB",producto: cartAdded})
+    ?res.status(201).send({status: "Success", reason: "Cart agregado a DB", cart: cartAdded})
     :res.status(400).send({status: "Error", reason: "Campos erroneos o los datos no fueron validados"})
 })
 
