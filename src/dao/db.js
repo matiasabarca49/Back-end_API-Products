@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const Product = require('./models/productsModels.js')
 
 class MongoManager{
     constructor(url){

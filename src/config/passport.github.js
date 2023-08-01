@@ -1,6 +1,6 @@
 const passport = require('passport')
 const User = require('../dao/models/usersModels.js')
-const ServiceMongo = require('../dao/dbService.js')
+const ServiceMongo = require('../service/dbService.js')
 const { createHash } = require('../utils/utils.js')
 const { Strategy } = require('passport-github2')
 const githubStrategy = Strategy

@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const ServiceMongo = require('../dao/dbService.js')
+const ServiceMongo = require('../service/dbService.js')
 const Product = require('../dao/models/productsModels.js')
 
 //Encriptación

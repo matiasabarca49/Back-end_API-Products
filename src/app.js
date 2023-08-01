@@ -13,7 +13,7 @@ const MongoManager = require('./dao/db.js')
 const mongoManager = new MongoManager(`mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD_DB}@cluster-mongo-coder-tes.qh8sdrt.mongodb.net/ecommerce`)
 
 //Metodos para trabajar en la DB
-const ServiceMongo = require('./dao/dbService.js')
+const ServiceMongo = require('./service/dbService.js')
 const serviceMongo = new ServiceMongo()
 //Modelos
 const Product = require('./dao/models/productsModels.js') 

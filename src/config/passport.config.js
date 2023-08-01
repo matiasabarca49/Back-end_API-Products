@@ -1,6 +1,6 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-const ServiceMongo = require('../dao/dbService.js')
+const ServiceMongo = require('../service/dbService.js')
 const { createHash, isValidPassword } = require('../utils/utils.js')
 const User = require('../dao/models/usersModels.js')
 
