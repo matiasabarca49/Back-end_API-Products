@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-class ProductManager{
+class ProductsManager{
     // cont = 1;
     constructor(url){
         this.products = []; 
@@ -49,7 +49,7 @@ class ProductManager{
         }
     }
 
-    addProduct(product){
+    postProduct(product){
 
         //Actualizamos el array con el archivo
         this.#updateProducts()
@@ -93,7 +93,7 @@ class ProductManager{
         return productFound ?  productFound :  "Not Found"
     }
 
-    updateProductByField(ID, field, NewData){
+    putProductByField(ID, field, NewData){
         this.#updateProducts()
         //Se verifica que exista un producto con el ID solicitado
         const aprovedId = this.products.find(product => product.id === parseFloat(ID))
@@ -112,7 +112,7 @@ class ProductManager{
         }
     }
 
-    updateProduct(ID, productToChange){
+    putProduct(ID, productToChange){
         this.#updateProducts()
         const notApproved = this.#checkProduct(productToChange)
         const productFound = this.products.find( product => product.id === parseFloat(ID))
@@ -142,7 +142,7 @@ class ProductManager{
         }
     }
 
-    deleteProduct(ID){
+    delProduct(ID){
         this.#updateProducts()
         const aprovedId = this.products.find(product => product.id === parseFloat(ID))
         if(aprovedId){
@@ -158,27 +158,9 @@ class ProductManager{
 
 }
 
-module.exports = ProductManager
+module.exports = ProductsManager
 
-/** 
-* Algoritmo Principal 
-**/
 
-//Proceso de testing
-
-/* const productManager = new ProductManager("./data/data.json")
-
-console.log(productManager.getProducts())
-
-productManager.addProduct({
-    title: "producto prueba",
-    description:"Este es un producto prueba",
-    price:200,
-    thumbnail:"Sin imagen",
-    code:"abc123",
-    stock:25
-})
- */
 
 
 

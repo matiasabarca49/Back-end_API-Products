@@ -1,13 +1,12 @@
-const ServiceMongo = require('../service/dbService.js')
-const User = require('../dao/models/usersModels.js')
-const serviceMongo = new ServiceMongo()
+const UsersManager = require('../dao/mongo/users.mongo.js')
+const usersManager = new UsersManager()
 
 /**
 * PUT
 */
 const addCartToUser = async (req, res) => {
     const {idUser,idCart } = req.body
-    const datedUser = await serviceMongo.updateCartFromUser(User, idUser, idCart)
+    const datedUser = await usersManager.putCart(idUser, idCart)
     if(datedUser){
         //Para que se actualice el usuario sin tener que salir y volver entrar a la cuenta
         req.session.carts = datedUser.carts

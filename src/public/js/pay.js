@@ -19,7 +19,6 @@ const render = ()=>{
         `
         cartCont.appendChild(div)
         const total = cart.reduce((acumulador, product) => acumulador + (product.product.price * product.quantity), 0)
-        console.log(total)
         const totalShopping = document.getElementById('totalShopping')
         totalShopping.innerText= `$${total}` 
     })
@@ -39,14 +38,12 @@ const reWritedForDB = (cart) =>{
 //Funcion que se ejecuta al hacer click al boton pagar
 const finishPurchase = async (cart)=>{
     const dateAtMomentPurchase = new Date()
-    console.log(cart)
-    console.log("Cart para DB:")
     const cartReWrited = reWritedForDB(cart)
     const finalCart = {
         dateCart: `${dateAtMomentPurchase.getDate()}/${dateAtMomentPurchase.getMonth()}/${dateAtMomentPurchase.getFullYear()}`,
         products: cartReWrited
     }
-    /* console.log(finalCart) */
+    //Agregamos el carrito a la DB
     const res = await fetch('http://localhost:8080/api/carts',{
         method: "POST",
         headers: {
@@ -55,8 +52,7 @@ const finishPurchase = async (cart)=>{
         body: JSON.stringify(finalCart)
     })
     const newCartAdded = await res.json()
-    console.log(newCartAdded)
-    console.log(newCartAdded.cart._id)
+    //Agregamos el cart al usuario
     const resAddCartToUser = await fetch('http://localhost:8080/api/users/addcart',{
         method: "PUT",
         headers: {
@@ -64,7 +60,6 @@ const finishPurchase = async (cart)=>{
         },
         body: JSON.stringify({ idUser: user.passport.user, idCart: newCartAdded.cart._id})
     })
-    /* const updatedUser = resAddCartToUser.json() */
     localStorage.setItem("cart", JSON.stringify([]))
     localStorage.setItem("purchased", true)
     window.location.href= "http://localhost:8080/products"
@@ -85,7 +80,6 @@ fetch('http://localhost:8080/api/sessions/current')
     .then( res => res.json())
     .then( data => {
         user = data.currentUser
-        console.log(user)
     })
 
 const toPay = document.getElementById('toPay')

@@ -1,29 +1,13 @@
 require('dotenv').config()
 const express = require("express")
 const handlebars = require("express-handlebars")
-const { Server } = require('socket.io')
 const http = require('http')
-
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server)
 
 //Inicio y conexion a DB
-const MongoManager = require('./dao/db.js')
+const MongoManager = require('./dao/mongo/db.js')
 const mongoManager = new MongoManager(`mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD_DB}@cluster-mongo-coder-tes.qh8sdrt.mongodb.net/ecommerce`)
-
-//Metodos para trabajar en la DB
-const ServiceMongo = require('./service/dbService.js')
-const serviceMongo = new ServiceMongo()
-//Modelos
-const Product = require('./dao/models/productsModels.js') 
-const Message = require('./dao/models/messagesModels.js') 
-
-//Para obtener los producto almacenados hasta ahora
-/* const ProductManager = require("./dao/fileManager/ProductManager.js")
-const productManager = new ProductManager('./data/products.json') */
-
-
 
 //Sessions
 const session = require('express-session')
@@ -78,6 +62,7 @@ const routeViewRealTimeProducts = require('./routes/pages/realTimeProducts.route
 const routeViewProducts = require('./routes/pages/products.router.js')
 const routeViewCart = require('./routes/pages/cartview.router.js')
 const routeGithubAuth = require('./routes/passport/github.passport.router.js')
+const routeError = require('./routes/pages/404.router.js')
 
 
 app.use("/api/products", routeProducts)
@@ -90,28 +75,13 @@ app.use("/chat", routeChat)
 app.use("/realtimeproducts", routeViewRealTimeProducts)
 app.use("/products", routeViewProducts)
 app.use("/carts", routeViewCart)
+app.use('*', routeError)
 
 /**
  * Websockets 
  **/
-io.on( 'connection', async (socket)=>{
-    //====== Productos ==============
-    //enviar al cliente los productos
-    console.log("Cliente Conectado")
-    socket.emit('sendProducts', await serviceMongo.getDocuments(Product))
-    //Agregar producto nuevo a base de datos
-    socket.on('newProductToBase', async (data) =>{
-        await serviceMongo.createNewDocument(Product, data)
-        io.sockets.emit('sendProducts',  await serviceMongo.getDocuments(Product))
-    })
-    //====== Mensajes ===============
-    socket.emit("chats", await serviceMongo.getDocuments(Message))
-    socket.on('msg',async (data)=>{
-        /* console.log(data) */
-        await serviceMongo.createNewDocument(Message, data)
-        io.sockets.emit("chats", await serviceMongo.getDocuments(Message))
-    })
-} )
+const { chatWebSocket } = require('./controllers/chat.controller.js')
+chatWebSocket(server)
 
 //Levantar el servidor para que empiece a escuchar
 server.listen("8080", ()=>{ 

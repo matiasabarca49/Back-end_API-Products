@@ -1,8 +1,9 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-const ServiceMongo = require('../service/dbService.js')
+const ServiceMongo = require('../service/dbMongoService.js')
 const { createHash, isValidPassword } = require('../utils/utils.js')
-const User = require('../dao/models/usersModels.js')
+const User = require('../dao/mongo/models/usersModels.js')
+const UserDTO = require('../dao/dto/user.dto.js')
 
 const serviceMongo = new ServiceMongo()
 
@@ -12,7 +13,7 @@ const initializePassport = () =>{
         async (req, username, password, done) => {
             try {
                 //El usuario pasado por el form(body) lo guardamos en una variable
-                const userData = req.body
+                let userData = req.body
                 //Verificamos si el usuario existe en la DB 
                 const userFound = await serviceMongo.getDocumentsByFilter(User, {email: userData.email})
                 //En caso de que el usuario exista. Frenamos la operacion, redirigimos e indicamos que ya existe
@@ -20,9 +21,8 @@ const initializePassport = () =>{
                     done(null, false)
                 }
                 else{
-                    //Si no existe, lo creamos. Le asignamos el Rol y al password lo segurizamos
-                    userData.rol = "User"
-                    userData.password = createHash(userData.password)
+                    //Si no existe, lo creamos formateado con DTO. Le asignamos el Rol y al password lo segurizamos
+                    userData = new UserDTO(req.body)
                     //Se agrega a la DB el nuevo user
                     const userAdded = await serviceMongo.createNewDocument(User, userData)
                     //Salimos y devolvemos el usuario creado
