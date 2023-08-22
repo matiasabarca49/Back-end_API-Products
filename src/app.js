@@ -80,8 +80,9 @@ app.use('*', routeError)
 /**
  * Websockets 
  **/
-const { chatWebSocket } = require('./controllers/chat.controller.js')
-chatWebSocket(server)
+const { webSocket } = require('./controllers/websockets.controller.js')
+webSocket(server)
+
 
 //Levantar el servidor para que empiece a escuchar
 server.listen("8080", ()=>{ 

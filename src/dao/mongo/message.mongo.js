@@ -9,6 +9,10 @@ class MessageManager {
     getMessage = ()=>{
         return serviceMongo.getDocuments(Message)
     }
+
+    postMassage = (message) =>{
+        return serviceMongo.createNewDocument(Message, message)
+    }
 }
 
 module.exports = MessageManager

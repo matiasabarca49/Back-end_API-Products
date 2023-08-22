@@ -63,6 +63,7 @@ const deleteProduct = async (req,res) => {
      :res.status(404).send({status: "Error", reason: "El producto no existe"})
 }
 
+
 module.exports = {
     getProducts,
     getProductsByID,
