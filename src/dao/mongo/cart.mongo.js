@@ -3,6 +3,8 @@ const serviceMongo = new ServiceMongo()
 const Cart = require('../mongo/models/cartsModels')
 const Product = require('../mongo/models/productsModels')
 const User = require('../mongo/models/usersModels')
+const Ticket = require('../mongo/models/ticketsModels')
+const TicketDTO = require('../dto/ticket.dto')
 
 class CartManager {
     constructor(){
@@ -38,7 +40,10 @@ class CartManager {
         await serviceMongo.updateDocument(User, idUser, {purchases: purchaseUpdated})
         //Dejar en carrito solo productos sin stock
         await serviceMongo.updateDocument(User, idUser, {cart: productsWithoutStock})
-        return {purchases: purchaseUpdated, cart: productsWithoutStock, purchase: productsWithStock}
+        //Generar Ticket
+        const ticket = new TicketDTO(user, productsWithStock)
+        await serviceMongo.createNewDocument(Ticket, ticket)
+        return {purchases: purchaseUpdated, cart: productsWithoutStock, purchase: productsWithStock, ticket: ticket}
     }
 
     postCart(cart){

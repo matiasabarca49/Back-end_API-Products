@@ -54,9 +54,12 @@ const finishPurchase = async ()=>{
     })
     const newCartAdded = await res.json()
     const resPurchase = await fetch(`http://localhost:8080/api/carts/${newCartAdded.cart._id}/purchase`)
-    
+    const ticket = await resPurchase.json()
+    console.log(ticket)
     localStorage.setItem("purchased", true)
-    window.location.href= "http://localhost:8080/products"
+    setTimeout(()=>{
+        window.location.href= "http://localhost:8080/products"
+    },10000)
 }
 
 

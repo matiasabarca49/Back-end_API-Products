@@ -7,7 +7,8 @@ class UserDTO{
         this.email = user.email
         this.password = createHash(user.password)
         this.rol = "User"
-        this.carts = []
+        this.purchases = []
+        this.cart = []
     }
 }
 

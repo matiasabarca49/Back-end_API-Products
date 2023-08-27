@@ -31,7 +31,7 @@ const getPurchase = async (req, res) =>{
     req.session.purchases = purchaseState.purchases
     req.session.cart = purchaseState.cart
     purchaseState.purchase
-        ? res.status(201).send({status: "Success"})
+        ? res.status(201).send({status: "Success", cart: purchaseState.purchase, ticket: purchaseState.ticket})
         : res.status(500).send({status: "Error"})
     
 
