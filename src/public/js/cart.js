@@ -1,24 +1,37 @@
-const AddToCart = (product)=>{
-    let cart =  JSON.parse(localStorage.getItem("cart"))
-    const productFound = cart.find( cartProduct => cartProduct.product._id === product._id)
-    if (productFound){
-        productFound.quantity++
-    }else{
-        cart.push({product: product, quantity: 1})
+const addToCart = async (product)=>{
+    try{
+        const resUser = await fetch(`http://localhost:8080/api/sessions/current`)
+        const user = await resUser.json()
+        const resToProductSended = await fetch(`http://localhost:8080/api/users/addcart`,{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product)
+        })
+        const data = resToProductSended.json()
+        totalProducts()
     }
-    console.log("agregado al carrito")
-    /* console.log(cart) */
-    totalProducts(cart)
-    localStorage.setItem('cart', JSON.stringify(cart))   
+    catch{
+        console.log("Hola")
+    }
 }
 
-const totalProducts = (cart)=>{
-    const cant = cart.reduce((acumlador, product) => acumlador + product.quantity, 0)
-    /* console.log(cant) */
+const totalProducts = async ()=>{
+    let cant
+    try{
+        const resUser = await fetch(`http://localhost:8080/api/sessions/current`)
+        const user = await resUser.json()
+        console.log(user)
+        cant = user.currentUser.cart.reduce((acumlador, product) => acumlador + product.quantity, 0)
+        console.log(cant)
+    }
+    catch{
+        cant = 0
+    }
     const totalCountNav = document.getElementById("totalCountNav")
     totalCountNav.innerText = cant
 }
 
-//
 
 

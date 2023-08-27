@@ -11,17 +11,14 @@ const render = (product) =>{
     stock.innerText = `Disponibles: ${product.stock}`
     category.innerText = product.category
     addCart.addEventListener('click', () => {
-        AddToCart(product)})
+        addToCart(product)})
 }
 
 /**
 * Algoritmo Principal 
 */
 
-const cart = JSON.parse(localStorage.getItem('cart')) || []
-localStorage.setItem('cart', JSON.stringify(cart))
-
-totalProducts(cart)
+totalProducts()
 
 //Obtenemos las query params. Obtenemos el string de Query
 const url = window.location.search
@@ -34,6 +31,5 @@ fetch(`http://localhost:8080/api/products/${id}`)
     .then( response => response.json())
     .then( data =>{
         //Una vez obtenido el producto, renderizamos
-        console.log(data)
         render(data.producto)
     } )

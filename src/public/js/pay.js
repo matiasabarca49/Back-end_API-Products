@@ -1,4 +1,4 @@
-const render = ()=>{
+const render = (cart)=>{
     cart.forEach(product => {
         const div = document.createElement("div")
         div.classList = "mx-auto py-1 w-75"
@@ -36,12 +36,13 @@ const reWritedForDB = (cart) =>{
 }
 
 //Funcion que se ejecuta al hacer click al boton pagar
-const finishPurchase = async (cart)=>{
+const finishPurchase = async ()=>{
+    const resUser = await fetch(`http://localhost:8080/api/sessions/current`)
+    const user = await resUser.json()
     const dateAtMomentPurchase = new Date()
-    const cartReWrited = reWritedForDB(cart)
     const finalCart = {
-        dateCart: `${dateAtMomentPurchase.getDate()}/${dateAtMomentPurchase.getMonth()}/${dateAtMomentPurchase.getFullYear()}`,
-        products: cartReWrited
+        dateCart: `${dateAtMomentPurchase.getDate()}/${dateAtMomentPurchase.getMonth()+1}/${dateAtMomentPurchase.getFullYear()}`,
+        products: user.currentUser.cart
     }
     //Agregamos el carrito a la DB
     const res = await fetch('http://localhost:8080/api/carts',{
@@ -52,27 +53,17 @@ const finishPurchase = async (cart)=>{
         body: JSON.stringify(finalCart)
     })
     const newCartAdded = await res.json()
-    //Agregamos el cart al usuario
-    const resAddCartToUser = await fetch('http://localhost:8080/api/users/addcart',{
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ idUser: user.passport.user, idCart: newCartAdded.cart._id})
-    })
-    localStorage.setItem("cart", JSON.stringify([]))
+    const resPurchase = await fetch(`http://localhost:8080/api/carts/${newCartAdded.cart._id}/purchase`)
+    
     localStorage.setItem("purchased", true)
     window.location.href= "http://localhost:8080/products"
 }
 
+
+
 /**
  *  Algoritmo Principal 
 **/
-
-const cart = JSON.parse(localStorage.getItem('cart'))
-const cartCont = document.getElementById("cartCont")
-
-render()
 
 let user
 
@@ -80,11 +71,12 @@ fetch('http://localhost:8080/api/sessions/current')
     .then( res => res.json())
     .then( data => {
         user = data.currentUser
+        render(user.cart)
     })
 
 const toPay = document.getElementById('toPay')
 toPay.addEventListener('click', ()=>{
     const processPurchase = document.getElementById('processPurchase')
     processPurchase.style.display="block"
-    finishPurchase(cart)
+    finishPurchase()
 })

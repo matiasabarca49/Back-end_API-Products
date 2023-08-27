@@ -24,6 +24,19 @@ const addProductInCart = async (req,res) => {
         :res.status(404).send({status: "Error", reason: "El carrito no existe"})
 }
 
+const getPurchase = async (req, res) =>{
+    const idCart = req.params.cid
+    const idUser = req.session.passport.user
+    const purchaseState = await cartManager.getPurchase(idCart, idUser )
+    req.session.purchases = purchaseState.purchases
+    req.session.cart = purchaseState.cart
+    purchaseState.purchase
+        ? res.status(201).send({status: "Success"})
+        : res.status(500).send({status: "Error"})
+    
+
+}
+
 const updateFullCartInDB = async (req, res) => {
     const newCart = req.body
     const cartUpdated = await cartManager.putFullCartInDB(req.params.cid, newCart)
@@ -60,6 +73,7 @@ module.exports = {
     getCartByID,
     addCart,
     addProductInCart,
+    getPurchase,
     updateFullCartInDB,
     updateProductCartInDB,
     deleteProductInCart,

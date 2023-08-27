@@ -43,7 +43,6 @@ const fetchProducts = (page)=>{
     })
 }
 const fetchProductsOpts = (opt, value)=>{
-    console.log("entre aqui")
     //Obtenemos los productos de la pagina pasada por parametro
     fetch(`http://localhost:8080/api/products?${opt}=${value}`)
     .then( response => response.json())
@@ -68,10 +67,7 @@ if(isAfterPurchase){
     localStorage.setItem("purchased", false)
 }
 
-const cart = JSON.parse(localStorage.getItem('cart')) || []
-localStorage.setItem('cart', JSON.stringify(cart))
-
-totalProducts(cart)
+totalProducts()
 
 let page = 1, limit, sort, query
 let products = []

@@ -37,8 +37,8 @@ const loginUser = async (req, res)=>{
     req.session.email = userFound.email
     req.session.age = userFound.age
     req.session.rol = userFound.rol
-    req.session.carts = userFound.carts
-    userFound.rol === "Admin" && (req.session.admin = true)
+    req.session.cart = userFound.cart
+    req.session.purchases = userFound.purchases
     res.redirect("/products")
 }
 

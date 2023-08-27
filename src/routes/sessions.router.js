@@ -5,7 +5,7 @@ const router = new Router()
 //utils
 const { checkLogin, voidLogAndRegis } = require('../utils/utils.js')
 //controllers
-const controller = require('../controllers/sessions.contollers.js')
+const controller = require('../controllers/sessions.controller.js')
 
 /**
 * GET 

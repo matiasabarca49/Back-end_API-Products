@@ -36,11 +36,11 @@
     <div>
         <h3>Historial de compras:</h3>
         <div id="compras">
-            {{#each userLoged.carts }}
+            {{#each userLoged.purchases }}
                 <div class="p-2 d-flex justify-content-around align-items-center bg-secondary bg-gradient bg-opacity-10 rounded">
-                    <div>{{this.cart.dateCart}}</div>
+                    <div>{{this.dateCart}}</div>
                     <div class="d-flex w-75 gap-1 overflow-x-auto" style="height: 250px;">
-                        {{#each this.cart.products}}
+                        {{#each this.cart}}
                             <div class="col-2 col-6 col-sm-4 card  mb-3 flex-grow-1" style="max-width: 200px;">
                                 <div class="card-header bg-transparent ">
                                     <p class="card-text"><small class="text-body-secondary">{{this.product.category}}</small>

@@ -2,11 +2,21 @@ const express = require('express')
 const { Router } = express
 const router = new Router()
 //controllers
-const { addCartToUser } = require('../controllers/users.controller.js')
+const { addPurchaseToUser, addProductToCartFromUser } = require('../controllers/users.controller.js')
+
+const ath = (req, res, next) =>{
+    if(req.session.rol === "User"){
+        next()
+    }
+    else{
+        res.send({status: "ERROR", reason: "Solo los usuarios pueden agregar productos al carrito"})
+    }
+}
 
 /**
 *   PUT 
 **/
-router.put( '/addcart', addCartToUser)
+router.post( '/addcart', ath, addProductToCartFromUser)
+router.put( '/addpurchase', ath, addPurchaseToUser)
 
 module.exports = router
