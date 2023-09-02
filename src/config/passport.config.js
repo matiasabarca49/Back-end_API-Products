@@ -4,8 +4,11 @@ const ServiceMongo = require('../service/dbMongoService.js')
 const { createHash, isValidPassword } = require('../utils/utils.js')
 const User = require('../dao/mongo/models/usersModels.js')
 const UserDTO = require('../dao/dto/user.dto.js')
-
 const serviceMongo = new ServiceMongo()
+//Errors
+const CustomError = require('../service/errors/customError')
+const { generateUserErrorInfo  } = require('../service/errors/messageCreater.js')
+const EErrors = require('../service/errors/ErrorEnums.js')
 
 const initializePassport = () =>{
     passport.use('register', new LocalStrategy(
@@ -30,6 +33,7 @@ const initializePassport = () =>{
                 }
 
             } catch (error) {
+                console.log(error)
                 done({status: "ERROR", reason: error})
             }
         }

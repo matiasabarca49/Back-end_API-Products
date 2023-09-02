@@ -1,4 +1,8 @@
 const { Server } = require('socket.io')
+//Errors
+const CustomError = require('../service/errors/customError')
+const { generateProductErrorInfo } = require('../service/errors/messageCreater.js')
+const EErrors = require('../service/errors/ErrorEnums.js')
 //Managers
 const ProductsManager = require('../dao/mongo/products.mongo.js')
 const productsManager = new ProductsManager()
@@ -14,8 +18,25 @@ const webSocket = (server) => {
         socket.emit('sendProducts', await productsManager.getProducts())
         //Agregar producto nuevo a base de datos
         socket.on('newProductToBase', async (data) =>{
-            await productsManager.postProduct(data)
-            io.sockets.emit('sendProducts',  await productsManager.getProducts())
+            //Constrolando de errores
+            const { title, code, stock} = data
+            try {
+                if(!title || !code || !stock){
+                    const customError = new CustomError()
+                    customError.createError({
+                        name:"Product creation error",
+                        cause: generateProductErrorInfo(data),
+                        message: "Error to create Product",
+                        code: EErrors.CREATE_PRODUCT_ERROR
+        
+                    })
+                }
+                //En caso de que no falten campos se procede a agregar el producto
+                await productsManager.postProduct(data)
+                io.sockets.emit('sendProducts',  await productsManager.getProducts())
+            } catch (error) {
+                console.log(error)
+            }
         })
         //====== Mensajes ===============
         socket.emit("chats", await messageManager.getMessage())

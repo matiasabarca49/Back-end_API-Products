@@ -1,3 +1,7 @@
+//Errores custom
+const CustomError = require('../service/errors/customError.js')
+const { generateProductErrorInfo } = require('../service/errors/messageCreater.js')
+const EErrors = require('../service/errors/ErrorEnums.js')
 //Administrador de productos
 const ProductsManager = require('../dao/mongo/products.mongo.js')
 const productsManager = new ProductsManager()
@@ -36,10 +40,28 @@ const getProductsByID = async (req,res) =>{
 }
 
 const addProduct = async (req, res) =>{
-    const productAdded = await productsManager.postProduct(req.body)
-    productAdded
-        ?res.status(201).send({status: "Success", action: "Producto agregado a DB correctamente", producto: productAdded})
-        :res.status(400).send({status: "Error", action: 'Campos Faltantes, mal escritos o  campo code repetido'})
+    const {title, code, stock} = req.body
+    try {
+        if(!title || !code || !stock){
+            const customError = new CustomError()
+            customError.createError({
+                name:"Product creation error",
+                cause: generateProductErrorInfo(req.body),
+                message: "Error to create Product",
+                code: EErrors.CREATE_PRODUCT_ERROR
+
+            })
+        }
+        //Si el body es correcto
+        const productAdded = await productsManager.postProduct(req.body)
+        productAdded
+            ?res.status(201).send({status: "Success", action: "Producto agregado a DB correctamente", producto: productAdded})
+            :res.status(400).send({status: "Error", action: 'Campos Faltantes, mal escritos o  campo code repetido'})
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({status: "Error", action: 'Campos Faltantes'})
+    }
+    
 }
 
 const addManyProducts = async (req, res) =>{

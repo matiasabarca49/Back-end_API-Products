@@ -12,8 +12,8 @@ const addToCart = async (product)=>{
         const data = resToProductSended.json()
         totalProducts()
     }
-    catch{
-        console.log("Hola")
+    catch(error){
+        console.log(error)
     }
 }
 
@@ -22,9 +22,7 @@ const totalProducts = async ()=>{
     try{
         const resUser = await fetch(`http://localhost:8080/api/sessions/current`)
         const user = await resUser.json()
-        console.log(user)
         cant = user.currentUser.cart.reduce((acumlador, product) => acumlador + product.quantity, 0)
-        console.log(cant)
     }
     catch{
         cant = 0

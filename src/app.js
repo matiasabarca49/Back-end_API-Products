@@ -40,6 +40,9 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 //Archivos estaticos
 app.use(express.static(__dirname + '/public'))
+//Compresion
+const compression = require('express-compression')
+app.use(compression())
 
 
 /** 
@@ -58,6 +61,7 @@ const routeChat = require('./routes/chat.router.js')
 const routeSessions = require('./routes/sessions.router.js')
 const routeUsers = require('./routes/users.router.js')
 const routeViewHome = require('./routes/pages/home.router.js')
+const routeMocks = require('./routes/mocks.router.js')
 const routeViewRealTimeProducts = require('./routes/pages/realTimeProducts.router.js')
 const routeViewProducts = require('./routes/pages/products.router.js')
 const routeViewCart = require('./routes/pages/cartview.router.js')
@@ -71,6 +75,7 @@ app.use("/api/sessions", routeSessions)
 app.use("/api/users", routeUsers)
 app.use("/auth", routeGithubAuth)
 app.use("/", routeViewHome)
+app.use("/mockingproducts", routeMocks)
 app.use("/chat", routeChat)
 app.use("/realtimeproducts", routeViewRealTimeProducts)
 app.use("/products", routeViewProducts)
