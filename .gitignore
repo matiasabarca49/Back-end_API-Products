@@ -5,3 +5,6 @@
 
 #dotenv
 .env
+
+#errores
+errors.log

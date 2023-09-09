@@ -1,4 +1,5 @@
-require('dotenv').config()
+/* require('dotenv').config() */
+const config = require('./config/config.js')
 const express = require("express")
 const handlebars = require("express-handlebars")
 const http = require('http')
@@ -43,6 +44,9 @@ app.use(express.static(__dirname + '/public'))
 //Compresion
 const compression = require('express-compression')
 app.use(compression())
+//Logger
+const addLogger = require('./service/logger/loggers.js')
+app.use(addLogger)
 
 
 /** 
@@ -58,6 +62,7 @@ app.set('view engine', 'handlebars')
 const routeProducts = require('./routes/products.router.js')
 const routeCarts = require('./routes/cart.router.js')
 const routeChat = require('./routes/chat.router.js')
+const routeLoggerTest = require('./routes/logger.router.js')
 const routeSessions = require('./routes/sessions.router.js')
 const routeUsers = require('./routes/users.router.js')
 const routeViewHome = require('./routes/pages/home.router.js')
@@ -77,6 +82,7 @@ app.use("/auth", routeGithubAuth)
 app.use("/", routeViewHome)
 app.use("/mockingproducts", routeMocks)
 app.use("/chat", routeChat)
+app.use("/loggerTest", routeLoggerTest)
 app.use("/realtimeproducts", routeViewRealTimeProducts)
 app.use("/products", routeViewProducts)
 app.use("/carts", routeViewCart)
@@ -90,8 +96,9 @@ webSocket(server)
 
 
 //Levantar el servidor para que empiece a escuchar
-server.listen("8080", ()=>{ 
-    console.log("El servidor está escuchando en el puerto 8080")
+server.listen(`${config.port}`, ()=>{ 
+    console.log("Environment Mode Option: ", config.environment);
+    console.log(`El servidor está escuchando en el puerto ${config.port}`)
     //Conectar base de datos
     mongoManager.connect()
 })
