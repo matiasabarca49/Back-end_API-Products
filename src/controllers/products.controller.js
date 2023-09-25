@@ -53,6 +53,13 @@ const addProduct = async (req, res) =>{
             })
         }
         //Si el body es correcto
+        //Agregar el usuario que creó el producto
+        if(req.session.rol === "Premium"){
+            req.body.owner = req.session.email
+        }
+        else{
+            req.body.owner = "Admin"
+        }
         const productAdded = await productsManager.postProduct(req.body)
         productAdded
             ?res.status(201).send({status: "Success", action: "Producto agregado a DB correctamente", producto: productAdded})
@@ -79,10 +86,11 @@ const updateProduct = async (req,res)=>{
  }
 
 const deleteProduct = async (req,res) => {
-    const productDelete = await productsManager.delProduct(req.params.id)
+    const user = req.session
+    const productDelete = await productsManager.delProduct(req.params.id, user)
     productDelete
      ?res.status(200).send({status: "Success", action: "Producto borrado correctamente", product: productDelete})
-     :res.status(404).send({status: "Error", reason: "El producto no existe"})
+     :res.status(404).send({status: "Error", reason: "El producto no existe o no tienes permiso para borrarlo"})
 }
 
 

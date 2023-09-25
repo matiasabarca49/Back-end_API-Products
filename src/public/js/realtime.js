@@ -31,7 +31,8 @@ const addProduct = (  )=>{
         code: document.getElementById('code').value,
         stock: document.getElementById('stock').value,
         status: true,
-        category: document.getElementById('category').value
+        category: document.getElementById('category').value,
+        owner: document.getElementById('owner').value
     }
     socket.emit('newProductToBase', newProduct )
     return false

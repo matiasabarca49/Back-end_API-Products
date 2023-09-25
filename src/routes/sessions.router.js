@@ -16,6 +16,8 @@ router.get("/perfil", checkLogin, controller.getPerfil)
 router.get("/logout", controller.getLogout)
 router.get("/fail", controller.getFail)
 router.get("/current", checkLogin, controller.getUserCurrent)
+router.get("/forgetpassword", controller.getChangePassword)
+router.get("/generatepassword", controller.getGeneratePassword)
 
 /**
 * POST 

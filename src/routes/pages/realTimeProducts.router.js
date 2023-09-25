@@ -4,7 +4,7 @@ const router = new Router()
 
 
 function ath(req, res, next){
-    if(req.session.rol === "Admin"){
+    if(req.session.rol === "Admin" || req.session.rol === "Premium"){
         next()
     }
     else{

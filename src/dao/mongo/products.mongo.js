@@ -1,4 +1,5 @@
 const Product = require('../mongo/models/productsModels')
+const User = require('../mongo/models/usersModels')
 const ServiceMongo = require('../../service/dbMongoService')
 const serviceMongo = new ServiceMongo()
 
@@ -26,8 +27,23 @@ class ProductsManager {
     putProduct(ID, productToChange){
         return serviceMongo.updateDocument(Product, ID, productToChange)
     }
-    delProduct(ID){
-        return serviceMongo.deleteDocument(Product, ID)
+    async delProduct(ID, user){
+        if (user.rol === "Premium"){
+            const productFound = await serviceMongo.getDocumentsByID(Product, ID)
+           if (user.email === productFound.owner){
+               return serviceMongo.deleteDocument(Product, ID) 
+           }
+           else{
+            return false
+           }
+        }
+        else if(user.rol === "Admin"){
+            return serviceMongo.deleteDocument(Product, ID)
+
+        }
+        else{
+            return false
+        }
     }
 }
 

@@ -32,6 +32,9 @@ const productSchema = new mongoose.Schema(
         category:{
             type: String,
             enum:["Tecnología", "Ropa", "Bazar","Accesorios","Calzado"]
+        },
+        owner:{
+            type: String
         }
     }
 )

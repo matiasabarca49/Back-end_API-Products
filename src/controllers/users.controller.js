@@ -2,6 +2,16 @@ const UsersManager = require('../dao/mongo/users.mongo.js')
 const usersManager = new UsersManager()
 
 /**
+* GET
+*/
+const changeRol = async (req, res) =>{
+    const userUpdated = await usersManager.putChangeRolFromUser(req.params.uid)
+    userUpdated
+        ? res.status(201).send({status: "Succefull", userUpdated: userUpdated})
+        : res.status(500).send({status: "ERROR", reason: "Los Administradores no pueden cambiar de rol"})
+}
+
+/**
 * PUT
 */
 
@@ -13,7 +23,7 @@ const addProductToCartFromUser = async (req,res) =>{
         res.status(201).send({status:" Succesfull ",userUpdated: datedUser})
 
     }else{
-        res.status(500).send({status: "ERROR"})
+        res.status(500).send({status: "ERROR" , reason: "No puede agregar un producto propio"})
     }
 }
 
@@ -31,6 +41,7 @@ const addPurchaseToUser = async (req, res) => {
 } 
 
 module.exports = {
+    changeRol,
     addPurchaseToUser,
     addProductToCartFromUser
 }

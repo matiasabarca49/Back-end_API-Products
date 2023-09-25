@@ -1,3 +1,5 @@
+const { searchSecret } = require('../utils/utils.js')
+
 const getRegister = (req, res) =>{
     res.render("register")  
   }
@@ -7,6 +9,17 @@ const getLogin = async (req, res) =>{
 const getPerfil = async (req, res) =>{
     res.render("perfil", {userLoged: req.session})
 }
+
+const getChangePassword = (req,res)=>{
+    res.render('forgetPassword')
+}
+const getGeneratePassword = (req,res)=>{
+    const secretFound = searchSecret(req.query.secret)
+    secretFound
+        ?res.render('generatePassword')
+        :res.render('forgetPassword')
+}   
+
 const getLogout = (req, res) =>{
     req.session.destroy( err =>{
         if(!err) res.redirect("/api/sessions/login")
@@ -48,6 +61,8 @@ module.exports = {
     getPerfil,
     getLogout,
     getFail,
+    getChangePassword,
+    getGeneratePassword,
     getUserCurrent,
     registerUser, 
     loginUser

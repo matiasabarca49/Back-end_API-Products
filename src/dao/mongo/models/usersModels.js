@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     },
     rol:{
         type: String,
-        enum:["User","Admin"],
+        enum:["User","Premium","Admin"],
         required: true
     },
     purchases:[

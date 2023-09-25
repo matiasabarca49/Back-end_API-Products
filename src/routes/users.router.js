@@ -2,21 +2,35 @@ const express = require('express')
 const { Router } = express
 const router = new Router()
 //controllers
-const { addPurchaseToUser, addProductToCartFromUser } = require('../controllers/users.controller.js')
+const { changeRol, addPurchaseToUser, addProductToCartFromUser } = require('../controllers/users.controller.js')
 
-const ath = (req, res, next) =>{
-    if(req.session.rol === "User"){
+const athCart = (req, res, next) =>{
+    if(req.session.rol === "User" || req.session.rol === "Premium"){
         next()
     }
     else{
-        res.send({status: "ERROR", reason: "Solo los usuarios pueden agregar productos al carrito"})
+        res.send({status: "ERROR", reason: "Solo los usuarios normales y los premium pueden agregar productos al carrito"})
+    }
+}
+
+const athRol = (req, res, next) =>{
+    if(req.session.rol === "Admin"){
+        next()
+    }else{
+        res.send({status: "ERROR", reason: "Solo los administradores pueden cambiar de rol a los usuarios"}) 
     }
 }
 
 /**
+*   POST 
+**/
+router.post( '/addcart', athCart, addProductToCartFromUser)
+    
+
+/**
 *   PUT 
 **/
-router.post( '/addcart', ath, addProductToCartFromUser)
-router.put( '/addpurchase', ath, addPurchaseToUser)
+router.put('/premium/:uid', athRol, changeRol)
+router.put( '/addpurchase', athCart, addPurchaseToUser)
 
 module.exports = router

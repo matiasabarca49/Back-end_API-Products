@@ -3,6 +3,8 @@ const { Faker, es } = require('@faker-js/faker')
 const ServiceMongo = require('../service/dbMongoService.js')
 const Product = require('../dao/mongo/models/productsModels.js')
 
+let secretSaved = []
+
 //Encriptación
 const createHash = (password) => {
    return bcrypt.hashSync(password, bcrypt.genSaltSync(10))
@@ -49,6 +51,7 @@ const reWriteDocsDB = async () =>{
             stock: product.stock,
             status: product.status,
             category: product.category,
+            owner: product.owner,
             id: product.id
         }
         productsReWrited.push(productReWrited)
@@ -82,11 +85,33 @@ const generateProducts = (nroUser)=>{
     return users
 }
 
+const saveSecret = (secretCreated)=>{
+    console.log("Clave guardada")
+    secretSaved.push(secretCreated)
+    //Borrar clave guardada para deshabilitar link
+    setTimeout( ()=>{
+       secretSaved = secretSaved.filter( secret => secret != secretCreated)
+    },3600000)
+}
+
+const searchSecret = (secretToSearch)=>{
+    const secretFound = secretSaved.find( secret => secret === secretToSearch )
+    if (secretFound){
+        return true
+    }
+    else{
+        return false
+    }
+          
+}
+
 module.exports= {
     createHash,
     isValidPassword,
     checkLogin,
     voidLogAndRegis,
     reWriteDocsDB,
-    generateProducts
+    generateProducts,
+    saveSecret,
+    searchSecret
 }

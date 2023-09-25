@@ -6,12 +6,12 @@ const { Router } = express
 const router = new Router()
 
 const ath = (req, res, next)=>{
-    if(req.session.rol === "User"){
+    if(req.session.rol === "User" || req.session.rol === "Premium"){
         next()
     }
     else if(req.session.rol === "Admin"){
         /* res.send({status: "ERROR", reason: "Solo los usuarios pueden agregar productos al carrito" }) */
-        res.send("solo los usuarios pueden agregar productos al carrito")
+        res.send("Solo los usuarios normales y los premium pueden agregar productos al carrito")
     }
     else{
         /* res.send({status: "ERROR", reason: "No está logueado" }) */
@@ -28,6 +28,7 @@ router.get("/:cid/purchase", ath,controller.getPurchase)
 /** 
  *  POST
  **/
+//Agrega un cart a la DB(/api/carts/), para agregar productos al usuario revise su enpoint(/api/users/addcart)
 router.post("/", ath,controller.addCart)
 router.post("/:cid/product/:pid", ath,controller.addProductInCart)
 

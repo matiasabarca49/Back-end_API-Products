@@ -8,11 +8,11 @@ const { Router } = express
 const router = new Router()
 
 const ath = (req, res ,next) => {
-    if (req.session.rol === "Admin" ){
+    if (req.session.rol === "Admin" || req.session.rol === "Premium" ){
         next()
     }
     else{
-        res.send("Los usuarios no puede administrar productos")
+        res.send("Los usuarios comunes no puede administrar productos o no ha iniciado sesión")
     }
 }
 
