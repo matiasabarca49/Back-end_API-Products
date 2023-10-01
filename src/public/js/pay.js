@@ -53,6 +53,7 @@ const finishPurchase = async ()=>{
         body: JSON.stringify(finalCart)
     })
     const newCartAdded = await res.json()
+    //Generamos la compra en el usuario
     const resPurchase = await fetch(`http://localhost:8080/api/carts/${newCartAdded.cart._id}/purchase`)
     const ticket = await resPurchase.json()
     console.log(ticket)

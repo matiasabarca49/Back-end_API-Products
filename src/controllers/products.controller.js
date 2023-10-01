@@ -16,7 +16,7 @@ const getProducts = async (req,res) =>{
     const products = await productsManager.getProductsPaginate(dftQuery, dftLimit, dftPage, dftSort)
     /* console.log(products) */
     products
-        ? res.status(201).send({
+        ? res.status(200).send({
             status: "success",
             payload: products.docs,
             totalPages: products.totalPages,
@@ -42,7 +42,7 @@ const getProductsByID = async (req,res) =>{
 const addProduct = async (req, res) =>{
     const {title, code, stock} = req.body
     try {
-        if(!title || !code || !stock){
+        if(!title || !code || !stock || stock < 1){
             const customError = new CustomError()
             customError.createError({
                 name:"Product creation error",
@@ -66,7 +66,7 @@ const addProduct = async (req, res) =>{
             :res.status(400).send({status: "Error", action: 'Campos Faltantes, mal escritos o  campo code repetido'})
     } catch (error) {
         console.log(error)
-        res.status(400).send({status: "Error", action: 'Campos Faltantes'})
+        res.status(400).send({status: "Error", action: 'Campos Faltantes o inválidos'})
     }
     
 }

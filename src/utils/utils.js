@@ -86,7 +86,6 @@ const generateProducts = (nroUser)=>{
 }
 
 const saveSecret = (secretCreated)=>{
-    console.log("Clave guardada")
     secretSaved.push(secretCreated)
     //Borrar clave guardada para deshabilitar link
     setTimeout( ()=>{
@@ -94,15 +93,19 @@ const saveSecret = (secretCreated)=>{
     },3600000)
 }
 
-const searchSecret = (secretToSearch)=>{
-    const secretFound = secretSaved.find( secret => secret === secretToSearch )
-    if (secretFound){
-        return true
-    }
-    else{
+const searchSecret = (secretToSearch, userMail)=>{
+    const isValid = isValidPassword( {password: secretToSearch}, `Cod!34fdsert${userMail}`)
+    if (isValid){
+        const secretFound = secretSaved.find( secret => secret === `${secretToSearch}&qui=45604545rgfdt355iuiljhgfds/&>S43&filter=user&type=change&user=notFound`)
+        if (secretFound){
+            return true
+        }
+        else{
+            return false
+        }    
+    }else{
         return false
     }
-          
 }
 
 module.exports= {

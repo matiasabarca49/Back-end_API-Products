@@ -14,7 +14,7 @@ const getChangePassword = (req,res)=>{
     res.render('forgetPassword')
 }
 const getGeneratePassword = (req,res)=>{
-    const secretFound = searchSecret(req.query.secret)
+    const secretFound = searchSecret(req.query.secret, req.query.email)
     secretFound
         ?res.render('generatePassword')
         :res.render('forgetPassword')

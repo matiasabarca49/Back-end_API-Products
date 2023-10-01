@@ -7,27 +7,27 @@
         <div class="d-flex gap-2">
             <div class="flex-grow-1">
                 <label htmlFor="">First Name:</label>
-                <input class='w-100' type="text" name="name"/>
+                <input class='w-100' type="text" name="name" required/>
             </div>
             <div class="flex-grow-1">
                 <label htmlFor="">Last Name:</label>
-                <input class='w-100' type="text" name="lastName"/>
+                <input class='w-100' type="text" name="lastName" required/>
              </div>
         </div>
         <div>
             <label htmlFor="">Age:</label>
-            <input class='w-100' type="text" name="age"/>
+            <input class='w-100' type="text" name="age" required/>
         </div>
         <div>
             <label htmlFor="">Email:</label>
-            <input class='w-100' type="text" name="email"/>
+            <input class='w-100' type="text" name="email" required/>
         </div>
         <div>
             <label htmlFor="">Contraseña:</label>
-            <input class="w-100" type="password" name="password"/>
+            <input class="w-100" type="password" name="password" required/>
         </div>
         {{#if error}}
-            <div class="m-2 text-danger">El usuario ya está registrado</div>
+            <div class="m-2 text-danger">El usuario ya está registrado o campos incompletos</div>
         {{/if}}
         <button class='btn btn-primary mt-2'>Register</button>
     </form>

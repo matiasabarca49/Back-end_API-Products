@@ -48,13 +48,31 @@ app.use(compression())
 const addLogger = require('./service/logger/loggers.js')
 app.use(addLogger)
 
-
 /** 
 * Handlebars
 **/
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
+
+/**
+ * API Doc
+ **/
+const swaggerJsdoc = require('swagger-jsdoc')
+const swaggerUiExpress = require('swagger-ui-express')
+
+const swaggerOptions = {
+    definition:{
+        openapi:'3.0.1',
+        info: {
+            title: "Documentación API Productos y Carritos",
+            description: "API que permite la obtencion de productos guardado en la DB y almacenar carritos de compras del usuario. A su vez genera todo el proceso y almacenamiento de la compra del usuario."
+        }
+    },
+    apis: [`./src/docs/**/*.yaml`]
+}
+const specs = swaggerJsdoc(swaggerOptions)
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 /** 
 * Routes

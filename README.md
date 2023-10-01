@@ -3,7 +3,7 @@
 Es una API que permite la obtención y administracion de productos para un market como tambien la obtención de los carritos de la DB. La app Utiliza MongoDB y es Server Side Rendering.  
 Para el Front-end, es utilizado Handlebars. Cuenta con vista de productos en DB, Tienda, Login, Register y Chat de mensajes.
 
-Conceptos utilizados: NodeJS, Express, MongoDB, Mongoose, Paginate, Passport-local, Passport-Github, Custom Errors, Patrón MVC, DAO, Loggers.
+Conceptos utilizados: NodeJS, Express, MongoDB, Mongoose, Paginate, Passport-local, Passport-Github, Custom Errors, Patrón MVC, DAO, Loggers, Swagger.
 Estilado: Bootstrap y CSS
 
 NOTA: Sin las variables de entorno no podrá iniciar el servidor.
@@ -61,12 +61,12 @@ npm start
 Con "npm start" el servidor iniciará en modo desarrollo y el puerto utilizado será el "8080". Las opciones que pude establecer son:
 
 - **--mode** --mode production o --mode development
-- **-p** numero de puerto. Por defecto "8080"
+- **-p** numero de puerto. Por defecto "8080"  
+Ej: 
 
-Ej:  
-    => nodemon ./src/app.js -p 9090
-    => node ./src/app.js -p 9090
-    => node ./src/app.js -p 9090 --mode development
+=> nodemon ./src/app.js -p 9090  
+=> node ./src/app.js -p 9090  
+=> node ./src/app.js -p 9090 --mode development
 
 ## Acceso
 
@@ -75,4 +75,6 @@ El acceso se realiza mediante el navegador.
  - En local a través de la dirección -> http://localhost:8080
  - En dispositivos de la red -> http://IP_Server:8080
 
-La API ofrece un mocks de productos en => http://IP_Server:8080/mockingproducts
+La API ofrece un mocks de productos en => http://IP_Server:8080/mockingproducts  
+
+La documentacion se encuentran en => http://IP_Server:8080/apidocs

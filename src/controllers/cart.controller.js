@@ -46,10 +46,9 @@ const updateFullCartInDB = async (req, res) => {
 }
 
 const updateProductCartInDB = async (req,res) => {
-    console.log(req.body.quantity)
     const productAdded = await cartManager.putProductCartInDB(req.params.cid, req.params.pid, req.body.quantity)
     productAdded
-        ?res.status(201).send({status: "Success", product: productAdded})
+        ?res.status(200).send({status: "Success", product: productAdded})
         :res.status(404).send({status: "Error", reason: "El carrito no existe o el producto no existe"})
 }
 
@@ -57,7 +56,7 @@ const deleteProductInCart = async (req, res) =>{
     const { cid, pid } = req.params
     const cartUpdated = await cartManager.delProductInCart(cid, pid )
     cartUpdated
-        ?res.status(201).send({status: "Success", cartUpdated: cartUpdated})
+        ?res.status(200).send({status: "Success", cartUpdated: cartUpdated})
         :res.status(500).send({status: "Error", reason: "El carrito no existe o el producto no existe"})
 }
 

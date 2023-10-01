@@ -14,18 +14,19 @@ const initializePassport = () =>{
     passport.use('register', new LocalStrategy(
         {passReqToCallback: true, usernameField: 'email'},
         async (req, username, password, done) => {
+            const { name, lastName, age, email} = req.body
+            //Verificamos que no falte ningun campo si no frenamos la operacion
+            if(!name || !lastName || !age || !email || !req.body.password) done({status: "ERROR", reason: "Campos erronéos o faltantes"})
             try {
-                //El usuario pasado por el form(body) lo guardamos en una variable
-                let userData = req.body
                 //Verificamos si el usuario existe en la DB 
-                const userFound = await serviceMongo.getDocumentsByFilter(User, {email: userData.email})
+                const userFound = await serviceMongo.getDocumentsByFilter(User, {email: email})
                 //En caso de que el usuario exista. Frenamos la operacion, redirigimos e indicamos que ya existe
                 if(userFound){
                     done(null, false)
                 }
                 else{
                     //Si no existe, lo creamos formateado con DTO. Le asignamos el Rol y al password lo segurizamos
-                    userData = new UserDTO(req.body)
+                    const userData = new UserDTO(req.body)
                     //Se agrega a la DB el nuevo user
                     const userAdded = await serviceMongo.createNewDocument(User, userData)
                     //Salimos y devolvemos el usuario creado
@@ -41,6 +42,8 @@ const initializePassport = () =>{
     passport.use("login", new LocalStrategy(
         {passReqToCallback: true, usernameField: "email"},
         async (req, username, password, done)=>{
+            //Verificamos que no falte ningun campo si no frenamos la operacion
+            if(!req.body.email || !req.body.password) done({status: "ERROR", reason: "Campos erronéos o faltantes"})
             try {
                 //Verificamos si el usuario existe en la DB
                 const userData = req.body

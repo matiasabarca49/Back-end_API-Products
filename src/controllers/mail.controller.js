@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer')
-const { saveSecret } = require('../utils/utils.js')
+const { saveSecret, createHash, isValidPassword, searchSecret } = require('../utils/utils.js')
 const UsersManager = require('../dao/mongo/users.mongo.js')
 const usersManager = new UsersManager()
 
@@ -23,9 +23,10 @@ transporter.verify(function (error, success) {
 });
 
 const generateLink = (user) =>{
-    const key = `Cod!34fdsert${ Date.now() }`
-    const dateNow = new Date()
-    const secret = `${Date.now()+dateNow.getFullYear()+Date.now()+dateNow.getMonth()+dateNow.getHours()+key}password` 
+    const key = createHash(`Cod!34fdsert${ user.email }`)
+    /* const dateNow = new Date()
+    const secret = `${Date.now()+dateNow.getFullYear()+Date.now()+dateNow.getMonth()+dateNow.getHours()+key}&qui=45604545rgfdt355iuiljhgfds/&>S43&filter=user&type=change&user=notFound`  */
+    const secret = `${key}&qui=45604545rgfdt355iuiljhgfds/&>S43&filter=user&type=change&user=notFound` 
     saveSecret(secret)
     const mailOptionsChangePassword = {
         from: `Tienda de Productos  <${process.env.GMAIL_CREDENTIAL_USER}>`,
@@ -82,28 +83,42 @@ const sendMailRecoverPass = async (req, res)=>{
 }
 
 const changepassword =  async (req, res)=>{
-    const passwordChanged = await usersManager.putChangePasswordFromUser(req.query.email, req.body.password)
-    if (passwordChanged.status){
-        const userFound = await usersManager.getUserByFilter({email: req.query.email})
-        let result = transporter.sendMail({
-            from: `Tienda de Productos  <${process.env.GMAIL_CREDENTIAL_USER}>`,
-            to: `${userFound.email}`,
-            subject: "Contraseña cambiada",
-            html:`
-                <div>  
-                    <h1>Hola ${userFound.name}</h1>
-                    <h3> Su contraseña ha sido cambiada</h3>
-                    <p style="margin-top: 20px">En caso de no haya sido usted el que cambió la contraseña. Cambiela de inmediato</p>
-                </div>
-            `,
-            attachments: []  
-        })
-        req.logger.info(passwordChanged.reason)
-        res.status(200).redirect("/api/sessions/login")
+    try {
+        const isValid = searchSecret(req.query.secret, req.query.email)
+        if (isValid === false){
+            req.logger.warning("Intento de manipulacion en restauracion contraseña")
+            res.status(500).send({status: "ERROR"})
+        }else{
+            const passwordChanged = await usersManager.putChangePasswordFromUser(req.query.email, req.body.password)
+            if (passwordChanged.status){
+                const userFound = await usersManager.getUserByFilter({email: req.query.email})
+                let result = transporter.sendMail({
+                    from: `Tienda de Productos  <${process.env.GMAIL_CREDENTIAL_USER}>`,
+                    to: `${userFound.email}`,
+                    subject: "Contraseña cambiada",
+                    html:`
+                        <div>  
+                            <h1>Hola ${userFound.name}</h1>
+                            <h3> Su contraseña ha sido cambiada</h3>
+                            <p style="margin-top: 20px">En caso de no haya sido usted el que cambió la contraseña. Cambiela de inmediato</p>
+                        </div>
+                    `,
+                    attachments: []  
+                })
+                req.logger.info(passwordChanged.reason)
+                res.status(200).redirect("/api/sessions/login")
+            }
+            else{
+                res.status(500).send({status: "ERROR", reason: passwordChanged.reason })
+            } 
+        }
+         
+
+    } catch{
+        req.logger.warning("Intento de manipulacion en restauracion contraseña")
+        res.status(500).send({status: "ERROR"})
     }
-    else{
-        res.status(500).send({status: "ERROR", reason: passwordChanged.reason })
-    }  
+    
 }
 
 

@@ -23,7 +23,7 @@ const addToCart = async (product)=>{
 
     }
     catch(error){
-        console.log(error)
+        console.log("Error al Agregar el producto al carrito")
     }
 }
 

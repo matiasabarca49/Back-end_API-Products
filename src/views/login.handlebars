@@ -10,11 +10,11 @@
     <form  class="container mb-4" action="/api/sessions/login" method="post" >
         <div>
             <label htmlFor="">Email:</label>
-            <input class='w-100' type="text" name="email"/>
+            <input class='w-100' type="text" name="email" required/>
         </div>
         <div>
             <label htmlFor="">Contraseña:</label>
-            <input class="w-100" type="password" name="password"/>
+            <input class="w-100" type="password" name="password" required/>
         </div>
         {{#if error}}
             <div class="text-danger">Constraseña o email erróneos</div>

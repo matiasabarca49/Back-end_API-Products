@@ -28,7 +28,7 @@ router.get("/:cid/purchase", ath,controller.getPurchase)
 /** 
  *  POST
  **/
-//Agrega un cart a la DB(/api/carts/), para agregar productos al usuario revise su enpoint(/api/users/addcart)
+//Agrega un cart a la DB(/api/carts/). Para agregar productos al usuario revise su enpoint(/api/users/addcart)
 router.post("/", ath,controller.addCart)
 router.post("/:cid/product/:pid", ath,controller.addProductInCart)
 
