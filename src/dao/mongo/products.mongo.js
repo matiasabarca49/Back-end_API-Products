@@ -16,6 +16,13 @@ class ProductsManager {
         return serviceMongo.getDocuments(Product)
     }
 
+    getProductsByID(ID){
+        return serviceMongo.getDocumentsByID(Product, ID)
+    }
+    getProductsByFilter(filter){
+        return serviceMongo.getDocumentsByFilter(Product, filter)
+    }
+
     postProduct(product){
         return serviceMongo.createNewDocument(Product, product)
     }
@@ -27,6 +34,7 @@ class ProductsManager {
     putProduct(ID, productToChange){
         return serviceMongo.updateDocument(Product, ID, productToChange)
     }
+    
     async delProduct(ID, user){
         if (user.rol === "Premium"){
             const productFound = await serviceMongo.getDocumentsByID(Product, ID)

@@ -32,8 +32,7 @@ const getProducts = async (req,res) =>{
 }
 
 const getProductsByID = async (req,res) =>{
-    const products = await productsManager.getProducts()
-    const productFound = products.find( product => product.id === req.params.id)
+    const productFound = await productsManager.getProductsByID(req.params.id)
     productFound
         ? res.status(200).send({status: "Success", producto: productFound})
         : res.status(404).send({status: "Error", reason: "Producto no encontrado"})

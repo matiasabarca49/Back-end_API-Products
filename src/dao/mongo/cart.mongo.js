@@ -62,6 +62,10 @@ class CartManager {
         return serviceMongo.addProductToCartInDB(Cart, cartID, productID, quantity)
     }
 
+    delCart(cartID){
+        return serviceMongo.deleteDocument(Cart, cartID)
+    }
+
     delProductInCart(cartID, productID){
         return serviceMongo.deleteProductCartInDB( Cart, cartID, productID )
     }
@@ -69,7 +73,6 @@ class CartManager {
     delFullCart(cartID){
         return serviceMongo.deleteFullCartInDB(Cart, cartID)
     }
-
 }
 
 module.exports = CartManager

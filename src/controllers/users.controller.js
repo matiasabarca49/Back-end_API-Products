@@ -20,7 +20,7 @@ const addProductToCartFromUser = async (req,res) =>{
     if (datedUser){
         //Para que se actualice el usuario sin tener que salir y volver entrar a la cuenta
         req.session.cart = datedUser.cart
-        res.status(201).send({status:" Succesfull ",userUpdated: datedUser})
+        res.status(201).send({status:" Succesfull ",userUpdated: datedUser.cart})
 
     }else{
         res.status(500).send({status: "ERROR" , reason: "No puede agregar un producto propio"})

@@ -9,7 +9,7 @@ const athCart = (req, res, next) =>{
         next()
     }
     else{
-        res.send({status: "ERROR", reason: "Solo los usuarios normales y los premium pueden agregar productos al carrito"})
+        res.status(401).send({status: "ERROR", reason: "Solo los usuarios normales y los premium pueden agregar productos al carrito"})
     }
 }
 
@@ -17,7 +17,7 @@ const athRol = (req, res, next) =>{
     if(req.session.rol === "Admin"){
         next()
     }else{
-        res.send({status: "ERROR", reason: "Solo los administradores pueden cambiar de rol a los usuarios"}) 
+        res.status(401).send({status: "ERROR", reason: "Solo los administradores pueden cambiar de rol a los usuarios"}) 
     }
 }
 

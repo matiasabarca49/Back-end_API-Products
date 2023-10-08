@@ -8,6 +8,17 @@ class UsersManager{
 
     }
 
+   async getUser(filter){
+        const userFound = await serviceMongo.getDocumentsByFilter(User, filter)
+        const userFormated ={
+            _id: userFound._id,
+            email: userFound.email,
+            purchases: userFound.purchases,
+            cart: userFound.cart
+        }
+        return userFormated
+    }
+    
     async putChangeRolFromUser(idUser){
         const userFound = await serviceMongo.getDocumentsByID(User, idUser)
         if (userFound.rol === "User"){
@@ -28,6 +39,7 @@ class UsersManager{
     }
 
    async postProductToCart(idUser, productToAdded){
+        console.log(productToAdded)
         const userFound = await serviceMongo.getDocumentsByID(User, idUser)
         if(userFound.email === productToAdded.owner){
             return false
@@ -61,6 +73,10 @@ class UsersManager{
    postPurchases(idUser, idCart){
         const userUpdated = serviceMongo.updateCartFromUser(User, idUser, idCart)
         return  userUpdated
+    }
+
+    delUser(IDUser){
+        return serviceMongo.deleteDocument(User, IDUser)
     }
 
 }

@@ -3,7 +3,7 @@
 Es una API que permite la obtención y administracion de productos para un market como tambien la obtención de los carritos de la DB. La app Utiliza MongoDB y es Server Side Rendering.  
 Para el Front-end, es utilizado Handlebars. Cuenta con vista de productos en DB, Tienda, Login, Register y Chat de mensajes.
 
-Conceptos utilizados: NodeJS, Express, MongoDB, Mongoose, Paginate, Passport-local, Passport-Github, Custom Errors, Patrón MVC, DAO, Loggers, Swagger.
+Conceptos utilizados: NodeJS, Express, MongoDB, Mongoose, Paginate, Passport-local, Passport-Github, Custom Errors, Patrón MVC, DAO, Loggers, Swagger, TDD, BDD.  
 Estilado: Bootstrap y CSS
 
 NOTA: Sin las variables de entorno no podrá iniciar el servidor.

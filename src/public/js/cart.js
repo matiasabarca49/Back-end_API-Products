@@ -1,7 +1,8 @@
 const addToCart = async (product)=>{
+    let user;
     try{
         const resUser = await fetch(`http://localhost:8080/api/sessions/current`)
-        const user = await resUser.json()
+        user = await resUser.json()
         //Los usuarios no pueden agregar sus propios productos
         if(user.currentUser.email === product.owner){
             const modal = document.getElementById("modalWarningRolUser")
@@ -23,7 +24,12 @@ const addToCart = async (product)=>{
 
     }
     catch(error){
-        console.log("Error al Agregar el producto al carrito")
+        if(!user){
+            window.location.href = "http://localhost:8080/api/sessions/login"
+        }
+        else{
+            console.log("Error al Agregar el producto al carrito")
+        }
     }
 }
 
