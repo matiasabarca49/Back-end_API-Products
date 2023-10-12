@@ -73,6 +73,9 @@ class CartManager {
     delFullCart(cartID){
         return serviceMongo.deleteFullCartInDB(Cart, cartID)
     }
+    delTicket(tCode){
+        return serviceMongo.deleteDocumentByFilter(Ticket, {code: tCode})
+    }
 }
 
 module.exports = CartManager

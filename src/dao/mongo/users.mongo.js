@@ -39,7 +39,7 @@ class UsersManager{
     }
 
    async postProductToCart(idUser, productToAdded){
-        console.log(productToAdded)
+        /* console.log(productToAdded) */
         const userFound = await serviceMongo.getDocumentsByID(User, idUser)
         if(userFound.email === productToAdded.owner){
             return false

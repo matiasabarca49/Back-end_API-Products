@@ -9,22 +9,22 @@ mongoose.connect(`mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD_DB
 @cluster-mongo-coder-tes.qh8sdrt.mongodb.net/ecommerce`)
 const UsersManager = require('../src/dao/mongo/users.mongo')
 const ProductsManagers = require('../src/dao/mongo/products.mongo')
-const { Cookie } = require('express-session')
+const CartManager = require('../src/dao/mongo/cart.mongo')
 
 
 describe('Test de API', function(){
-    after(function(){
-        mongoose.connection.close()
+    before(async function(){
+        this.usersManager = new UsersManager()
+    })
+    after(async function(){
+        const userFound = await this.usersManager.getUser({email: "TestUser@correo.com" })
+        if(userFound){
+           const result = await this.usersManager.delUser(userFound._id.toString())
+        }
+        mongoose.connection.close() 
     })
     describe('Test de Sessions', async function(){
         this.timeout(15000)
-        before(async function(){
-            this.usersManager = new UsersManager()
-            const userFound = await this.usersManager.getUser({email: "TestUser@correo.com" })
-            if(userFound){
-                await this.usersManager.delUser(userFound._id.toString())
-            } 
-        })
         //Test 01
         it("Registrando Usuario", async function(){
             this.timeout(15000)
@@ -95,7 +95,10 @@ describe('Test de API', function(){
         this.timeout(15000)
         before(function(){
             this.productsManagers = new ProductsManagers()
+            this.cartManager = new CartManager()
             this.Cookie
+            this.cartID
+            this.ticketCode
         })
         //Test 01
         it("Loguear usuario", async function(){
@@ -140,13 +143,17 @@ describe('Test de API', function(){
             //Then
             const resultAddCart = await requester.post("/api/carts/").set('Cookie', this.Cookie ).send(finalCart)
             const resultPurchase = await requester.get(`/api/carts/${resultAddCart._body.cart._id}/purchase`).set('Cookie', this.Cookie )
+            this.cartID = resultAddCart._body.cart._id
+            this.ticketCode = resultPurchase._body.ticket.code
             //Assert
             expect(resultAddCart.statusCode).is.ok.and.equal(201)
             expect(resultAddCart._body.status).is.ok.and.equal('Success')
             expect(resultPurchase.statusCode).is.ok.and.equal(201)
             expect(resultPurchase._body.status).is.ok.and.equal('Success')
             expect(resultPurchase._body).is.ok.and.have.property('ticket')
+            //Borrando Cart y Ticket de la DB
+            this.cartManager.delCart(this.cartID)
+            await this.cartManager.delTicket(this.ticketCode)
         })
-
     })
 })

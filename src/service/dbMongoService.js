@@ -114,6 +114,20 @@ class ServiceMongo{
             } )
         return documentDeleted
     }
+    
+    async deleteDocumentByFilter(Model, filter){
+        const documentToDelete = this.getDocumentsByFilter(Model, filter)
+        let documentDeleted 
+        await Model.deleteOne(filter)
+            .then( dt =>{
+                documentDeleted = documentToDelete
+            } )
+            .catch( err => {
+                console.log(err)
+                documentDeleted= false
+            } )
+        return documentDeleted
+    }
 
     /**
      * Métodos para el cart  
