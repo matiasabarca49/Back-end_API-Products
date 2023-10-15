@@ -38,5 +38,29 @@
         </div>
         </div>
     </div>
+    <div class="container-fluid mt-2">
+        <h2>Usuarios en la base de datos:</h2>
+        <div class="row gap-4 p-4 ms-4">
+            {{#each users }}
+                <div class=" col-2 col-6 col-sm-4 card  mb-3 flex-grow-1 shadow" style="max-width: 18rem;">
+                    <div class="card-header bg-transparent ">
+                        <p class="fw-light opacity-75" style="font-size: 14px;">{{this.id}}</p>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fs-4 text fw-bold">{{this.name}}</h5>
+                        <h5 class="card-title fs-4 text fw-bold">{{this.lastName}}</h5>
+                        <p class="card-text">{{this.email}}</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center bg-transparent fs-4 text ">
+                        <div>
+                            Rol: {{this.rol}}
+                        </div>
+                        <div class="fs-6 fw-light opacity-75">Age: {{this.age}}</div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+        </div>
+    </div>
 </main>
 <script src="./js/home.js"></script>

@@ -5,6 +5,9 @@ const { createHash, isValidPassword } = require('../utils/utils.js')
 const User = require('../dao/mongo/models/usersModels.js')
 const UserDTO = require('../dao/dto/user.dto.js')
 const serviceMongo = new ServiceMongo()
+//Users Managers
+const UsersManager = require('../dao/mongo/users.mongo.js')
+const usersManager = new UsersManager()
 //Errors
 const CustomError = require('../service/errors/customError')
 const { generateUserErrorInfo  } = require('../service/errors/messageCreater.js')
@@ -51,7 +54,8 @@ const initializePassport = () =>{
                 //Si existe, verificamos que la "password" proviniente del body, sea correcta.
                 if(userFound){
                     const checkPassword = isValidPassword(userFound, userData.password)
-                    checkPassword ? done(null, userFound) : done(null, false)
+                    /* checkPassword && await usersManager.putConnectionUser(userFound._id.toString()) */
+                    checkPassword ? done(null, await usersManager.putConnectionUser(userFound._id.toString())) : done(null, false)
                 }
                 else{
                     //En caso de que el usuario no exista o este mal las credenciales. Frenamos la operacion

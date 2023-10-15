@@ -39,24 +39,29 @@ function voidLogAndRegis(req, res, next){
 //Debido a un error o directiva de Handlebars los productos son reescritos para lograr que handlebars renderice
 const serviceMongo =  new ServiceMongo()
 
-const reWriteDocsDB = async () =>{
-    const productsReWrited = []
-    const productsFromBase = await serviceMongo.getDocuments(Product)
-    productsFromBase.forEach( product => {
-        const productReWrited = {
-            title: product.title,
-            description: product.description,
-            price: product.price,
-            code: product.code,
-            stock: product.stock,
-            status: product.status,
-            category: product.category,
-            owner: product.owner,
-            id: product.id
+const reWriteDocsDB = async (Model) =>{
+    const documentsReWrited = []
+    const documentsFromBase = await serviceMongo.getDocuments(Model)
+    documentsFromBase.forEach( document => {
+        const documentReWrited = {
+            name: document.name || "Not Declared",
+            lastName: document.lastName || "Not Declared",
+            age: document.age || "Not Declared",
+            email: document.email || "Not Declared",
+            rol: document.rol || "Not Declared",
+            title: document.title || "Not Declared",
+            description: document.description || "Not Declared",
+            price: document.price || "Not Declared",
+            code: document.code || "Not Declared",
+            stock: document.stock || "Not Declared",
+            status: document.status || "Not Declared",
+            category: document.category || "Not Declared",
+            owner: document.owner || "Not Declared",
+            id: document.id
         }
-        productsReWrited.push(productReWrited)
+        documentsReWrited.push(documentReWrited)
     })
-    return productsReWrited
+    return documentsReWrited
 }
 
 //Generación de Mock

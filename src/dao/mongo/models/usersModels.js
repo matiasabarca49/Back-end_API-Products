@@ -27,6 +27,19 @@ const userSchema = new mongoose.Schema({
         enum:["User","Premium","Admin"],
         required: true
     },
+    documents:[
+        {
+            name:{
+                type: String
+            },
+            reference:{
+                type: String
+            }
+        }
+    ],
+    lastConnection:{
+        type: String
+    },
     purchases:[
             {   
                 dateCart:{

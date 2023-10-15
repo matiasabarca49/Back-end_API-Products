@@ -1,8 +1,10 @@
 const express = require('express')
 const { Router } = express
 const router = new Router()
+//Multer
+const uploader = require('../utils/multer.js')
 //controllers
-const { changeRol, addPurchaseToUser, addProductToCartFromUser } = require('../controllers/users.controller.js')
+const { changeRol, addPurchaseToUser, addProductToCartFromUser, addDocumentsInUser } = require('../controllers/users.controller.js')
 
 const athCart = (req, res, next) =>{
     if(req.session.rol === "User" || req.session.rol === "Premium"){
@@ -25,6 +27,7 @@ const athRol = (req, res, next) =>{
 *   POST 
 **/
 router.post( '/addcart', athCart, addProductToCartFromUser)
+router.post( '/:uid/documents',uploader.single('file'),addDocumentsInUser)
     
 
 /**

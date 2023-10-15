@@ -19,20 +19,6 @@ class UsersManager{
         return userFormated
     }
     
-    async putChangeRolFromUser(idUser){
-        const userFound = await serviceMongo.getDocumentsByID(User, idUser)
-        if (userFound.rol === "User"){
-            const userUpdated = await serviceMongo.updateDocument(User, idUser,{rol: "Premium"})
-            return userUpdated 
-        }
-        else if(userFound.rol === "Premium"){
-            const userUpdated = await serviceMongo.updateDocument(User, idUser,{rol: "User"})
-            return userUpdated 
-        }
-        else{
-            return false
-        }
-    }
 
     async getUserByFilter(filter){
         return serviceMongo.getDocumentsByFilter(User, filter)
@@ -53,6 +39,27 @@ class UsersManager{
         return userUpdated
    }
 
+   async postDocument(idUser,document){
+    let documentsUpdated
+    const userFound = await serviceMongo.getDocumentsByID(User, idUser)
+    //Buscando si ya existe el documento en DB
+    const documentFound = userFound.documents.find( documentDB => documentDB.name === document.name)
+    if(documentFound){
+       const documentFilter = userFound.documents.filter( documentDB => documentDB.name !== document.name)
+        documentsUpdated = [...documentFilter, document]
+    }
+    else{
+        documentsUpdated = [...userFound.documents, document]  
+    }
+    //Agregamos el documento a la DB
+    if(userFound){
+        const userUpdated = await serviceMongo.updateDocument(User, idUser, {documents: documentsUpdated})
+        return userUpdated
+    }else{
+        return false
+    }
+   }
+
    async putChangePasswordFromUser(emailUser, password){
         const user = await serviceMongo.getDocumentsByFilter(User, { email: emailUser})
         //Revisar que la contraseña no sea igual a la anterior
@@ -70,10 +77,49 @@ class UsersManager{
        
    }
 
-   postPurchases(idUser, idCart){
-        const userUpdated = serviceMongo.updateCartFromUser(User, idUser, idCart)
-        return  userUpdated
+   async putChangeRolFromUser(idUser){
+        const documents = ["Identificacion", "Comprobante de domicilio", "Comprobante de estado de cuenta"]
+        const userFound = await serviceMongo.getDocumentsByID(User, idUser)
+        if (userFound.rol === "User"){
+            let cont=0
+            userFound.documents.forEach( document => {
+                if(documents.includes(document.name)){
+                    cont++
+                }
+            })
+            if (cont === 3){
+                const userUpdated = await serviceMongo.updateDocument(User, idUser,{rol: "Premium"})
+                return {status: true, userUpdated: {_id: userUpdated._id, name: userUpdated.name, lastName: userUpdated.lastName, email: userUpdated.email, rol: userUpdated.rol}} 
+            }
+            else{
+                return {status: false, reason: "Faltan Cargar Documentos"}
+            }
+        }
+        else if(userFound.rol === "Premium"){
+            const userUpdated = await serviceMongo.updateDocument(User, idUser,{rol: "User"})
+            return {status: true, userUpdated: {_id: userUpdated._id, name: userUpdated.name, lastName: userUpdated.lastName, email: userUpdated.email, rol: userUpdated.rol}}
+        }
+        else{
+            return {status: false, reason: "El usuario no fue encontrado"}
+        }
+    }  
+
+    async putConnectionUser(idUser){
+        const date = new Date().toString()
+        /* const dateNow = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}hs` */
+        const userFound = await serviceMongo.getDocumentsByID(User, idUser)
+        if(userFound){
+            const userUpdated = await serviceMongo.updateDocument(User, idUser,{lastConnection: date})
+            return userUpdated
+        }else{
+            return false
+        }
     }
+
+    postPurchases(idUser, idCart){
+            const userUpdated = serviceMongo.updateCartFromUser(User, idUser, idCart)
+            return  userUpdated
+        }
 
     delUser(IDUser){
         return serviceMongo.deleteDocument(User, IDUser)

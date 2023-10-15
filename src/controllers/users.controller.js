@@ -6,9 +6,9 @@ const usersManager = new UsersManager()
 */
 const changeRol = async (req, res) =>{
     const userUpdated = await usersManager.putChangeRolFromUser(req.params.uid)
-    userUpdated
-        ? res.status(201).send({status: "Succefull", userUpdated: userUpdated})
-        : res.status(500).send({status: "ERROR", reason: "Los Administradores no pueden cambiar de rol"})
+    userUpdated.status
+        ? res.status(201).send({status: "Succefull", userUpdated: userUpdated.userUpdated})
+        : res.status(500).send({status: "ERROR", reason: userUpdated.reason ||"Los Administradores no pueden cambiar de rol"})
 }
 
 /**
@@ -40,8 +40,24 @@ const addPurchaseToUser = async (req, res) => {
     }
 } 
 
+const addDocumentsInUser = async (req, res) => {
+    const isValid = ["Identificacion", "Comprobante de domicilio", "Comprobante de estado de cuenta"].includes(req.file.originalname.split(".")[0])
+    if(isValid){
+        const document ={
+            name:req.file.originalname,
+            reference: req.file.path
+        }
+        const userUpdated = await usersManager.postDocument(req.params.uid, document)
+        res.status(201).send({status: "Charged", file: userUpdated.documents[userUpdated.documents.length - 1]})
+    }
+    else{
+        res.status(500).send({status: "Error"})
+    }
+}
+
 module.exports = {
     changeRol,
     addPurchaseToUser,
-    addProductToCartFromUser
+    addProductToCartFromUser,
+    addDocumentsInUser
 }

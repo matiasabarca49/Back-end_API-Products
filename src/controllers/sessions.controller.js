@@ -1,4 +1,6 @@
 const { searchSecret } = require('../utils/utils.js')
+const UsersManager = require('../dao/mongo/users.mongo.js')
+const usersManager = new UsersManager()
 
 const getRegister = (req, res) =>{
     res.render("register")  
@@ -20,8 +22,9 @@ const getGeneratePassword = (req,res)=>{
         :res.render('forgetPassword')
 }   
 
-const getLogout = (req, res) =>{
-    req.session.destroy( err =>{
+const getLogout = async (req, res) =>{
+    if(req.session.passport?.user) await usersManager.putConnectionUser(req.session.passport.user)
+    req.session.destroy( async err =>{
         if(!err) res.redirect("/api/sessions/login")
         else res.status(500).send({status: "ERROR"})
     })
@@ -50,6 +53,7 @@ const loginUser = async (req, res)=>{
     req.session.email = userFound.email
     req.session.age = userFound.age
     req.session.rol = userFound.rol
+    req.session.lastConnection = userFound.lastConnection
     req.session.cart = userFound.cart
     req.session.purchases = userFound.purchases
     res.redirect("/products")
