@@ -4,7 +4,7 @@ const router = new Router()
 //Multer
 const uploader = require('../utils/multer.js')
 //controllers
-const { changeRol, addPurchaseToUser, addProductToCartFromUser, addDocumentsInUser } = require('../controllers/users.controller.js')
+const { getUsers, changeRol, addPurchaseToUser, addProductToCartFromUser, addDocumentsInUser, delUser, delUserForConnectionn } = require('../controllers/users.controller.js')
 
 const athCart = (req, res, next) =>{
     if(req.session.rol === "User" || req.session.rol === "Premium"){
@@ -19,9 +19,15 @@ const athRol = (req, res, next) =>{
     if(req.session.rol === "Admin"){
         next()
     }else{
-        res.status(401).send({status: "ERROR", reason: "Solo los administradores pueden cambiar de rol a los usuarios"}) 
+        res.status(401).send({status: "ERROR", reason: "Solo los administradores pueden administrar a los usuarios"}) 
     }
 }
+
+/**
+*   GET 
+**/
+router.get("/", getUsers)
+
 
 /**
 *   POST 
@@ -29,11 +35,15 @@ const athRol = (req, res, next) =>{
 router.post( '/addcart', athCart, addProductToCartFromUser)
 router.post( '/:uid/documents',uploader.single('file'),addDocumentsInUser)
     
-
 /**
 *   PUT 
 **/
 router.put('/premium/:uid', athRol, changeRol)
-router.put( '/addpurchase', athCart, addPurchaseToUser)
+
+/**
+*   DELETE
+**/
+router.delete("/:id", athRol, delUser)
+router.delete("/delete/withoutconnection", athRol, delUserForConnectionn)
 
 module.exports = router

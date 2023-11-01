@@ -2,11 +2,19 @@ const { createHash, isValidPassword } = require('../../utils/utils.js')
 const User = require('../mongo/models/usersModels')
 const ServiceMongo = require('../../service/dbMongoService')
 const serviceMongo = new ServiceMongo()
+const { reWriteDocsDB } = require("../../utils/utils.js")
+const { transporter } = require('../../config/config.js')
+const { generateFormatEmail } = require('../../utils/utils.js')
+
 
 class UsersManager{
     constructor(){
 
     }
+
+   getUsers(){
+    return reWriteDocsDB(User, "User")
+   }
 
    async getUser(filter){
         const userFound = await serviceMongo.getDocumentsByFilter(User, filter)
@@ -105,7 +113,7 @@ class UsersManager{
     }  
 
     async putConnectionUser(idUser){
-        const date = new Date().toString()
+        const date = new Date().toISOString()
         /* const dateNow = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}hs` */
         const userFound = await serviceMongo.getDocumentsByID(User, idUser)
         if(userFound){
@@ -116,13 +124,19 @@ class UsersManager{
         }
     }
 
-    postPurchases(idUser, idCart){
-            const userUpdated = serviceMongo.updateCartFromUser(User, idUser, idCart)
-            return  userUpdated
-        }
-
     delUser(IDUser){
         return serviceMongo.deleteDocument(User, IDUser)
+    }
+
+    async delUserForTimeDisconnection(){
+        const oldDate = new Date()
+        oldDate.setDate(oldDate.getDate() - 2 )
+        const usersToDelete = await serviceMongo.getManyDocumentsByFilter(User, { lastConnection: { $lt: oldDate.toISOString()}, rol: {$ne: "Admin"}})
+        const usersDeleted = await serviceMongo.deleteManyDocumentByFilter(User, { lastConnection: { $lt: oldDate.toISOString()}, rol: {$ne: "Admin"}})
+        usersToDelete.forEach( user => {
+            transporter.sendMail(generateFormatEmail(user.email, { subject: "Usuario Eliminado", head: "El Usuario fue eliminado correctamente", body: `El Usuario "${user.name} ${user.lastName}" con rol "${user.rol}" fue eliminado. Por ausencia de conexión ${new Date(user.lastConnection).toLocaleString()}.`}))
+        } )
+        return usersDeleted
     }
 
 }

@@ -54,6 +54,14 @@ app.use(addLogger)
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
+//Crear una helpers que nos permite comporar dos terminos
+const hbs = handlebars.create({})
+hbs.handlebars.registerHelper('ifCond', function(v1, v2, options) {
+    if(v1 === v2) {
+      return options.fn(this);
+    }
+    return options.inverse(this);
+  });
 
 /**
  * API Doc
@@ -89,6 +97,7 @@ const routeMocks = require('./routes/mocks.router.js')
 const routeViewRealTimeProducts = require('./routes/pages/realTimeProducts.router.js')
 const routeViewProducts = require('./routes/pages/products.router.js')
 const routeViewCart = require('./routes/pages/cartview.router.js')
+const routeViewUsers = require('./routes/pages/usersview.router.js')
 const routeGithubAuth = require('./routes/passport/github.passport.router.js')
 const routeError = require('./routes/pages/404.router.js')
 
@@ -106,6 +115,7 @@ app.use("/loggerTest", routeLoggerTest)
 app.use("/realtimeproducts", routeViewRealTimeProducts)
 app.use("/products", routeViewProducts)
 app.use("/carts", routeViewCart)
+app.use("/usersview", routeViewUsers)
 app.use('*', routeError)
 
 /**
@@ -118,7 +128,7 @@ webSocket(server)
 //Levantar el servidor para que empiece a escuchar
 server.listen(`${config.port}`, ()=>{ 
     console.log("Environment Mode Option: ", config.environment);
-    console.log(`El servidor está escuchando en el puerto ${config.port}`)
+    console.log(`Server running on port ${config.port}`)
     //Conectar base de datos
     mongoManager.connect()
 })

@@ -1,26 +1,8 @@
-const nodemailer = require('nodemailer')
+/* const nodemailer = require('nodemailer') */
 const { saveSecret, createHash, isValidPassword, searchSecret } = require('../utils/utils.js')
 const UsersManager = require('../dao/mongo/users.mongo.js')
 const usersManager = new UsersManager()
-
-//Creando trasnporter
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    port: 578,
-    auth:{
-        user: process.env.GMAIL_CREDENTIAL_USER,
-        pass: process.env.GMAIL_CREDENTIAL_TOKEN
-    }
-})
-
-//Verificar conexion
-transporter.verify(function (error, success) {
-    if (error) {
-        console.log(error);
-    } else {
-        console.log('Server is ready to take our messages');
-    }
-});
+const { transporter } = require('../config/config.js')
 
 const generateLink = (user) =>{
     const key = createHash(`Cod!34fdsert${ user.email }`)
@@ -49,7 +31,7 @@ const generateLink = (user) =>{
 }
 
 
-const sendMail = (req, res )=>{
+const sendMail = (req, res)=>{
     //Para enviar ticket de compra
 }
 

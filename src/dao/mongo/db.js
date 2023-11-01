@@ -9,7 +9,7 @@ class MongoManager{
         return mongoose.connect(this.url,
         {useUnifiedTopology: true, 
         useNewUrlParser: true})
-            .then(connect => console.log("Conexion a db exitosa"))
+            .then(connect => console.log("DB connection successful"))
             .catch( err => console.log(err))
     }
 }

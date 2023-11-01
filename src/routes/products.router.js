@@ -36,7 +36,7 @@ router.put("/:id", ath,updateProduct)
 /**
 * DELETE
 */
-router.delete("/:id", ath,deleteProduct)
+router.delete("/:id", ath, deleteProduct)
 
 
 module.exports = router

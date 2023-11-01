@@ -1,5 +1,5 @@
 <header>
-    <nav class="navbar bg-primary d-flex justify-content-around" data-bs-theme="dark">
+    <nav class="navbar bg-primary d-flex justify-content-around" data-bs-theme="dark" style="height: 60px;">
         <div>
           <a class="navbar-brand" href="http://localhost:8080/products">Tienda</a>
         </div>
@@ -18,9 +18,20 @@
                     <a class="btn btn-light" href="/api/sessions/login">Login</a>
                 </div>
             {{/unless}}
-            <div>
-                <a class="btn" href="/"><img style="width: 30px; filter: invert(100%)" src="../../img/home.png" alt="home"></a>
-            </div>
+            {{#ifCond userLoged.rol "Admin"}}
+                <div>
+                    <a class="btn" href="/"><img style="width: 30px; filter: invert(100%)" src="../../img/configurar.png" alt="home"></a>
+                </div>
+            {{else}}
+                <div>
+                    <a class="btn" href="chat"><img style="width: 30px; filter: invert(100%)" src="../../img/chat.png" alt="home"></a>
+                </div>
+            {{/ifCond}}
+            {{#ifCond userLoged.rol "Premium"}}
+                <div>
+                    <a class="btn" href="/realtimeproducts"><img style="width: 30px; filter: invert(100%)" src="../../img/upload.png" alt="home"></a>
+                </div>
+            {{/ifCond}}
         </div>
     </nav>
 </header>
@@ -32,7 +43,6 @@
         <h4>Edad: {{userLoged.age}}</h4>
         <h4>Email: {{userLoged.email}}</h4>
         <h4>Permisos a nivel de: {{userLoged.rol}}</h4>
-        <h4>Ultima conexión: {{userLoged.lastConnection}}</h4>
     </div>
     <div>
         <h3>Historial de compras:</h3>

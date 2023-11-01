@@ -1,13 +1,22 @@
 const UsersManager = require('../dao/mongo/users.mongo.js')
 const usersManager = new UsersManager()
 
+
 /**
 * GET
 */
+
+const getUsers = async (req, res) =>{
+    const usersGetted = await usersManager.getUsers()
+    usersGetted
+        ? res.status(200).send({status: "Succesfull", users: usersGetted})
+        : res.status(500).send({status: "Error"})
+}
+
 const changeRol = async (req, res) =>{
     const userUpdated = await usersManager.putChangeRolFromUser(req.params.uid)
     userUpdated.status
-        ? res.status(201).send({status: "Succefull", userUpdated: userUpdated.userUpdated})
+        ? res.status(201).send({status: "Succesfull", userUpdated: userUpdated.userUpdated})
         : res.status(500).send({status: "ERROR", reason: userUpdated.reason ||"Los Administradores no pueden cambiar de rol"})
 }
 
@@ -27,19 +36,6 @@ const addProductToCartFromUser = async (req,res) =>{
     }
 }
 
-const addPurchaseToUser = async (req, res) => {
-    const {idUser,idCart } = req.body
-    const datedUser = await usersManager.postPurchases(idUser, idCart)
-    if(datedUser){
-        //Para que se actualice el usuario sin tener que salir y volver entrar a la cuenta
-        req.session.carts = datedUser.carts
-        res.status(201).send({status:"success", datedUser: datedUser})
-    }
-    else{
-        res.status(500).send({status: "ERROR"})
-    }
-} 
-
 const addDocumentsInUser = async (req, res) => {
     const isValid = ["Identificacion", "Comprobante de domicilio", "Comprobante de estado de cuenta"].includes(req.file.originalname.split(".")[0])
     if(isValid){
@@ -55,9 +51,26 @@ const addDocumentsInUser = async (req, res) => {
     }
 }
 
+/**
+* DELETE
+*/
+const delUser = async (req, res) =>{
+    const userDeleted = await usersManager.delUser(req.params.id)
+    userDeleted 
+        ? res.status(200).send({status: "Successful", user: userDeleted})
+        : res.status(500).send({status: "Error", reason: "El usuario no existe o error en el servidor"})
+}
+
+const delUserForConnectionn = async (req, res) =>{
+    const usersUpdated = await usersManager.delUserForTimeDisconnection()
+    res.send(usersUpdated)
+}
+
 module.exports = {
+    getUsers,
     changeRol,
-    addPurchaseToUser,
     addProductToCartFromUser,
-    addDocumentsInUser
+    addDocumentsInUser,
+    delUser,
+    delUserForConnectionn
 }

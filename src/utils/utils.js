@@ -39,27 +39,36 @@ function voidLogAndRegis(req, res, next){
 //Debido a un error o directiva de Handlebars los productos son reescritos para lograr que handlebars renderice
 const serviceMongo =  new ServiceMongo()
 
-const reWriteDocsDB = async (Model) =>{
+const reWriteDocsDB = async (Model, documentFormat) =>{
     const documentsReWrited = []
     const documentsFromBase = await serviceMongo.getDocuments(Model)
     documentsFromBase.forEach( document => {
-        const documentReWrited = {
-            name: document.name || "Not Declared",
-            lastName: document.lastName || "Not Declared",
-            age: document.age || "Not Declared",
-            email: document.email || "Not Declared",
-            rol: document.rol || "Not Declared",
-            title: document.title || "Not Declared",
-            description: document.description || "Not Declared",
-            price: document.price || "Not Declared",
-            code: document.code || "Not Declared",
-            stock: document.stock || "Not Declared",
-            status: document.status || "Not Declared",
-            category: document.category || "Not Declared",
-            owner: document.owner || "Not Declared",
-            id: document.id
+        
+        if(documentFormat === "Product"){
+            const documentReWrited = {
+                title: document.title || "Not Declared",
+                description: document.description || "Not Declared",
+                price: document.price || "Not Declared",
+                code: document.code || "Not Declared",
+                stock: document.stock || "Not Declared",
+                status: document.status || "Not Declared",
+                category: document.category || "Not Declared",
+                owner: document.owner || "Not Declared",
+                id: document.id 
+            }
+            documentsReWrited.push(documentReWrited)
         }
-        documentsReWrited.push(documentReWrited)
+        else if(documentFormat === "User"){
+            const documentReWrited = {
+                name: document.name || "Not Declared",
+                lastName: document.lastName || "Not Declared",
+                age: document.age || "Not Declared",
+                email: document.email || "Not Declared",
+                rol: document.rol || "Not Declared",
+                id: document.id 
+            }
+            documentsReWrited.push(documentReWrited)
+        }
     })
     return documentsReWrited
 }
@@ -113,6 +122,23 @@ const searchSecret = (secretToSearch, userMail)=>{
     }
 }
 
+//General Formato Email
+generateFormatEmail = (email, payload) =>{
+    const mailOptions = {
+        from: `Tienda de Productos  <${process.env.GMAIL_CREDENTIAL_USER}>`,
+        to: `${email}`,
+        subject: `${payload.subject}`,
+        html:`
+            <div>  
+                <h1> ${payload.head} </h1>
+                <p> ${payload.body} </p>
+            </div>
+        `,
+        attachments: []  
+    }
+    return mailOptions
+}
+
 module.exports= {
     createHash,
     isValidPassword,
@@ -121,5 +147,6 @@ module.exports= {
     reWriteDocsDB,
     generateProducts,
     saveSecret,
-    searchSecret
+    searchSecret,
+    generateFormatEmail
 }

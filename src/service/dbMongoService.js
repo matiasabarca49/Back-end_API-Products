@@ -43,6 +43,21 @@ class ServiceMongo{
         return documentFromDB
     }
 
+    async getManyDocumentsByFilter(Model, filter){
+        let documentsFromDB 
+        await Model.find(filter)
+            .then( dt => {
+                documentsFromDB = dt
+            } )
+            .catch(error =>{
+                console.log(error)
+            })
+        /* console.log(productsFromDB) */
+        return documentsFromDB
+    }
+
+   
+
     async getPaginate(Model, query ,lmit , pag , srt){
         let documentsFromDB 
         await Model.paginate(query || {} ,{limit: lmit || 10 , page: pag || 1, sort: srt || {}})
@@ -129,6 +144,19 @@ class ServiceMongo{
         return documentDeleted
     }
 
+    async deleteManyDocumentByFilter(Model, filter){
+        let documentsDeleted 
+        await Model.deleteMany(filter)
+            .then( dt =>{
+                documentsDeleted = dt
+            } )
+            .catch( err => {
+                console.log(err)
+                documentsDeleted= false
+            } )
+        return documentsDeleted
+    }
+
     /**
      * Métodos para el cart  
      **/ 
@@ -198,18 +226,6 @@ class ServiceMongo{
             return false
         }
     }
-
-    /**
-     * Métodos para Users  
-     **/ 
-
-    async updateCartFromUser(Model, IDUser, IDNewCart){
-        const user = await this.getDocumentsByID(Model, IDUser)
-        const updatedCarts = [...user.carts, {cart: IDNewCart}]
-        const updatedUser = await this.updateDocument(Model, IDUser, {carts: updatedCarts })
-        return updatedUser || false
-    }
 }
-
 
 module.exports = ServiceMongo

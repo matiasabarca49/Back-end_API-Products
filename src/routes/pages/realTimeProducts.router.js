@@ -8,12 +8,12 @@ function ath(req, res, next){
         next()
     }
     else{
-        res.send("Usted no tiene permisos necesarios, consulte con el administrador")
+        res.status(401).send({status: "Error", reason: "no autorizado"})
     }
 }
 
 router.get( "/", ath, (req,res) => {
-    res.render('realTimeProducts')
+    res.render('realTimeProducts', {rol: req.session.rol})
 })
 
 module.exports = router

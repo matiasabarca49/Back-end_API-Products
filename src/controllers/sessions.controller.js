@@ -56,7 +56,11 @@ const loginUser = async (req, res)=>{
     req.session.lastConnection = userFound.lastConnection
     req.session.cart = userFound.cart
     req.session.purchases = userFound.purchases
-    res.redirect("/products")
+    if(req.session.rol === "Admin"){
+        res.redirect("/")
+    }else{
+        res.redirect("/products")
+    }
 }
 
 module.exports = {
