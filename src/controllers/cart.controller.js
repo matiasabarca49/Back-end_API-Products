@@ -33,8 +33,6 @@ const getPurchase = async (req, res) =>{
     purchaseState.purchase
         ? res.status(201).send({status: "Success", cart: purchaseState.purchase, ticket: purchaseState.ticket})
         : res.status(500).send({status: "Error"})
-    
-
 }
 
 const updateFullCartInDB = async (req, res) => {

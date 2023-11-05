@@ -66,11 +66,21 @@ const delUserForConnectionn = async (req, res) =>{
     res.send(usersUpdated)
 }
 
+const delProductFromUser = async(req, res)=>{
+    const userUpdated = await usersManager.delProductFromUser(req.session.passport.user, req.params.id)
+    //Actualiza el cart del usuario
+    req.session.cart = userUpdated.cart
+    userUpdated
+        ? res.send({status: "Successful", cart: userUpdated.cart})
+        : res.status(500).send({status: "Error"})
+}
+
 module.exports = {
     getUsers,
     changeRol,
     addProductToCartFromUser,
     addDocumentsInUser,
     delUser,
-    delUserForConnectionn
+    delUserForConnectionn,
+    delProductFromUser
 }

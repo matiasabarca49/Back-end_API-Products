@@ -27,13 +27,17 @@
     </div>
     <a href="http://localhost:8080/products" class="mx-2 position-absolute btn btn-outline-secondary"> Regresar</a>
     <h1 class="text-center">Pagar</h1>
-    <section class="w-75 mx-auto bg-secondary bg-gradient bg-opacity-10" id="cartCont"></section>
+    <section class="w-75 mx-auto bg-secondary bg-gradient bg-opacity-10" id="cartCont">
+        {{!-- Aqui se renderizan los productos --}}
+    </section>
     <div class="w-75 mx-auto my-2" style="height: 5px; border-bottom: 2px solid black"></div>
     <section class=" w-75 d-flex justify-content-center gap-5 w-75 mx-auto">
         <div class="text-center fs-1" style="width: 30%;">Total:</div>
         <div class="w-25 text-center fs-1 fw-bold" id="totalShopping"></div>
     </section>
-    <div class="w-50 mx-auto my-3 btn btn-danger d-block" id="toPay">Pagar</div>
+    <div id="contToPay">
+        
+    </div>
 
 </main>
 <script src="../js/pay.js"></script>

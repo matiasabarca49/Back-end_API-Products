@@ -3,6 +3,7 @@ const { saveSecret, createHash, isValidPassword, searchSecret } = require('../ut
 const UsersManager = require('../dao/mongo/users.mongo.js')
 const usersManager = new UsersManager()
 const { transporter } = require('../config/config.js')
+const { generateFormatLink } = require('../utils/utils.js')
 
 const generateLink = (user) =>{
     const key = createHash(`Cod!34fdsert${ user.email }`)
@@ -31,8 +32,20 @@ const generateLink = (user) =>{
 }
 
 
-const sendMail = (req, res)=>{
+const sendMailPurchase = (req, res)=>{
     //Para enviar ticket de compra
+    transporter.sendMail(generateFormatEmail(req.body.email, { subject: "Compra Realizada", head: "La compra fue realizada correctamente", body: `Compra realiza el "${req.body.purchase_datetime}" con código "${req.body.code}". Con email de cuenta ${req.body.purchaser}. El Total de la compra es: $${req.body.amount}`}), (error, info)=>{
+        if(error){
+            req.logger.error(`Peticion ${req.method} en "${"http://"+req.headers.host + "/api/mail" +req.url}" a las ${new Date().toLocaleTimeString()} el ${new Date().toLocaleDateString()}\n
+            ERROR: Fallo al enviar el mail. EL error es:\n
+            ${error}`)
+            res.status(500).send({status: "ERROR", reason: error}) 
+        }
+        else{
+            req.logger.info(`Mensaje enviado con éxito solicitado en el endpoint${"http://"+req.headers.host + "/api/mail" +req.url}"`)
+        }
+    })
+    res.send("OK")
 }
 
 const sendMailRecoverPass = async (req, res)=>{
@@ -105,7 +118,7 @@ const changepassword =  async (req, res)=>{
 
 
 module.exports= {
-    sendMail,
+    sendMailPurchase,
     sendMailRecoverPass,
     changepassword
 }

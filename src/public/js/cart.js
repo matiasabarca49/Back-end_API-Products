@@ -4,8 +4,15 @@ const addToCart = async (product)=>{
         const resUser = await fetch(`http://localhost:8080/api/sessions/current`)
         user = await resUser.json()
         //Los usuarios no pueden agregar sus propios productos
-        if(user.currentUser.email === product.owner){
+        if(user.currentUser.email === product.owner || user.currentUser.rol === "Admin"){
             const modal = document.getElementById("modalWarningRolUser")
+            if(user.currentUser.email === product.owner){
+                modal.innerText = "Los Usuarios Premium no pueden agregar sus propios productos"
+            }
+            else{
+                modal.innerText = "Los Administradores no pueden comprar productos"
+
+            }
             modal.style.display = "block"
             setTimeout(()=>{
                 modal.style.display = "none"

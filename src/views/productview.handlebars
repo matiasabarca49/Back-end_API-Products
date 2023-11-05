@@ -21,7 +21,7 @@
             {{#if userLoged.user}}
                 {{#ifCond userLoged.rol "Admin"}}
                     <div>
-                        <a class="btn" href="/"><img style="width: 30px; filter: invert(100%)" src="./img/configurar.png" alt="home"></a>
+                        <a class="btn" href="/"><img style="width: 30px; filter: invert(100%)" src="../../img/configurar.png" alt="home"></a>
                     </div>
                 {{else}}
                     <div>
@@ -46,7 +46,7 @@
 </header>
 <div></div>
 <main class="container-fluid mt-5 position-relative">
-    <div class="p-4 bg-danger w-50 position-absolute top-0 start-50 translate-middle rounded" style="display: none; z-index: 999;"id="modalWarningRolUser"> Los usuarios no pueden agregar sus propios productos </div>
+    <div class="p-4 bg-danger w-50 position-absolute top-0 start-50 translate-middle rounded shadow" style="display: none; z-index: 999;"id="modalWarningRolUser">  </div>
     <a class="btn btn-primary mb-4" href="http://localhost:8080/products"> Regresar </a>
     <div class="row ">
         <div  class="col-6 position-relative" id="thumbnail">

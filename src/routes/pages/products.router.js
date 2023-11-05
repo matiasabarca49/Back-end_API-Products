@@ -15,6 +15,9 @@ router.get("/productview", (req,res)=>{
 router.get("/pay", checkLogin,(req,res)=>{
     res.render("viewpay", {userLoged: req.session})
 })
+router.get('/ticket', (req, res)=>{
+    res.render("ticket")
+})
 
 
 /**

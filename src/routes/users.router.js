@@ -4,7 +4,7 @@ const router = new Router()
 //Multer
 const uploader = require('../utils/multer.js')
 //controllers
-const { getUsers, changeRol, addPurchaseToUser, addProductToCartFromUser, addDocumentsInUser, delUser, delUserForConnectionn } = require('../controllers/users.controller.js')
+const { getUsers,changeRol, addPurchaseToUser, addProductToCartFromUser, addDocumentsInUser, delUser, delUserForConnectionn, delProductFromUser } = require('../controllers/users.controller.js')
 
 const athCart = (req, res, next) =>{
     if(req.session.rol === "User" || req.session.rol === "Premium"){
@@ -28,7 +28,6 @@ const athRol = (req, res, next) =>{
 **/
 router.get("/", getUsers)
 
-
 /**
 *   POST 
 **/
@@ -45,5 +44,6 @@ router.put('/premium/:uid', athRol, changeRol)
 **/
 router.delete("/:id", athRol, delUser)
 router.delete("/delete/withoutconnection", athRol, delUserForConnectionn)
+router.delete("/delete/product/:id", delProductFromUser)
 
 module.exports = router

@@ -139,6 +139,17 @@ class UsersManager{
         return usersDeleted
     }
 
+    async delProductFromUser(userID, productID){
+        const userFound = await serviceMongo.getDocumentsByID(User, userID)
+        if(userFound){
+            const cartFiltered = userFound.cart.filter( product => product.product._id.toString() !== productID )
+            const userUpdated = await serviceMongo.updateDocument(User, userID, {cart: cartFiltered})
+            return userUpdated
+        }else{
+            return false
+        }
+    } 
+
 }
 
 
