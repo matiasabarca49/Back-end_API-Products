@@ -126,9 +126,11 @@ app.use('*', routeError)
 const { webSocket } = require('./controllers/websockets.controller.js')
 webSocket(server)
 
+const port = process.env.PORT || config.port
+
 
 //Levantar el servidor para que empiece a escuchar
-server.listen(`${config.port}`, ()=>{ 
+server.listen(`${port}`, ()=>{ 
     console.log("Environment Mode Option: ", config.environment);
     console.log(`Server running on port ${config.port}`)
     //Conectar base de datos
