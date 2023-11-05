@@ -5,6 +5,7 @@ const handlebars = require("express-handlebars")
 const http = require('http')
 const app = express()
 const server = http.createServer(app)
+const cors = require('cors')
 
 //Inicio y conexion a DB
 const MongoManager = require('./dao/mongo/db.js')
@@ -47,6 +48,8 @@ app.use(compression())
 //Logger
 const addLogger = require('./service/logger/loggers.js')
 app.use(addLogger)
+//CORS
+app.use(cors())
 
 /** 
 * Handlebars
