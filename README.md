@@ -68,6 +68,23 @@ Ej:
 => node ./src/app.js -p 9090  
 => node ./src/app.js -p 9090 --mode development
 
+NOTA: Es necesario crear un archivo ".env" con variables de entornos obligatorias
+
+## Variable de Entorno
+
+### Obligatorias
+
+- **MONGO_URL** URL de la DB MongoDB.
+- **SECRET_SESSIONS** Secreto para almacenar sesiones en la DB
+
+### Opcionales
+
+**PORT** Cambiar el puerto del servidor.
+**GMAIL_CREDENTIAL_USER** Usuario que permite enviar emails
+**GMAIL_CREDENTIAL_TOKEN** Token para enviar emails
+**GITHUB_CLIENT_ID** ID Github Autenticación Terceros
+**process.env.GITHUB_CLIENT_SECRET** Secreto Github
+
 ## Acceso
 
 El acceso se realiza mediante el navegador. 

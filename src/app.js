@@ -8,8 +8,9 @@ const server = http.createServer(app)
 const cors = require('cors')
 
 //Inicio y conexion a DB
-const MongoManager = require('./dao/mongo/db.js')
-const mongoManager = new MongoManager(`mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD_DB}@cluster-mongo-coder-tes.qh8sdrt.mongodb.net/ecommerce`)
+const MongoManager = require('./config/mongoDBConfig.js')
+//const mongoManager = new MongoManager(`mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD_DB}@cluster-mongo-coder-tes.qh8sdrt.mongodb.net/ecommerce`)
+const mongoManager = new MongoManager(process.env.MONGO_URL) 
 
 //Sessions
 const session = require('express-session')
@@ -17,7 +18,7 @@ const mongoSession = require('connect-mongo')
 
 app.use(session({
     store: mongoSession.create({
-        mongoUrl: `mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD_DB}@cluster-mongo-coder-tes.qh8sdrt.mongodb.net/ecommerce`,
+        mongoUrl: process.env.MONGO_URL,
         mongoOption: {useNewUrlParser: true, useUnifiedTopology: true}
     }),
     secret: process.env.SECRET_SESSIONS ,
@@ -112,7 +113,10 @@ app.use("/api/sessions", routeSessions)
 app.use("/api/users", routeUsers)
 app.use("/api/mail", routeMailAPI)
 app.use("/api/ticket", routeTicket)
-app.use("/auth", routeGithubAuth)
+if(!process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET){
+    app.use("/auth", routeGithubAuth)
+} 
+//Vista Store
 app.use("/", routeViewHome)
 app.use("/mockingproducts", routeMocks)
 app.use("/chat", routeChat)
@@ -134,8 +138,11 @@ const port = process.env.PORT || config.port
 
 //Levantar el servidor para que empiece a escuchar
 server.listen(`${port}`, ()=>{ 
-    console.log("Environment Mode Option: ", config.environment);
-    console.log(`Server running on port ${config.port}`)
     //Conectar base de datos
     mongoManager.connect()
+    console.log("==========================================");
+    console.log("🟢 [STATUS] Servidor Backend ECOMMERCE UP");
+    console.log("==========================================");
+    console.log("[INFO] Environment Mode Option: ", config.environment);
+    console.log(`✅ [OK] Server running on port ${port}`)
 })

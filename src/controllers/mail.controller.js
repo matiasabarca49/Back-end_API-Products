@@ -1,7 +1,7 @@
 /* const nodemailer = require('nodemailer') */
 const { saveSecret, createHash, isValidPassword, searchSecret } = require('../utils/utils.js')
-const UsersManager = require('../dao/mongo/users.mongo.js')
-const usersManager = new UsersManager()
+const UsersService = require('../service/mongo/users.service.js')
+const usersService = new UsersService()
 const { transporter } = require('../config/config.js')
 const { generateFormatLink } = require('../utils/utils.js')
 
@@ -33,25 +33,33 @@ const generateLink = (user) =>{
 
 
 const sendMailPurchase = (req, res)=>{
-    //Para enviar ticket de compra
-    transporter.sendMail(generateFormatEmail(req.body.email, { subject: "Compra Realizada", head: "La compra fue realizada correctamente", body: `Compra realiza el "${req.body.purchase_datetime}" con código "${req.body.code}". Con email de cuenta ${req.body.purchaser}. El Total de la compra es: $${req.body.amount}`}), (error, info)=>{
-        if(error){
-            req.logger.error(`Peticion ${req.method} en "${"http://"+req.headers.host + "/api/mail" +req.url}" a las ${new Date().toLocaleTimeString()} el ${new Date().toLocaleDateString()}\n
-            ERROR: Fallo al enviar el mail. EL error es:\n
-            ${error}`)
-            res.status(500).send({status: "ERROR", reason: error}) 
-        }
-        else{
-            req.logger.info(`Mensaje enviado con éxito solicitado en el endpoint${"http://"+req.headers.host + "/api/mail" +req.url}"`)
-        }
-    })
-    res.send("OK")
+    if(!process.env.GMAIL_CREDENTIAL_USER && !process.env.GMAIL_CREDENTIAL_TOKEN){
+        console.log("=======")
+        console.log("⚠️ [Info] Envío de emails desactivado")
+        console.log("Faltan Credenciales")
+        console.log("=======")
+        res.send("OK")
+    }else{
+        //Para enviar ticket de compra
+        transporter.sendMail(generateFormatEmail(req.body.email, { subject: "Compra Realizada", head: "La compra fue realizada correctamente", body: `Compra realiza el "${req.body.purchase_datetime}" con código "${req.body.code}". Con email de cuenta ${req.body.purchaser}. El Total de la compra es: $${req.body.amount}`}), (error, info)=>{
+            if(error){
+                req.logger.error(`Peticion ${req.method} en "${"http://"+req.headers.host + "/api/mail" +req.url}" a las ${new Date().toLocaleTimeString()} el ${new Date().toLocaleDateString()}\n
+                ERROR: Fallo al enviar el mail. EL error es:\n
+                ${error}`)
+                res.status(500).send({status: "ERROR", reason: error}) 
+            }
+            else{
+                req.logger.info(`Mensaje enviado con éxito solicitado en el endpoint${"http://"+req.headers.host + "/api/mail" +req.url}"`)
+            }
+        })
+        res.send("OK")
+    }
 }
 
 const sendMailRecoverPass = async (req, res)=>{
     const userMail = req.body.mail
     try {
-        const userFound = await usersManager.getUserByFilter({email: userMail})
+        const userFound = await usersService.getUserByFilter({email: userMail})
         if (userFound){
             let result = transporter.sendMail(generateLink(userFound), (error, info)=>{
                 if(error){
@@ -84,9 +92,9 @@ const changepassword =  async (req, res)=>{
             req.logger.warning("Intento de manipulacion en restauracion contraseña")
             res.status(500).send({status: "ERROR"})
         }else{
-            const passwordChanged = await usersManager.putChangePasswordFromUser(req.query.email, req.body.password)
+            const passwordChanged = await usersService.putChangePasswordFromUser(req.query.email, req.body.password)
             if (passwordChanged.status){
-                const userFound = await usersManager.getUserByFilter({email: req.query.email})
+                const userFound = await usersService.getUserByFilter({email: req.query.email})
                 let result = transporter.sendMail({
                     from: `Tienda de Productos  <${process.env.GMAIL_CREDENTIAL_USER}>`,
                     to: `${userFound.email}`,

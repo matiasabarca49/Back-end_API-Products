@@ -3,21 +3,22 @@ const { Server } = require('socket.io')
 const CustomError = require('../service/errors/customError')
 const { generateProductErrorInfo } = require('../service/errors/messageCreater.js')
 const EErrors = require('../service/errors/ErrorEnums.js')
-//Managers
-const ProductsManager = require('../dao/mongo/products.mongo.js')
-const productsManager = new ProductsManager()
-const MessageManager = require('../dao/mongo/message.mongo.js')
-const messageManager = new MessageManager()
-const UsersManager = require('../dao/mongo/users.mongo')
-const usersManager = new UsersManager()
+//Services
+const ProductsService = require('../service/mongo/products.service.js')
+const MessageService = require('../service/mongo/message.service.js')
+const UsersService = require('../service/mongo/users.service.js')
+
+const productsService = new ProductsService()
+const messageService = new MessageService()
+const usersService = new UsersService()
 
 const webSocket = (server) => {
     const io = new Server(server)
     io.on( 'connection', async (socket)=>{
         //====== Productos ==============
         //enviar al cliente los productos
-        console.log("Cliente Conectado")
-        socket.emit('sendProducts', await productsManager.getProducts())
+        console.log("Cliente Conectado al API WebSocket")
+        socket.emit('sendProducts', await productsService.getProducts())
         //Agregar producto nuevo a base de datos
         socket.on('newProductToBase', async (data) =>{
             //Constrolando de errores
@@ -35,7 +36,7 @@ const webSocket = (server) => {
                 }
                 //Verificar que el owner sea un mail valido
                 if(owner !== "Admin") {
-                    const userFound = await usersManager.getUserByFilter({email: owner})
+                    const userFound = await usersService.getUserByFilter({email: owner})
                     if(!userFound || userFound.rol === "User"){
                         const customError = new CustomError()
                         customError.createError({
@@ -47,17 +48,17 @@ const webSocket = (server) => {
                     }
                 }
                 //En caso de que no falten campos y el owner sea válido se procede a agregar el producto
-                await productsManager.postProduct(data)
-                io.sockets.emit('sendProducts',  await productsManager.getProducts())
+                await productsService.postProduct(data)
+                io.sockets.emit('sendProducts',  await productsService.getProducts())
             } catch (error) {
                 console.log(error)
             }
         })
         //====== Mensajes ===============
-        socket.emit("chats", await messageManager.getMessage())
+        socket.emit("chats", await messageService.getMessage())
         socket.on('msg',async (data)=>{
-            await messageManager.postMassage(data)
-            io.sockets.emit("chats", await messageManager.getMessage())
+            await messageService.postMassage(data)
+            io.sockets.emit("chats", await messageService.getMessage())
         })
     } )
 }

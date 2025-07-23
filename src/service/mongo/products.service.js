@@ -1,40 +1,40 @@
-const Product = require('../mongo/models/productsModels')
-const User = require('../mongo/models/usersModels')
-const ServiceMongo = require('../../service/dbMongoService')
-const serviceMongo = new ServiceMongo()
+const Product = require('../../model/productsModels.js')
+const User = require('../../model/usersModels.js')
+const PersistController = require('../../dao/mongo/persistController.js')
+const persistController = new PersistController()
 const { transporter } = require('../../config/config.js')
 const { generateFormatEmail } = require('../../utils/utils.js')
 
-class ProductsManager {
+class ProductsService {
     constructor(){
 
     }
 
     getProductsPaginate(dftQuery, dftLimit, dftPage, dftSort){
-        return serviceMongo.getPaginate(Product, dftQuery, dftLimit, dftPage, dftSort)
+        return persistController.getPaginate(Product, dftQuery, dftLimit, dftPage, dftSort)
     }
 
     getProducts(){
-        return serviceMongo.getDocuments(Product)
+        return persistController.getDocuments(Product)
     }
 
     getProductsByID(ID){
-        return serviceMongo.getDocumentsByID(Product, ID)
+        return persistController.getDocumentsByID(Product, ID)
     }
     getProductsByFilter(filter){
-        return serviceMongo.getDocumentsByFilter(Product, filter)
+        return persistController.getDocumentsByFilter(Product, filter)
     }
 
     postProduct(product){
-        return serviceMongo.createNewDocument(Product, product)
+        return persistController.createNewDocument(Product, product)
     }
 
     postManyProducts(products){
-        return serviceMongo.createManyDocuments(Product, products)
+        return persistController.createManyDocuments(Product, products)
     }
 
     putProduct(ID, productToChange){
-        return serviceMongo.updateDocument(Product, ID, productToChange)
+        return persistController.updateDocument(Product, ID, productToChange)
     }
 
     /* generateFormatEmail = (email, payload) =>{
@@ -55,7 +55,7 @@ class ProductsManager {
     } */
     
     async delProduct(ID, user){
-        const productFound = await serviceMongo.getDocumentsByID(Product, ID)
+        const productFound = await persistController.getDocumentsByID(Product, ID)
         //Enviar mail al propietario del producto
         if( productFound.owner !== "Admin"){
             transporter.sendMail(generateFormatEmail(productFound.owner, { subject: "Producto Borrado", head: "El Producto fue borrado correctamente", body: `El producto "${productFound.title}" con código "${productFound.code}" fue borrado. Por el administrador ${user.user} ${user.lastName}. El producto pertenece al usuario con email ${productFound.owner}`}), (error, info)=>{
@@ -73,14 +73,14 @@ class ProductsManager {
         //Eliminar el producto. "Admin" puede eliminar todos los productos, "El propietario solo puede eliminar sus productos"
         if (user.rol === "Premium"){
            if (user.email === productFound.owner){
-               return serviceMongo.deleteDocument(Product, ID) 
+               return persistController.deleteDocument(Product, ID) 
            }
            else{
             return false
            }
         }
         else if(user.rol === "Admin"){
-            return serviceMongo.deleteDocument(Product, ID)
+            return persistController.deleteDocument(Product, ID)
 
         }
         else{
@@ -89,4 +89,4 @@ class ProductsManager {
     }
 }
 
-module.exports = ProductsManager
+module.exports = ProductsService

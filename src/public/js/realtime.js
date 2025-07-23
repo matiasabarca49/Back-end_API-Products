@@ -13,7 +13,7 @@ const render = (array)=>{
                         </div>
                         <div class="card-body">
                             <h5 class="card-title fs-4 text fw-bold">${product.title}</h5>
-                            <p class="card-text">${product.description}</p>
+                            <p class="card-text">${product.description.slice(0,70)}...</p>
                         </div>
                         <div class="card-footer bg-transparent fs-4 text "> $ ${product.price}</div>
                     `
@@ -25,9 +25,9 @@ const render = (array)=>{
 const addProduct = (  )=>{
     const newProduct ={
         title: document.getElementById('title').value,
-        description: document.getElementById('description').value,
+        description: document.getElementById('description').value || "Sin Descripción",
         price: document.getElementById('price').value,
-        thumbnail: document.getElementById('thumbnail').value,
+        thumbnail: document.getElementById('thumbnail').value || "Sin Imagen" ,
         code: document.getElementById('code').value,
         stock: document.getElementById('stock').value,
         status: true,

@@ -2,8 +2,8 @@ const express = require('express')
 const passport = require('passport')
 const { Router } = express
 const router = new Router()
-//utils
-const { checkLogin, voidLogAndRegis } = require('../utils/utils.js')
+//middleware
+const { checkLogin, voidLogAndRegis } = require('../middlewares/sessions.middleware.js')
 //controllers
 const controller = require('../controllers/sessions.controller.js')
 

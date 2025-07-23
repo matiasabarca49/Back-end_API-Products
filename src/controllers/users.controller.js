@@ -1,5 +1,5 @@
-const UsersManager = require('../dao/mongo/users.mongo.js')
-const usersManager = new UsersManager()
+const UsersService = require('../service/mongo/users.service.js')
+const usersService = new UsersService()
 
 
 /**
@@ -7,14 +7,14 @@ const usersManager = new UsersManager()
 */
 
 const getUsers = async (req, res) =>{
-    const usersGetted = await usersManager.getUsers()
+    const usersGetted = await usersService.getUsers()
     usersGetted
         ? res.status(200).send({status: "Succesfull", users: usersGetted})
         : res.status(500).send({status: "Error"})
 }
 
 const changeRol = async (req, res) =>{
-    const userUpdated = await usersManager.putChangeRolFromUser(req.params.uid)
+    const userUpdated = await usersService.putChangeRolFromUser(req.params.uid)
     userUpdated.status
         ? res.status(201).send({status: "Succesfull", userUpdated: userUpdated.userUpdated})
         : res.status(500).send({status: "ERROR", reason: userUpdated.reason ||"Los Administradores no pueden cambiar de rol"})
@@ -25,7 +25,7 @@ const changeRol = async (req, res) =>{
 */
 
 const addProductToCartFromUser = async (req,res) =>{
-    const datedUser = await usersManager.postProductToCart(req.session.passport.user, req.body)
+    const datedUser = await usersService.postProductToCart(req.session.passport.user, req.body)
     if (datedUser){
         //Para que se actualice el usuario sin tener que salir y volver entrar a la cuenta
         req.session.cart = datedUser.cart
@@ -43,7 +43,7 @@ const addDocumentsInUser = async (req, res) => {
             name:req.file.originalname,
             reference: req.file.path
         }
-        const userUpdated = await usersManager.postDocument(req.params.uid, document)
+        const userUpdated = await usersService.postDocument(req.params.uid, document)
         res.status(201).send({status: "Charged", file: userUpdated.documents[userUpdated.documents.length - 1]})
     }
     else{
@@ -55,19 +55,19 @@ const addDocumentsInUser = async (req, res) => {
 * DELETE
 */
 const delUser = async (req, res) =>{
-    const userDeleted = await usersManager.delUser(req.params.id)
+    const userDeleted = await usersService.delUser(req.params.id)
     userDeleted 
         ? res.status(200).send({status: "Successful", user: userDeleted})
         : res.status(500).send({status: "Error", reason: "El usuario no existe o error en el servidor"})
 }
 
 const delUserForConnectionn = async (req, res) =>{
-    const usersUpdated = await usersManager.delUserForTimeDisconnection()
+    const usersUpdated = await usersService.delUserForTimeDisconnection()
     res.send(usersUpdated)
 }
 
 const delProductFromUser = async(req, res)=>{
-    const userUpdated = await usersManager.delProductFromUser(req.session.passport.user, req.params.id)
+    const userUpdated = await usersService.delProductFromUser(req.session.passport.user, req.params.id)
     //Actualiza el cart del usuario
     req.session.cart = userUpdated.cart
     userUpdated

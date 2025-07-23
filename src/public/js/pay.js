@@ -6,23 +6,26 @@ const render = (cart)=>{
     if( cart.length !== 0){
         cart.forEach(product => {
             const div = document.createElement("div")
-            div.classList = "mx-auto py-1 w-75"
-            div.innerHTML = `  
-                    <div class="mx-auto d-flex justify-content-center align-items-center gap-5 w-75">
-                        <div class="col-2 col-6 col-sm-4 card" style="width: 70%;">
-                            <div class=" d-flex justify-content-between card-header bg-transparent ">
-                                <p class="card-text"><small class="text-body-secondary">${product.product.category}</small></p>
-                                <button class="btn btn-danger" id="delete${product.product._id}">X</button>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title fs-3 fw-bold">${product.product.title}</h5>
-                                <p class="fs-5 text-body-tertiary">Cantidad: ${product.quantity}</p
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent fs-6">$${product.product.price} x ${product.quantity}</div>
+            div.classList = "cart-item-container"
+            div.innerHTML =         
+                `
+                    <div class="cart-item cart-item-content">
+                    <div class="item-header">
+                        <p class="item-category">${product.product.category}</p>
+                        <button class="remove-btn" id="delete${product.product._id}">X</button>
                     </div>
-                    <div class="fs-3 fw-bold text-center w-25"> $${product.product.price * product.quantity}</div>
-            `
+                    <div class="item-body">
+                        <h5 class="item-title">${product.product.title}</h5>
+                        <p class="item-quantity">Cantidad: ${product.quantity}</p>
+                    </div>
+                    <div class="item-footer">
+                        <div class="item-calculation">${product.product.price} x ${product.quantity}</div>
+                    </div>
+                    </div>
+                    <div class="cart-item-total">
+                        <div class="item-price">$${product.product.price * product.quantity}</div>
+                    </div>
+             `
             cartCont.appendChild(div)
             //Agregar Evento para eliminar producto
             const btnDelete = document.getElementById(`delete${product.product._id}`)
@@ -48,7 +51,7 @@ const render = (cart)=>{
         contentPay.appendChild(btn)
     }
     else{
-        cartCont.innerHTML= `<p class="p-5 mt-3 fs-2 opacity-50 text-center"> - Carrito Vacio - </p>`
+        cartCont.innerHTML= `<p class="p-5 mt-3 fs-2 opacity-50 text-center text-white"> - Carrito Vacio - </p>`
         totalShopping.innerText="$0"
         contentPay.innerHTML = " "
     }

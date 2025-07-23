@@ -1,4 +1,4 @@
-const { createHash} = require('../../utils/utils.js')
+const { createHash} = require('../utils/utils.js')
 class UserDTO{
     constructor(user){
         this.name = user.name

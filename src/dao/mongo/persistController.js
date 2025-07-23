@@ -1,4 +1,4 @@
-class ServiceMongo{
+class PersistController{
 
     constructor(){
 
@@ -228,4 +228,4 @@ class ServiceMongo{
     }
 }
 
-module.exports = ServiceMongo
+module.exports = PersistController

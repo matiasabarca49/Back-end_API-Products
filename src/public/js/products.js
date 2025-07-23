@@ -4,21 +4,20 @@ const renderProducts = (array)=>{
     contProducts.innerHTML= ""
     array.forEach(product => {
         const div = document.createElement('div')
-        div.className= " col-2 col-6 col-sm-4 card  mb-3 flex-grow-1 shadow"
+        div.className= "product-card"
         div.style.maxWidth= "18rem"
         div.innerHTML= 
-                    `
-                        <div class="card-header bg-transparent ">
-                            <p class="card-text"><small class="text-body-secondary">${product.category}</small>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fs-4 text fw-bold">${product.title}</h5>
-                            <p class="card-text">${product.description}</p>
-                        </div>
-                        <div class="card-footer bg-transparent fs-4 text d-flex justify-content-between "> $ 
-                            ${product.price}
-                            <a class="btn btn-success" href="http://localhost:8080/products/productview?id=${product._id}">Ver Más</a>
-                        </div>
+                    ` 
+                            <div class="card-header">
+                                <p class="card-category">${product.category}</p>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${product.title}</h5>
+                            </div>
+                            <div class="card-footer"> 
+                                <span class="card-price">$ ${product.price}</span>
+                                <a class="btn-success" href="http://localhost:8080/products/productview?id=${product._id}">Ver Más</a>
+                            </div>  
                     `
         contProducts.appendChild(div)
     });

@@ -1,7 +1,8 @@
 const express = require('express')
-const { reWriteDocsDB, checkLogin } = require('../../utils/utils.js')
-const Product = require('../../dao/mongo/models/productsModels.js')
-const User = require('../../dao/mongo/models/usersModels.js')
+const { reWriteDocsDB} = require('../../utils/utils.js')
+const {checkLogin} = require("../../middlewares/sessions.middleware.js")
+const Product = require('../../model/productsModels.js')
+const User = require('../../model/usersModels.js')
 const { Router } = express
 const router = new Router()
 

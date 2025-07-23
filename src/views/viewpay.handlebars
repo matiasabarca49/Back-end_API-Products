@@ -1,10 +1,11 @@
+<link rel="stylesheet" href="../../css/style.css">
 <header>
-    <nav class="navbar bg-primary d-flex justify-content-around" data-bs-theme="dark">
-        <div>
-          <a class="navbar-brand" href="http://localhost:8080/products">Tienda</a>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a class="brand-link" href="http://localhost:8080/products">Tienda</a>
         </div>
-        <div class="d-flex align-items-center gap-2">
-            <div class="text-white fs-5">{{userLoged.user}}</div>
+        <div class="nav-actions">
+            <div class="user-name">{{userLoged.user}}</div>
             {{#if userLoged.user}}
                 
             {{/if}}
@@ -16,28 +17,48 @@
         </div>
     </nav>
 </header>
-<main class="my-2 position-relative">
-    <div id="processPurchase" class="position-fixed w-100 h-100 top-0 z-3" style="display: none;background-image: linear-gradient(rgba(5, 7, 12,0.90),rgba(5, 7, 12, 0.90));">
-        <div class="position-absolute position-absolute top-50 start-50 translate-middle d-flex gap-3 align-items-center">
-            <div class="spinner-border text-light" role="status">
-                <span class="visually-hidden">Loading...</span>
+
+<main class="main-container">
+    <!-- Modal de procesamiento de compra -->
+    <div id="processPurchase" class="purchase-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <h3 class="modal-title">Procesando Compra...</h3>
             </div>
-            <h3 class=" fs-2" style="z-index: 999; color: white"> Procesado Compra... </h3>
         </div>
     </div>
-    <a href="http://localhost:8080/products" class="mx-2 position-absolute btn btn-outline-secondary"> Regresar</a>
-    <h1 class="text-center">Pagar</h1>
-    <section class="w-75 mx-auto bg-secondary bg-gradient bg-opacity-10" id="cartCont">
-        {{!-- Aqui se renderizan los productos --}}
-    </section>
-    <div class="w-75 mx-auto my-2" style="height: 5px; border-bottom: 2px solid black"></div>
-    <section class=" w-75 d-flex justify-content-center gap-5 w-75 mx-auto">
-        <div class="text-center fs-1" style="width: 30%;">Total:</div>
-        <div class="w-25 text-center fs-1 fw-bold" id="totalShopping"></div>
-    </section>
-    <div id="contToPay">
-        
+
+    <!-- Botón de regreso -->
+    <div class="back-button-container">
+        <a href="http://localhost:8080/products" class="back-button">
+            <svg class="home-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.42-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Regresar
+        </a>
     </div>
 
+    <!-- Título principal -->
+    <h1 class="cart-title">Finalizar Compra</h1>
+
+    <!-- Contenedor de productos del carrito -->
+    <section class="cart-items-section" id="cartCont">
+        {{!-- Aquí se renderizan los productos --}}
+    </section>
+
+    <!-- Línea divisoria -->
+    <div class="divider"></div>
+
+    <!-- Sección de total -->
+    <section class="total-section">
+        <div class="total-label">Total:</div>
+        <div class="total-amount" id="totalShopping">$0.00</div>
+    </section>
+
+    <!-- Contenedor para métodos de pago -->
+    <div class="payment-container" id="contToPay">
+        <!-- Aquí irán los métodos de pago -->
+    </div>
 </main>
 <script src="../js/pay.js"></script>

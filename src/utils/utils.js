@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const { Faker, es } = require('@faker-js/faker')
-const ServiceMongo = require('../service/dbMongoService.js')
-const Product = require('../dao/mongo/models/productsModels.js')
+const PersistController = require('../dao/mongo/persistController.js')
+const Product = require('../model/productsModels.js')
 
 let secretSaved = []
 
@@ -16,32 +16,13 @@ const isValidPassword = (user ,password) =>{
     
 }
 
-//Check Login
-function checkLogin(req, res, next){
-    if(req.session.user){
-        next()
-    }
-    else{
-        res.redirect("/api/sessions/login")
-    }
-}
-
-function voidLogAndRegis(req, res, next){
-    if(req.session.user){
-        res.redirect("/api/sessions/perfil")
-    }
-    else{
-        next()
-    }
-}
-
 //Reescrituras de documentos DB
 //Debido a un error o directiva de Handlebars los productos son reescritos para lograr que handlebars renderice
-const serviceMongo =  new ServiceMongo()
+const persistController =  new PersistController()
 
 const reWriteDocsDB = async (Model, documentFormat) =>{
     const documentsReWrited = []
-    const documentsFromBase = await serviceMongo.getDocuments(Model)
+    const documentsFromBase = await persistController.getDocuments(Model)
     documentsFromBase.forEach( document => {
         
         if(documentFormat === "Product"){
@@ -142,8 +123,6 @@ generateFormatEmail = (email, payload) =>{
 module.exports= {
     createHash,
     isValidPassword,
-    checkLogin,
-    voidLogAndRegis,
     reWriteDocsDB,
     generateProducts,
     saveSecret,
