@@ -1,12 +1,34 @@
-# Repositorio de API Productos - Users - Mensajes
+# Repositorio de Store API – Gestión de Productos y Carritos
 
-Es una API que permite la obtención y administracion de productos para un market como tambien la obtención de los carritos de la DB. La app Utiliza MongoDB y es Server Side Rendering.  
-Para el Front-end, es utilizado Handlebars. Cuenta con vista de productos en DB, Tienda, Login, Register y Chat de mensajes.
+Este proyecto es una API completa para la gestión de productos y carritos en un mercado online. Permite la obtención, visualización y administración de productos, así como la consulta de carritos almacenados en la base de datos.
 
-Conceptos utilizados: NodeJS, Express, MongoDB, Mongoose, Paginate, Passport-local, Passport-Github, Custom Errors, Patrón MVC, DAO, Loggers, Swagger, TDD, BDD.  
-Estilado: Bootstrap y CSS
+La aplicación utiliza MongoDB como base de datos y está desarrollada con renderizado del lado del servidor (SSR). Para el Front-end se emplea Handlebars, ofreciendo vistas dinámicas como:
 
-NOTA: Sin las variables de entorno no podrá iniciar el servidor.
+- Vista de productos desde la base de datos  
+- Tienda online  
+- Login y Registro de usuarios  
+- Chat de mensajes en tiempo real
+
+## Tecnologías y conceptos utilizados  
+
+- **Node.js** y **Express.js**  
+- **MongoDB** y **Mongoose**  
+- **Handlebars** para SSR  
+- **Paginación** con `mongoose-paginate`  
+- **Autenticación** con `passport-local` y `passport-github`  
+- **Patrón de arquitectura MVC**  
+- **DAO (Data Access Object)**  
+- **Loggers personalizados**  
+- **Documentación con Swagger**  
+- **Errores personalizados (Custom Errors)**  
+- **Testing con TDD y BDD**  
+
+## Estilos
+
+- **Bootstrap**
+- **CSS personalizado**
+
+> ⚠️ **Importante:** El servidor no podrá iniciarse sin las variables de entorno requeridas. Asegúrese de definirlas correctamente en un archivo `.env`.
 
 ## Instalación y puesta en marcha
 ###### Requisitos para la instalación:
@@ -79,11 +101,11 @@ NOTA: Es necesario crear un archivo ".env" con variables de entornos obligatoria
 
 ### Opcionales
 
-**PORT** Cambiar el puerto del servidor.
-**GMAIL_CREDENTIAL_USER** Usuario que permite enviar emails
-**GMAIL_CREDENTIAL_TOKEN** Token para enviar emails
-**GITHUB_CLIENT_ID** ID Github Autenticación Terceros
-**process.env.GITHUB_CLIENT_SECRET** Secreto Github
+**PORT** Cambiar el puerto del servidor.  
+**GMAIL_CREDENTIAL_USER** Usuario que permite enviar emails  
+**GMAIL_CREDENTIAL_TOKEN** Token para enviar emails  
+**GITHUB_CLIENT_ID** ID Github Autenticación Terceros  
+**GITHUB_CLIENT_SECRET** Secreto Github
 
 ## Acceso
 

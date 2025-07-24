@@ -3,7 +3,6 @@ const { saveSecret, createHash, isValidPassword, searchSecret } = require('../ut
 const UsersService = require('../service/mongo/users.service.js')
 const usersService = new UsersService()
 const { transporter } = require('../config/config.js')
-const { generateFormatLink } = require('../utils/utils.js')
 
 const generateLink = (user) =>{
     const key = createHash(`Cod!34fdsert${ user.email }`)

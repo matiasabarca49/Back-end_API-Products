@@ -1,8 +1,8 @@
 const { Server } = require('socket.io')
 //Errors
-const CustomError = require('../service/errors/customError')
-const { generateProductErrorInfo } = require('../service/errors/messageCreater.js')
-const EErrors = require('../service/errors/ErrorEnums.js')
+const CustomError = require('../utils/errors/customError')
+const { generateProductErrorInfo } = require('../utils/errors/messageCreater.js')
+const EErrors = require('../utils/errors/ErrorEnums.js')
 //Services
 const ProductsService = require('../service/mongo/products.service.js')
 const MessageService = require('../service/mongo/message.service.js')

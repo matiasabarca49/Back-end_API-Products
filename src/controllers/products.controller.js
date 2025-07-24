@@ -1,7 +1,7 @@
 //Errores custom
-const CustomError = require('../service/errors/customError.js')
-const { generateProductErrorInfo } = require('../service/errors/messageCreater.js')
-const EErrors = require('../service/errors/ErrorEnums.js')
+const CustomError = require('../utils/errors/customError.js')
+const { generateProductErrorInfo } = require('../utils/errors/messageCreater.js')
+const EErrors = require('../utils/errors/ErrorEnums.js')
 //Administrador de productos
 const ProductsService = require('../service/mongo/products.service.js')
 const productsService = new ProductsService()

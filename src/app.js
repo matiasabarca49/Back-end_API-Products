@@ -47,7 +47,7 @@ app.use(express.static(__dirname + '/public'))
 const compression = require('express-compression')
 app.use(compression())
 //Logger
-const addLogger = require('./service/logger/loggers.js')
+const addLogger = require('./utils/logger/loggers.js')
 app.use(addLogger)
 //CORS
 app.use(cors())
@@ -106,7 +106,7 @@ const routeViewUsers = require('./routes/pages/usersview.router.js')
 const routeGithubAuth = require('./routes/passport/github.passport.router.js')
 const routeError = require('./routes/pages/404.router.js')
 
-
+//API
 app.use("/api/products", routeProducts)
 app.use("/api/carts", routeCarts)
 app.use("/api/sessions", routeSessions)

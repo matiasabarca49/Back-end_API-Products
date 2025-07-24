@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node ./src/app.js",
+    "auto-start": "nodemon ./src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "chai": "^4.3.10",
     "mocha": "^10.2.0",
+    "nodemon": "^3.1.10",
     "supertest": "^6.3.3"
   }
 }

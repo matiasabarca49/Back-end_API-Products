@@ -5,18 +5,13 @@ const { getChatPage } = require('../controllers/chat.controller')
 
 const router = new Router()
 
-const ath = ( req, res, next )=> {
-    if (req.session.rol === "Admin"){
-        res.send("Los administradores no pueden acceder al chat")
-    }
-    else{
-        next()
-    }
-}
+//middleware
+const { checkPerChat } = require('../middlewares/permissions.middleware.js')
+
 
 /**
 * GET
 */
-router.get("/", ath,getChatPage)
+router.get("/", checkPerChat,getChatPage)
 
 module.exports = router

@@ -9,10 +9,6 @@ const persistController = new PersistController()
 //Users Service
 const UsersService = require('../service/mongo/users.service.js')
 const usersService = new UsersService()
-//Errors
-const CustomError = require('../service/errors/customError')
-const { generateUserErrorInfo  } = require('../service/errors/messageCreater.js')
-const EErrors = require('../service/errors/ErrorEnums.js')
 
 const initializePassport = () =>{
     passport.use('register', new LocalStrategy(
