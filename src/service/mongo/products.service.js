@@ -24,6 +24,20 @@ class ProductsService {
         return persistController.getDocumentsByFilter(Product, filter)
     }
 
+    getProductsSearch(query){
+        const searchRegex = new RegExp(query, 'i')
+        return persistController.getDocumentsByQuery(Product, 
+                {
+                    $or: [
+                        { title: searchRegex },
+                        { category: searchRegex },
+                        { code: searchRegex },
+                        { owner: searchRegex},
+                        { _id: query.match(/^[0-9a-fA-F]{24}$/) ? query : null }, // si q parece un ObjectId válido
+                    ]
+                })
+    }
+
     postProduct(product){
         return persistController.createNewDocument(Product, product)
     }

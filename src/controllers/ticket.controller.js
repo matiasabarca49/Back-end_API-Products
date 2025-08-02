@@ -16,6 +16,15 @@ const getTicket = async (req, res)=>{
     }
 }
 
+const getTicketByIDCart = async (req,res) =>{
+    const {idCart} = req.query
+    const ticketGetted = await ticketService.getTicketByIDCart(idCart)
+    ticketGetted
+        ? res.status(200).send({status:"Success", ticket: ticketGetted})
+        : res.status(500).send({status: "ERROR"})
+}
+
 module.exports = {
-    getTicket
+    getTicket,
+    getTicketByIDCart
 }

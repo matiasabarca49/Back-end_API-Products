@@ -1,14 +1,43 @@
-<div>
-    <a class="btn" href="/"><img style="width: 30px;" src="./img/configurar.png" alt="home"></a>
-</div>
-<div id="modalError" class="p-5 position-fixed start-50 end-50 translate-middle z-3 d bg-danger-subtle w-50 shadow-lg p-3 mb-5 bg-body-tertiary rounded" style="margin:10% 0; top:70px; display: none">
-        <h3 class="text-center fw-bold">Error</h3>
-        <p class="text-center fs-5">Faltan cargar los documentos necesarios para ser Usuario Premium</p>
-</div>
-<div class="container-fluid mt-2">
-        <h2>Usuarios en la base de datos:</h2>
-        <div class="row gap-4 p-4 ms-4" id="contUsers">
-            
+<link rel="stylesheet" href="../../css/style.css">
+<header>
+    <nav class="navbar">
+        <div class="nav-brand">
+          <a class="brand-link" href="http://localhost:8080/products">Panel</a>
         </div>
-</div>
+        <div class="nav-actions">
+            <div class="user-name">{{userLoged.user}}</div>
+            {{#if userLoged.user}}
+                <div>
+                    <a class="btn btn-light" href="/api/sessions/perfil">Ver Perfil</a>
+                </div>
+                <div>
+                        <a class="btn btn-light" href="/products">Tienda</a>
+                </div>
+                <div>
+                    <a class="btn btn-danger" href="/api/sessions/logout">salir</a> 
+                </div>
+            {{/if}}
+            {{#unless userLoged.user}}
+                <div>
+                    <a class="btn btn-light" href="/api/sessions/login">Iniciar Sesión</a>
+                </div>
+            {{/unless}}
+        </div>
+    </nav>
+</header>
+<section class="container">
+    <div id="modalError" class="p-5 position-fixed start-50 end-50 translate-middle z-3 d bg-danger w-50 shadow-lg p-3 mb-5 rounded" style="margin:10% 0; top:70px; display: none">
+            <h3 class="text-center fw-bold">Error</h3>
+            <p class="text-center fs-5">Faltan cargar los documentos necesarios para ser Usuario Premium</p>
+    </div>
+    <div class="mt-5">
+            <a class="back-button" href="/"> Regresar </a>
+        </div>
+    <div class="container-fluid mt-2">
+            <h2>Usuarios en la base de datos:</h2>
+            <div class="row gap-4 p-4 ms-4" id="contUsers">
+                
+            </div>
+    </div>
+</section>
 <script src="./js/users.js"></script>

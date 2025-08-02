@@ -19,6 +19,9 @@ class TicketService{
         }
     }
 
+    async getTicketByIDCart(idCart){
+        return await persistController.getDocumentsByFilter(Ticket, {idCart: idCart})
+    }
 
 }
 

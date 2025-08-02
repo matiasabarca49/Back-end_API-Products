@@ -5,8 +5,8 @@ const router = new Router()
 const { checkPermAdmin } = require('../../middlewares/permissions.middleware.js')
 
 
-router.get("/:cid", checkPermAdmin,(req,res)=>{
-    res.render("cartview")
+router.get("/", checkPermAdmin,(req,res)=>{
+    res.render("cartview", {userLoged: req.session})
 })
 
 

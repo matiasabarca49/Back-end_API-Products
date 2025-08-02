@@ -1,29 +1,30 @@
+<link rel="stylesheet" href="../../css/style.css">
 <div>
-    <a class="btn" href="/"><img style="width: 30px;" src="../../img/home.png" alt="home"></a>
+    <a class="btn filter-icon" href="/"><img style="width: 30px;" src="../../img/home.png" alt="home"></a>
 </div>
-<div class='container mt-5 mx-auto p-3 rounded bg-dark text-light'>
-    <h1 class='text-center my-5'>LOGIN</h1>
-    <a class='btn btn-secondary my-4 mx-2' href="http://localhost:8080/auth/github">Ingresar con Github</a>
+<div class='container block-component'>
+    <h1 class='first-text'>Iniciar Sesión</h1>
+    <a class='btn btn-light m-auto' href="http://localhost:8080/auth/github">Ingresar con Github</a>
     {{#if githubError}}
             <div class="text-danger">No se pudo ingresar con Github</div>
         {{/if}}
-    <form  class="container mb-4" action="/api/sessions/login" method="post" >
-        <div>
+    <form  class="container pt-4" action="/api/sessions/login" method="post" >
+        <div class="my-2">
             <label htmlFor="">Email:</label>
-            <input class='w-100' type="text" name="email" required/>
+            <input class='w-100 ' type="text" name="email" required/>
         </div>
-        <div>
+        <div class="my-2">
             <label htmlFor="">Contraseña:</label>
             <input class="w-100" type="password" name="password" required/>
         </div>
         {{#if error}}
             <div class="text-danger">Constraseña o email erróneos</div>
         {{/if}}
-        <button class='btn btn-primary mt-2'>Login</button>
+        <button class='btn-success my-2'>Ingresar</button>
     </form>
-    <a class="text-decoration-none" href="/api/sessions/forgetpassword">¿Olvidaste la constraseña?</a>
+    <a class="text-decoration-none text-white m-2 " href="/api/sessions/forgetpassword">¿Olvidaste la constraseña?</a>
 </div>
 <div class="container mt-3">
-    <a class="btn btn-warning" href="/api/sessions/register"> Registrarse</a>
-    <a class="btn btn-success" href="/products"> Ir a la tienda</a>
+    <a class="btn btn-danger" href="/api/sessions/register"> Registrarse</a>
+    <a class="btn btn-danger" href="/products"> Ir a la tienda</a>
 </div>

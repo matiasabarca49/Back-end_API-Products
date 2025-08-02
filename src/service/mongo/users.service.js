@@ -26,11 +26,11 @@ class UsersService{
         }
         return userFormated
     }
-    
 
     async getUserByFilter(filter){
         return persistController.getDocumentsByFilter(User, filter)
     }
+
 
    async postProductToCart(idUser, productToAdded){
         /* console.log(productToAdded) */

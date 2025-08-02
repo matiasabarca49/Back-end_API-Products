@@ -7,12 +7,12 @@ const renderUsers = (users)=>{
         div.style.maxWidth = "18rem"
         div.innerHTML=  `
                     <div class="card-header bg-transparent d-flex justify-content-between align-items-center gap-3" id="contHeader${user.id}">
-                        <p class="fw-light opacity-75" style="font-size: 14px; margin-bottom: 0">${user.id}</p>
+                        <p class="fw-light opacity-75" style="font-size: 14px; margin-bottom: 0">ID:${user.id}</p>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title fs-4 text fw-bold">${user.name}</h5>
-                        <h5 class="card-title fs-4 text fw-bold">${user.lastName}</h5>
-                        <p class="card-text">${user.email}</p>
+                        <h5 class="card-title fs-4 text-black fw-bold">${user.name}</h5>
+                        <h5 class="card-title fs-4 text-black fw-bold">${user.lastName}</h5>
+                        <p class="card-text text-secondary">${user.email}</p>
                     </div>
                     <div class="p-3 d-flex flex-column align-items-center">
                         <div class="card-footer w-100 d-flex justify-content-between align-items-center bg-transparent fs-4 text ">

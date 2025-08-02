@@ -1,4 +1,3 @@
-
 const render = (array)=>{
     const contProducts = document.getElementById('products')
     contProducts.innerHTML= ""
@@ -12,7 +11,7 @@ const render = (array)=>{
                             <p class="card-text"><small class="text-body-secondary">${product.category}</small>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title fs-4 text fw-bold">${product.title}</h5>
+                            <h5 class="card-title fs-4 text-black fw-bold">${product.title}</h5>
                             <p class="card-text">${product.description.slice(0,70)}...</p>
                         </div>
                         <div class="card-footer bg-transparent fs-4 text "> $ ${product.price}</div>

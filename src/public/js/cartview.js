@@ -1,3 +1,38 @@
+const getCart = (idCart) =>{
+    fetch(`http://localhost:8080/api/carts/${idCart}`)
+    .then(response => response.json())
+    .then( data =>{
+        renderProducts(data.cart.products)
+        getUserCart(data.cart._id)
+    } )
+}
+
+const getUserCart = (idCart)=>{
+    fetch(`http://localhost:8080/api/ticket/filter?idCart=${idCart}`)
+    .then(response => response.json())
+    .then( data =>{
+        console.log(data)
+        getUser(data.ticket)
+
+    } )
+}
+
+const getUser = (ticket) =>{
+    fetch(`http://localhost:8080/api/users/filter?email=${ticket.purchaser}`)
+    .then(response => response.json())
+    .then( data =>{
+        console.log(data)
+         //Info
+        const info = document.getElementById('infoID')
+        info.innerHTML= `
+            <h4>Comprado por: ${data.user.name} ${data.user.lastName}</h4>
+            <h4>Email: ${data.user.email}</h4>
+            <h4>Código: ${ticket.code}</h4>
+            <h4>Fecha de Compra: ${ticket.purchase_datetime}</h4>
+    `
+    } )
+}
+
 const renderProducts = (array)=>{
     const contProducts = document.getElementById('contCart')
     contProducts.innerHTML= ""
@@ -11,7 +46,7 @@ const renderProducts = (array)=>{
                             <p class="card-text"><small class="text-body-secondary">${item.product.category}</small>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title fs-4 text fw-bold">${item.product.title}</h5>
+                            <h5 class="card-title fs-4 text-black fw-bold">${item.product.title}</h5>
                             <p class="card-text">${item.product.description}</p>
                         </div>
                         <div class="card-footer bg-transparent fs-4 text d-flex justify-content-between align-items-center">
@@ -37,13 +72,18 @@ const total = (array) =>{
 **/
 
 //obtenemos la URL actual
-const url = window.location.href
+//const url = window.location.href
 //mediante el metodo "split" obtenemos el id del carrito. 
-const id = url.split("/")[4]
+//const id = url.split("/")[4]
+
+
 
 //Una vez extraido el ID realizamos el fetch
-fetch(`http://localhost:8080/api/carts/${id}`)
-    .then(response => response.json())
-    .then( data =>{
-        renderProducts(data.cart.products)
-    } )
+//getCart(id)
+
+const formCart = document.getElementById("buttonCartID")
+formCart.addEventListener("click", (e)=>{
+    e.preventDefault()
+    const idCart = document.getElementById("IDCartToSearch").value
+    getCart(idCart)
+})

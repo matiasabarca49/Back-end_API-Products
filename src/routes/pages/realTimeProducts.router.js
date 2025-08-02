@@ -5,7 +5,7 @@ const router = new Router()
 const { checkPermAdminAndPremium } = require('../../middlewares/permissions.middleware.js')
 
 router.get( "/", checkPermAdminAndPremium, (req,res) => {
-    res.render('realTimeProducts', {rol: req.session.rol})
+    res.render('realTimeProducts', {rol: req.session.rol, userLoged: req.session})
 })
 
 module.exports = router

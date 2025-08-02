@@ -38,6 +38,18 @@ const getProductsByID = async (req,res) =>{
         : res.status(404).send({status: "Error", reason: "Producto no encontrado"})
 }
 
+const getSearchProducts =  async (req, res) =>{
+    const { query } = req.query
+    //Si el query viene vacio
+    query === "" || undefined && res.status(400).json({success: false, error: "Parámetro de búsqueda vacío",});
+
+    const productsFounded = await productsService.getProductsSearch(query)
+    productsFounded
+        ? res.status(200).json({success: true, data: productsFounded})
+        : res.status(500).json({success: false, error: "Error interno del servidor",
+});
+}
+
 const addProduct = async (req, res) =>{
     const {title, code, stock} = req.body
     try {
@@ -96,6 +108,7 @@ const deleteProduct = async (req,res) => {
 module.exports = {
     getProducts,
     getProductsByID,
+    getSearchProducts,
     addProduct,
     addManyProducts,
     updateProduct,

@@ -25,7 +25,7 @@ const checkPerAddProduct = (req, res ,next) => {
     }
 }
 
-const checkPerAddCart = (req, res, next) =>{
+const checkPerAdmCart = (req, res, next) =>{
     if(req.session.rol === "User" || req.session.rol === "Premium"){
         next()
     }
@@ -43,18 +43,28 @@ const CheckPerRol = (req, res, next) =>{
 }
 
 const checkPerCart = (req, res, next)=>{
-    if(req.session.rol === "User" || req.session.rol === "Premium"){
+    if(req.session.rol === "Admin"){
         next()
     }
-    else if(req.session.rol === "Admin"){
+    else if(req.session.rol === "User" || req.session.rol === "Premium"){
         /* res.send({status: "ERROR", reason: "Solo los usuarios pueden agregar productos al carrito" }) */
-        res.send("Solo los usuarios normales y los premium pueden agregar productos al carrito")
+        res.send("Solo los Administradores pueden ver los carritos de compra")
     }
     else{
         /* res.send({status: "ERROR", reason: "No está logueado" }) */
         res.redirect("/api/sessions/login")
     }
 }
+
+const checkPerShowCart = (req, res, next)=>{
+    if(req.session.rol === "Admin"){
+        next()
+    }
+    else{
+        res.send("Solo los administradores puede ver carritos")
+    }
+}
+
 
 const checkPerChat = ( req, res, next )=> {
     if (req.session.rol === "Admin"){
@@ -69,8 +79,9 @@ module.exports = {
     checkPermAdmin,
     checkPermAdminAndPremium,
     checkPerAddProduct,
-    checkPerAddCart,
+    checkPerAdmCart,
     CheckPerRol,
+    checkPerShowCart,
     checkPerCart,
     checkPerChat
 }

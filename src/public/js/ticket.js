@@ -3,18 +3,17 @@ const renderProducts = (ticket, cart, user)=>{
     contProducts.innerHTML= ""
     cart.products.forEach(item => {
         const div = document.createElement('div')
-        div.className= " col-2 col-6 col-sm-4 card  mb-3 flex-grow-1 shadow"
+        div.className= " purchase-product-card"
         div.style.maxWidth= "18rem"
         div.innerHTML= 
                     `
-                        <div class="card-header bg-transparent ">
-                            <p class="card-text"><small class="text-body-secondary">${item.product.category}</small>
+                        <div class="purchase-card-header ">
+                            <p class="purchase-card-category">${item.product.category}</p>
                         </div>
-                        <div class="card-body">
-                            <h5 class="card-title fs-4 text fw-bold">${item.product.title}</h5>
-                            <p class="card-text">${item.product.description}</p>
+                        <div class="purchase-card-body">
+                            <h5 class="purchase-card-title">${item.product.title}</h5>
                         </div>
-                        <div class="card-footer bg-transparent fs-4 text d-flex justify-content-between align-items-center">
+                        <div class="purchase-card-footer">
                             <h4 class="text-body-tertiary">Cantidad: ${item.quantity}</h4>
                             <h4>$${item.product.price * item.quantity}</h4> 
                         </div>
@@ -47,7 +46,7 @@ const total = (array) =>{
 
 //Obtenemos las query params. Obtenemos el string de Query
 const url = window.location.search
-//Creamos el objeto que contiene las queryparasm usando su constructor
+//Creamos el objeto que contiene las queryparams usando su constructor
 const params = new URLSearchParams(url)
 //Mediante el metodo "get" obtenemos el id para utilizarlo en el fetch
 const code = params.get("code")

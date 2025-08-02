@@ -13,6 +13,15 @@ const getUsers = async (req, res) =>{
         : res.status(500).send({status: "Error"})
 }
 
+const getUserByFilter = async (req, res) =>{
+    const filter = req.query
+    const userGetted = await usersService.getUserByFilter(filter)
+    userGetted
+         ? res.status(200).send({status: "Succesfull", user: userGetted})
+         : res.status(500).send({status: "Error"})
+
+}
+
 const changeRol = async (req, res) =>{
     const userUpdated = await usersService.putChangeRolFromUser(req.params.uid)
     userUpdated.status
@@ -77,6 +86,7 @@ const delProductFromUser = async(req, res)=>{
 
 module.exports = {
     getUsers,
+    getUserByFilter,
     changeRol,
     addProductToCartFromUser,
     addDocumentsInUser,

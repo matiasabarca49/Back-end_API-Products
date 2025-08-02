@@ -1,21 +1,22 @@
+<link rel="stylesheet" href="../../css/style.css">
 <div>
-    <a class="btn" href="/"><img style="width: 30px;" src="../../img/home.png" alt="home"></a>
+    <a class="btn filter-icon" href="/"><img style="width: 30px;" src="../../img/home.png" alt="home"></a>
 </div>
-<div class='container mt-5 mx-auto p-3 rounded bg-dark text-light w-50'>
-    <h1 class='text-center my-5'>REGISTER</h1>
+<div class='container mt-5 block-component'>
+    <h1 class='first-text'>Registrarse en la tienda</h1>
     <form  class="container" action="/api/sessions/register" method="post" >
         <div class="d-flex gap-2">
             <div class="flex-grow-1">
-                <label htmlFor="">First Name:</label>
+                <label htmlFor="">Nombre:</label>
                 <input class='w-100' type="text" name="name" required/>
             </div>
             <div class="flex-grow-1">
-                <label htmlFor="">Last Name:</label>
+                <label htmlFor="">Apellido:</label>
                 <input class='w-100' type="text" name="lastName" required/>
              </div>
         </div>
         <div>
-            <label htmlFor="">Age:</label>
+            <label htmlFor="">Edad:</label>
             <input class='w-100' type="text" name="age" required/>
         </div>
         <div>
@@ -29,10 +30,10 @@
         {{#if error}}
             <div class="m-2 text-danger">El usuario ya está registrado o campos incompletos</div>
         {{/if}}
-        <button class='btn btn-primary mt-2'>Register</button>
+        <button class='btn-success my-2'>Registrarse</button>
     </form>
 </div>
-<div class="container mt-3 w-50">
-    <a class="btn btn-warning" href="/api/sessions/Login"> Login</a>
-    <a class="btn btn-success" href="/products"> Ir a la tienda</a>
+<div class="container mt-3">
+    <a class="btn btn-danger" href="/api/sessions/Login"> Ya estoy registrado</a>
+    <a class="btn btn-danger" href="/products"> Ir a la tienda</a>
 </div>

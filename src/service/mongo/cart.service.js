@@ -41,7 +41,7 @@ class CartService {
         //Dejar en carrito solo productos sin stock
         await persistController.updateDocument(User, idUser, {cart: productsWithoutStock})
         //Generar Ticket
-        const ticket = new TicketDTO(user, productsWithStock)
+        const ticket = new TicketDTO(user, productsWithStock, idCart)
         await persistController.createNewDocument(Ticket, ticket)
         return {purchases: purchaseUpdated, cart: productsWithoutStock, purchase: productsWithStock, ticket: ticket}
     }

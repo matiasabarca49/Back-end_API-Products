@@ -1,6 +1,6 @@
 const express = require('express')
 //controllers
-const {getProducts, getProductsByID, addProduct, addManyProducts, updateProduct, deleteProduct} = require('../controllers/products.controller.js')
+const {getProducts, getProductsByID, getSearchProducts, addProduct, addManyProducts, updateProduct, deleteProduct} = require('../controllers/products.controller.js')
 //middleware
 const { checkPerAddProduct } = require('../middlewares/permissions.middleware.js')
 
@@ -14,6 +14,7 @@ const router = new Router()
 * GET
 **/
 router.get("/", getProducts)
+router.get("/search", getSearchProducts)
 router.get("/:id", getProductsByID)
 
 /**

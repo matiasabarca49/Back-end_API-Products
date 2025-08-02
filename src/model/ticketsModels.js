@@ -16,6 +16,10 @@ const ticketSchema = new mongoose.Schema({
     purchaser: {
         type: String,
         required: true
+    },
+    idCart:{
+        type: String,
+        required: true                 
     } 
 })
 

@@ -43,6 +43,22 @@ class PersistController{
         return documentFromDB
     }
 
+    async getDocumentsByQuery(Model, query){
+        let documentsFromDB 
+        console.log(query)
+        await Model.find(query)
+            .then( dt => {
+                documentsFromDB = dt
+            } )
+            .catch(error =>{
+                documentsFromDB = false
+                console.log(error)
+            })
+        /* console.log(productsFromDB) */
+        return documentsFromDB
+    }
+
+
     async getManyDocumentsByFilter(Model, filter){
         let documentsFromDB 
         await Model.find(filter)

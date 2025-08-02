@@ -92,7 +92,7 @@ Ej:
 
 NOTA: Es necesario crear un archivo ".env" con variables de entornos obligatorias
 
-## Variable de Entorno
+## Variables de Entorno
 
 ### Obligatorias
 
@@ -101,11 +101,11 @@ NOTA: Es necesario crear un archivo ".env" con variables de entornos obligatoria
 
 ### Opcionales
 
-**PORT** Cambiar el puerto del servidor.  
-**GMAIL_CREDENTIAL_USER** Usuario que permite enviar emails  
-**GMAIL_CREDENTIAL_TOKEN** Token para enviar emails  
-**GITHUB_CLIENT_ID** ID Github Autenticación Terceros  
-**GITHUB_CLIENT_SECRET** Secreto Github
+- **PORT** Cambiar el puerto del servidor.  
+- **GMAIL_CREDENTIAL_USER** Usuario que permite enviar emails  
+- **GMAIL_CREDENTIAL_TOKEN** Token para enviar emails  
+- **GITHUB_CLIENT_ID** ID Github Autenticación Terceros  
+- **GITHUB_CLIENT_SECRET** Secreto Github
 
 ## Acceso
 
