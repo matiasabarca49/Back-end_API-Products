@@ -11,19 +11,17 @@ program.parse();
 
 const environment = program.opts().mode;
 
+//Cargar variables de entorno segun el ambiente
 dotenv.config({
     path:environment==="production"? "./.env": "./.env"
 });
+//Importar verificacion de variables de entorno
+const reqVars = require("../utils/dotenv.helper.js")
 
 //Crear transporter para enviar mails
 let transporter = {};
-if(!process.env.GMAIL_CREDENTIAL_USER && !process.env.GMAIL_CREDENTIAL_TOKEN){
-    console.log("=================================================")
-    console.log("⚠️ [Info] Envío de emails desactivado")
-    console.log("Faltan Credenciales")
-    console.log("=================================================")
-}else{
-
+//if(process.env.GMAIL_CREDENTIAL_USER?.trim() && process.env.GMAIL_CREDENTIAL_TOKEN?.trim()){
+if(reqVars.validateEnvVars('gmail')){
     //Creando trasnporter
     transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -43,7 +41,6 @@ if(!process.env.GMAIL_CREDENTIAL_USER && !process.env.GMAIL_CREDENTIAL_TOKEN){
         }
     });
 }
-
 
 module.exports = {
     port: program.opts().p,

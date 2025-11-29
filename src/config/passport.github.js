@@ -6,14 +6,10 @@ const { Strategy } = require('passport-github2')
 const githubStrategy = Strategy
 const UserDTO = require('../dto/user.dto.js')
 
-if(!process.env.GITHUB_CLIENT_ID && !process.env.GITHUB_CLIENT_SECRET){
-    console.log("=================================================")
-    console.log("⚠️ [Info] Autenticacion con GITHUB Desactivada")
-    console.log("Faltan Credenciales")
-    console.log("=================================================")
+const {validateEnvVars} = require('../utils/dotenv.helper.js')
 
-}else{
-
+if(validateEnvVars('github')){
+    
     const serviceMongo = new ServiceMongo()
     
     passport.use('auth-github',
