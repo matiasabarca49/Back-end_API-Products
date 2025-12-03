@@ -1,5 +1,5 @@
 const passport = require('passport')
-const User = require('../model/usersModels.js')
+const User = require('../model/users.model.js')
 const ServiceMongo = require('../dao/mongo/persistController.js')
 const { createHash } = require('../utils/utils.js')
 const { Strategy } = require('passport-github2')

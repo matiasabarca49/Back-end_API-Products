@@ -6,9 +6,7 @@ class MongoManager{
     }
         
     connect(){
-        return mongoose.connect(this.url,
-        {useUnifiedTopology: true, 
-        useNewUrlParser: true})
+        return mongoose.connect(this.url)
             .then( connect => {
                 const port = process.env.PORT || 8080
                 console.log("✅ [OK] Conexión a la DB: ÉXITO");

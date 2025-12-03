@@ -17,8 +17,7 @@ const mongoSession = require('connect-mongo')
 
 app.use(session({
     store: mongoSession.create({
-        mongoUrl: process.env.MONGO_URL,
-        mongoOption: {useNewUrlParser: true, useUnifiedTopology: true}
+        mongoUrl: process.env.MONGO_URL
     }),
     secret: process.env.SECRET_SESSIONS ,
     resave: true,
@@ -29,7 +28,7 @@ app.use(session({
 const passport = require('passport')
 const initializePassport = require('./config/passport.config.js')
 //Estrategia de autorizacion de terceros
-require('./config/passport.github.js')
+require('./config/passport.github.config.js')
 //Config de passport con estrategias
 initializePassport()
 app.use(passport.initialize())

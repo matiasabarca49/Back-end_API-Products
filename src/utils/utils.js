@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const { Faker, es } = require('@faker-js/faker')
 const PersistController = require('../dao/mongo/persistController.js')
-const Product = require('../model/productsModels.js')
+const Product = require('../model/products.model.js')
 
 let secretSaved = []
 
@@ -39,7 +39,7 @@ const reWriteDocsDB = async (Model, documentFormat) =>{
             }
             documentsReWrited.push(documentReWrited)
         }
-        else if(documentFormat === "User"){
+        else if(documentFormat === "users"){
             const documentReWrited = {
                 name: document.name || "Not Declared",
                 lastName: document.lastName || "Not Declared",

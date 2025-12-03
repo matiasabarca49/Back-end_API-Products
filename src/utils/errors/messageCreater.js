@@ -25,7 +25,9 @@ const generateProductErrorInfo = (product) => {
 `;
 };
 
+
+
 module.exports = {
     generateUserErrorInfo,
-    generateProductErrorInfo
+    generateProductErrorInfo,
 }

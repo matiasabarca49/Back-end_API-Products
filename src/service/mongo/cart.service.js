@@ -1,9 +1,9 @@
 const PersistController = require('../../dao/mongo/persistController.js')
 const persistController = new PersistController()
-const Cart = require('../../model/cartsModels.js')
-const Product = require('../../model/productsModels.js')
-const User = require('../../model/usersModels.js')
-const Ticket = require('../../model/ticketsModels.js')
+const Cart = require('../../model/carts.model.js')
+const Product = require('../../model/products.model.js')
+const User = require('../../model/users.model.js')
+const Ticket = require('../../model/tickets.model.js')
 const TicketDTO = require('../../dto/ticket.dto.js')
 
 class CartService {

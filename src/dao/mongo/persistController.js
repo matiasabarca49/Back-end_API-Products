@@ -1,3 +1,6 @@
+const CustomError = require("../../utils/errors/customError")
+const EErrors = require("../../utils/errors/ErrorEnums")
+
 class PersistController{
 
     constructor(){
@@ -5,42 +8,30 @@ class PersistController{
     }
     //"Model" hace referencia al "Schema" de una colección
     async getDocuments(Model){
-        let documentsFromDB 
-        await Model.find()
-            .then( dt => {
-                documentsFromDB = dt
-            } )
+        //Si la respuesta tiene exito, devuelve los documentos encontrados
+        return await Model.find()
+            //Si hay un error, lo muestra por consola y lo lanza para que lo capte la capa superior(Controlador/Servicio)
             .catch(error =>{
                 console.log(error)
+                throw error
             })
-        /* console.log(documentsFromDB) */
-        return documentsFromDB
     }
 
     async getDocumentsByID(Model, ID){
-        let documentFromDB 
-        await Model.findOne({_id: ID})
-            .then( dt => {
-                documentFromDB = dt
-            } )
+        return await Model.findOne({_id: ID})
             .catch(error =>{
                 console.log(error)
+                throw error
             })
-        /* console.log(productsFromDB) */
-        return documentFromDB
+    
     }
 
     async getDocumentsByFilter(Model, filter){
-        let documentFromDB 
-        await Model.findOne(filter)
-            .then( dt => {
-                documentFromDB = dt
-            } )
+        return await Model.findOne(filter)
             .catch(error =>{
                 console.log(error)
+                throw error
             })
-        /* console.log(productsFromDB) */
-        return documentFromDB
     }
 
     async getDocumentsByQuery(Model, query){
@@ -60,16 +51,11 @@ class PersistController{
 
 
     async getManyDocumentsByFilter(Model, filter){
-        let documentsFromDB 
-        await Model.find(filter)
-            .then( dt => {
-                documentsFromDB = dt
-            } )
+        return await Model.find(filter)
             .catch(error =>{
                 console.log(error)
+                throw error
             })
-        /* console.log(productsFromDB) */
-        return documentsFromDB
     }
 
    
@@ -89,32 +75,32 @@ class PersistController{
     }
 
     async createNewDocument(Model, newDocument){
-        
         //Verificamos que el documento sea valido con el esquema(modelo)
-        let documentAdded 
         const model = new Model(newDocument)
-        await model.save()
-            .then( dt => {
-                documentAdded = dt
-            })
+        return await model.save()
             .catch( error => {
-                console.log(error)
-                documentAdded = false
-            } )
-        return documentAdded      
+                if (error.code === 11000) {
+                    const customError = new CustomError()
+                    customError.createError({
+                        name:"Document creation error",
+                        cause: 'Datos Duplicados en la Base de Datos',
+                        message: "No se puede crear el documento. Verifica tus datos",
+                        code: EErrors.DATA_DB_DUPLICATED
+
+                    })
+                    throw customError
+                }else{
+                    throw error
+                }
+            } )   
     }
 
-    async createManyDocuments(Model, arrayProducts){
-        let documentsAdded
-        await Model.insertMany(arrayProducts)
-            .then( dts =>{
-                documentsAdded = dts
-            } )
+    async createManyDocuments(Model, arrayProducts){ 
+        return await Model.insertMany(arrayProducts)
             .catch( err =>{
                 console.log(err)
-                documentsAdded = false
+                throw err
             })
-        return documentsAdded
     }
 
     async updateDocument(Model, ID,toUpdate ){

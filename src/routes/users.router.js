@@ -4,7 +4,7 @@ const router = new Router()
 //Multer
 const uploader = require('../utils/multer.js')
 //controllers
-const { getUsers, getUserByFilter, changeRol, addPurchaseToUser, addProductToCartFromUser, addDocumentsInUser, delUser, delUserForConnectionn, delProductFromUser } = require('../controllers/users.controller.js')
+const { getUsers, getUserByFilter, changeRol, addPurchaseToUser, addProductToCartFromUser, addDocumentsInUser, delUser, delUserForConnectionn, delProductFromUser, createUser } = require('../controllers/users.controller.js')
 //middleware
 const {checkPerAdmCart, CheckPerRol, checkPermAdmin} = require('../middlewares/permissions.middleware.js')
 
@@ -12,12 +12,13 @@ const {checkPerAdmCart, CheckPerRol, checkPermAdmin} = require('../middlewares/p
 /**
 *   GET 
 **/
-router.get("/", getUsers)
+router.get("/",checkPermAdmin ,getUsers)
 router.get("/filter", checkPermAdmin, getUserByFilter)
 
 /**
 *   POST 
 **/
+router.post('/', createUser)
 router.post( '/addcart', checkPerAdmCart, addProductToCartFromUser)
 router.post( '/:uid/documents',uploader.single('file'),addDocumentsInUser)
     

@@ -1,4 +1,4 @@
-const Product = require('../../model/productsModels.js')
+const Product = require('../../model/products.model.js')
 const PersistController = require('../../dao/mongo/persistController.js')
 const persistController = new PersistController()
 const { transporter } = require('../../config/config.js')

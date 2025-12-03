@@ -26,7 +26,7 @@ if(!process.env.MONGO_URL?.trim() || !process.env.SECRET_SESSIONS?.trim()){
 }
 
 if(!process.env.GMAIL_CREDENTIAL_USER?.trim() && !process.env.GMAIL_CREDENTIAL_TOKEN?.trim()){
-    console.log("⚠️ [Info] Envío de emails desactivado")
+    console.log("⚠️ [Info] Envío de emails Desactivado")
     requiredEnvVars.gmail = false
 }
 

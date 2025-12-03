@@ -1,5 +1,5 @@
-const Cart = require('../../model/cartsModels.js')
-const Ticket = require('../../model/ticketsModels.js')
+const Cart = require('../../model/carts.model.js')
+const Ticket = require('../../model/tickets.model.js')
 const PersistController = require('../../dao/mongo/persistController.js')
 const persistController = new PersistController()
 
