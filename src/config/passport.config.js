@@ -46,12 +46,15 @@ const initializePassport = () =>{
                 if(userFound){
                     const checkPassword = isValidPassword(userFound, userData.password)
                     checkPassword 
-                        ? done(null, await usersService.putConnectionUser(userFound.id)) 
-                        : done(null, false)
-                }
+                        //Si la contraseña es correcta, se actualiza la fecha de ultima conexion
+                        ? done(null, await usersService.putConnectionUser(userFound._id.toString()))
+                        //Si no existe, devolvemos un error
+                        : done(null, false, {status: "ERROR", reason: "Contraseña incorrecta"})
+                } 
+                //Si no existe, devolvemos un error
                 else{
                     //En caso de que el usuario no exista o este mal las credenciales. Frenamos la operacion
-                    done(null, false)
+                    done(null, false, {status: "ERROR", reason: "Usuario no encontrado o credenciales incorrectas"})
                 }
             } catch (error) {
                 done({status: "ERROR", reason: error})

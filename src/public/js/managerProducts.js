@@ -11,23 +11,23 @@ const renderProducts = (array) => {
                                 <div class="header-content">
                                     <p class="card-category">${product.category}</p>
                                     <div class="header-buttons">
-                                        <button class="btn principal-button edit-btn" onclick="editProduct('${product._id}')">
+                                        <button class="btn principal-button edit-btn" onclick="editProduct('${product.id}')">
                                             ✎
                                         </button>
-                                        <button class="btn btn-danger delete-btn" onclick="deleteProduct('${product._id}')">
+                                        <button class="btn btn-danger delete-btn" onclick="deleteProduct('${product.id}')">
                                             ✕
                                         </button>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <h6 class="text-body-secondary">ID: ${product._id}</h6>
+                                <h6 class="text-body-secondary">ID: ${product.id}</h6>
                                 <h5 class="card-title">${product.title}</h5>
                                 <h6>stock: ${product.stock}</h6>
                             </div>
                             <div class="card-footer"> 
                                 <span class="card-price">$ ${product.price}</span>
-                                <a class="btn btn-light" href="http://localhost:8080/products/productview?id=${product._id}">Ver en Tienda</a>
+                                <a class="btn btn-light" href="http://localhost:8080/products/productview?id=${product.id}">Ver en Tienda</a>
                             </div>  
                     `
         contProducts.appendChild(div)

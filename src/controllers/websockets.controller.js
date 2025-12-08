@@ -18,7 +18,7 @@ const webSocket = (server) => {
         //====== Productos ==============
         //enviar al cliente los productos
         console.log("Cliente Conectado al API WebSocket")
-        socket.emit('sendProducts', await productsService.getProducts())
+        socket.emit('sendProducts', await productsService.getAll())
         //Agregar producto nuevo a base de datos
         socket.on('newProductToBase', async (data) =>{
             //Constrolando de errores
@@ -36,7 +36,7 @@ const webSocket = (server) => {
                 }
                 //Verificar que el owner sea un mail valido
                 if(owner !== "Admin") {
-                    const userFound = await usersService.getUserByFilter({email: owner})
+                    const userFound = await usersService.getByFilter({email: owner})
                     if(!userFound || userFound.rol === "User"){
                         const customError = new CustomError()
                         customError.createError({
@@ -48,17 +48,17 @@ const webSocket = (server) => {
                     }
                 }
                 //En caso de que no falten campos y el owner sea válido se procede a agregar el producto
-                await productsService.postProduct(data)
-                io.sockets.emit('sendProducts',  await productsService.getProducts())
+                await productsService.create(data)
+                io.sockets.emit('sendProducts',  await productsService.getAll())
             } catch (error) {
                 console.log(error)
             }
         })
         //====== Mensajes ===============
-        socket.emit("chats", await messageService.getMessage())
+        socket.emit("chats", await messageService.getAll())
         socket.on('msg',async (data)=>{
-            await messageService.postMassage(data)
-            io.sockets.emit("chats", await messageService.getMessage())
+            await messageService.create(data)
+            io.sockets.emit("chats", await messageService.getAll())
         })
     } )
 }

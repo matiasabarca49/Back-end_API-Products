@@ -1,32 +1,32 @@
 const Product = require('../../model/products.model.js')
-const PersistController = require('../../dao/mongo/persistController.js')
-const persistController = new PersistController()
+const BaseService = require('./base.service.js')
 const { transporter } = require('../../config/config.js')
 const { generateFormatEmail } = require('../../utils/utils.js')
+const ProductDTO = require('../../dto/product.dto.js')
 
-class ProductsService {
+class ProductsService extends BaseService{
     constructor(){
-
+        super(Product)
     }
 
-    getProductsPaginate(dftQuery, dftLimit, dftPage, dftSort){
-        return persistController.getPaginate(Product, dftQuery, dftLimit, dftPage, dftSort)
-    }
+   /*  getProductsPaginate(dftQuery, dftLimit, dftPage, dftSort){
+        return this.persistController.getPaginate(this.model, dftQuery, dftLimit, dftPage, dftSort)
+    } */
 
-    getProducts(){
-        return persistController.getDocuments(Product)
+    /* getProducts(){
+        return this.persistController.getDocuments(Product)
     }
 
     getProductsByID(ID){
-        return persistController.getDocumentsByID(Product, ID)
+        return this.persistController.getDocumentsByID(Product, ID)
     }
     getProductsByFilter(filter){
-        return persistController.getDocumentsByFilter(Product, filter)
-    }
+        return this.persistController.getDocumentsByFilter(Product, filter)
+    } */
 
     getProductsSearch(query){
         const searchRegex = new RegExp(query, 'i')
-        return persistController.getDocumentsByQuery(Product, 
+        return this.persistController.getDocumentsByQuery( 
                 {
                     $or: [
                         { title: searchRegex },
@@ -38,17 +38,17 @@ class ProductsService {
                 })
     }
 
-    postProduct(product){
-        return persistController.createNewDocument(Product, product)
-    }
+    /* postProduct(product){
+        return this.persistController.createNewDocument(this.model, product)
+    } */
 
-    postManyProducts(products){
-        return persistController.createManyDocuments(Product, products)
-    }
+    /* postManyProducts(products){
+        return this.persistController.createManyDocuments(this.model, products)
+    } */
 
-    putProduct(ID, productToChange){
-        return persistController.updateDocument(Product, ID, productToChange)
-    }
+    /* putProduct(ID, productToChange){
+        return this.persistController.updateDocument(this.model, ID, productToChange)
+    } */
 
     /* generateFormatEmail = (email, payload) =>{
         const mailOptions = {
@@ -68,7 +68,7 @@ class ProductsService {
     } */
     
     async delProduct(ID, user){
-        const productFound = await persistController.getDocumentsByID(Product, ID)
+        const productFound = await this.persistController.getDocumentsByID(ID)
         //Enviar mail al propietario del producto
         if( productFound.owner !== "Admin"){
             transporter.sendMail(generateFormatEmail(productFound.owner, { subject: "Producto Borrado", head: "El Producto fue borrado correctamente", body: `El producto "${productFound.title}" con código "${productFound.code}" fue borrado. Por el administrador ${user.user} ${user.lastName}. El producto pertenece al usuario con email ${productFound.owner}`}), (error, info)=>{
@@ -86,20 +86,37 @@ class ProductsService {
         //Eliminar el producto. "Admin" puede eliminar todos los productos, "El propietario solo puede eliminar sus productos"
         if (user.rol === "Premium"){
            if (user.email === productFound.owner){
-               return persistController.deleteDocument(Product, ID) 
+               return this.persistController.deleteDocument(ID) 
            }
            else{
             return false
            }
         }
         else if(user.rol === "Admin"){
-            return persistController.deleteDocument(Product, ID)
+            return this.persistController.deleteDocument(ID)
 
         }
         else{
             return false
         }
     }
+
+    /**
+         * 
+         *Wrapper Pattern
+         */
+    
+        toFormatDTO(productData) {
+            return new ProductDTO(productData)
+        }
+    
+        toDTO(product) {
+            return ProductDTO.toResponse(product) 
+        }
+    
+        toManyDTO(products) {
+            return products.map(product => ProductDTO.toResponse(product)) 
+        }
 }
 
 module.exports = ProductsService

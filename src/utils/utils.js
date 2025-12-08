@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt')
 const { Faker, es } = require('@faker-js/faker')
-const PersistController = require('../dao/mongo/persistController.js')
-const Product = require('../model/products.model.js')
+
 
 let secretSaved = []
 
@@ -18,15 +17,12 @@ const isValidPassword = (user ,password) =>{
 
 //Reescrituras de documentos DB
 //Debido a un error o directiva de Handlebars los productos son reescritos para lograr que handlebars renderice
-const persistController =  new PersistController()
-
-const reWriteDocsDB = async (Model, documentFormat) =>{
+const reWriteDocsDB = async (documentFormat, documentsFromBase) =>{
     const documentsReWrited = []
-    const documentsFromBase = await persistController.getDocuments(Model)
     documentsFromBase.forEach( document => {
-        
-        if(documentFormat === "Product"){
-            const documentReWrited = {
+        let documentReWrited
+        if(documentFormat === "products"){
+            documentReWrited = {
                 title: document.title || "Not Declared",
                 description: document.description || "Not Declared",
                 price: document.price || "Not Declared",
@@ -37,10 +33,8 @@ const reWriteDocsDB = async (Model, documentFormat) =>{
                 owner: document.owner || "Not Declared",
                 id: document.id 
             }
-            documentsReWrited.push(documentReWrited)
-        }
-        else if(documentFormat === "users"){
-            const documentReWrited = {
+        }else{
+            documentReWrited = {
                 name: document.name || "Not Declared",
                 lastName: document.lastName || "Not Declared",
                 age: document.age || "Not Declared",
@@ -48,9 +42,9 @@ const reWriteDocsDB = async (Model, documentFormat) =>{
                 rol: document.rol || "Not Declared",
                 id: document.id 
             }
-            documentsReWrited.push(documentReWrited)
         }
-    })
+        documentsReWrited.push(documentReWrited)
+    })  
     return documentsReWrited
 }
 

@@ -8,3 +8,6 @@
 
 #errores
 errors.log
+
+# Ignorar configuraciones locales de VS Code
+.vscode/

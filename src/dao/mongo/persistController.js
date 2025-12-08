@@ -3,13 +3,13 @@ const EErrors = require("../../utils/errors/ErrorEnums")
 
 class PersistController{
 
-    constructor(){
-
+    constructor(model){
+        this.model = model
     }
     //"Model" hace referencia al "Schema" de una colección
-    async getDocuments(Model){
+    async getDocuments(){
         //Si la respuesta tiene exito, devuelve los documentos encontrados
-        return await Model.find()
+        return await this.model.find()
             //Si hay un error, lo muestra por consola y lo lanza para que lo capte la capa superior(Controlador/Servicio)
             .catch(error =>{
                 console.log(error)
@@ -17,8 +17,8 @@ class PersistController{
             })
     }
 
-    async getDocumentsByID(Model, ID){
-        return await Model.findOne({_id: ID})
+    async getDocumentsByID(ID){
+        return await this.model.findOne({_id: ID})
             .catch(error =>{
                 console.log(error)
                 throw error
@@ -26,57 +26,41 @@ class PersistController{
     
     }
 
-    async getDocumentsByFilter(Model, filter){
-        return await Model.findOne(filter)
+    async getDocumentsByFilter(filter){
+        return await this.model.findOne(filter)
             .catch(error =>{
                 console.log(error)
                 throw error
             })
     }
 
-    async getDocumentsByQuery(Model, query){
-        let documentsFromDB 
-        console.log(query)
-        await Model.find(query)
-            .then( dt => {
-                documentsFromDB = dt
-            } )
-            .catch(error =>{
-                documentsFromDB = false
-                console.log(error)
-            })
-        /* console.log(productsFromDB) */
-        return documentsFromDB
-    }
-
-
-    async getManyDocumentsByFilter(Model, filter){
-        return await Model.find(filter)
+    async getDocumentsByQuery(query){
+        return await this.model.find(query)
             .catch(error =>{
                 console.log(error)
                 throw error
             })
     }
 
-   
-
-    async getPaginate(Model, query ,lmit , pag , srt){
-        let documentsFromDB 
-        await Model.paginate(query || {} ,{limit: lmit || 10 , page: pag || 1, sort: srt || {}})
-            .then( dts => {
-                documentsFromDB = dts
-            } )
+    async getManyDocumentsByFilter(filter){
+        return await this.model.find(filter)
             .catch(error =>{
                 console.log(error)
-                documentsFromDB = false
+                throw error
             })
-        /* console.log(productsFromDB) */
-        return documentsFromDB
     }
 
-    async createNewDocument(Model, newDocument){
+    async getPaginate(query ,lmit , pag , srt){
+        return await this.model.paginate(query || {} ,{limit: lmit || 10 , page: pag || 1, sort: srt || {}})
+            .catch(error =>{
+                console.log(error)
+                throw error
+            })
+    }
+
+    async createNewDocument(newDocument){
         //Verificamos que el documento sea valido con el esquema(modelo)
-        const model = new Model(newDocument)
+        const model = new this.model(newDocument)
         return await model.save()
             .catch( error => {
                 if (error.code === 11000) {
@@ -95,33 +79,26 @@ class PersistController{
             } )   
     }
 
-    async createManyDocuments(Model, arrayProducts){ 
-        return await Model.insertMany(arrayProducts)
+    async createManyDocuments(arrayProducts){ 
+        return await this.model.insertMany(arrayProducts)
             .catch( err =>{
                 console.log(err)
                 throw err
             })
     }
 
-    async updateDocument(Model, ID,toUpdate ){
-        let documentUpdated
-        await Model.updateOne({_id: ID}, toUpdate)
-            .then( dt =>{
-                /* console.log(dt) */
-                //Devolvemos el documento actualizado utilizando el metodo creado "getDocumentByID"
-                documentUpdated= this.getDocumentsByID(Model, ID)
-            } )
+    async updateDocument(ID,toUpdate ){
+       return await this.model.updateOne({_id: ID}, toUpdate)
             .catch( err =>{
                 console.log(err)
-                documentUpdated = false
+                throw err
             })
-        return documentUpdated
     }
 
-    async deleteDocument(Model, ID){
-        const documentToDelete = this.getDocumentsByID(Model, ID)
+    async deleteDocument(ID){
+        const documentToDelete = await this.getDocumentsByID(ID)
         let documentDeleted 
-        await Model.deleteOne({_id: ID})
+        await this.model.deleteOne({_id: ID})
             .then( dt =>{
                 documentDeleted = documentToDelete
             } )
@@ -132,10 +109,10 @@ class PersistController{
         return documentDeleted
     }
     
-    async deleteDocumentByFilter(Model, filter){
-        const documentToDelete = this.getDocumentsByFilter(Model, filter)
+    async deleteDocumentByFilter(filter){
+        const documentToDelete = await this.getDocumentsByFilter(filter)
         let documentDeleted 
-        await Model.deleteOne(filter)
+        await this.model.deleteOne(filter)
             .then( dt =>{
                 documentDeleted = documentToDelete
             } )
@@ -146,9 +123,9 @@ class PersistController{
         return documentDeleted
     }
 
-    async deleteManyDocumentByFilter(Model, filter){
+    async deleteManyDocumentByFilter(filter){
         let documentsDeleted 
-        await Model.deleteMany(filter)
+        await this.model.deleteMany(filter)
             .then( dt =>{
                 documentsDeleted = dt
             } )
@@ -164,9 +141,9 @@ class PersistController{
      **/ 
 
     //Funcion que agrega un producto en un carrito que ya se encuentre en la DB
-    async addProductToCartInDB(Model, IDCart, IDProduct, quantty){
+    async addProductToCartInDB(IDCart, IDProduct, quantty){
         //Obtenemos el carrito al que se quiere agregar productos
-        const cart = await this.getDocumentsByID(Model, IDCart)
+        const cart = await this.getDocumentsByID(IDCart)
         //Verificamos que el cart exista
         if (cart){
             //el "item.product._id.toString()" es debido al formato de id que entrega la DB
@@ -177,7 +154,7 @@ class PersistController{
                 ? quantty? productFound.quantity = quantty : productFound.quantity++
                 : cart.products = [...cart.products, {product: IDProduct, quantity: 1}]
            //Se actualiza el cart con el metodo creado anteriormente. Este metodo ya no devuelve el documeto actualizado
-           const cartUpdated = await this.updateDocument(Model, IDCart, {products: cart.products})
+           const cartUpdated = await this.updateDocument(IDCart, {products: cart.products})
            return cartUpdated
         }
         else{
@@ -185,10 +162,10 @@ class PersistController{
         }
     }
 
-    async updateCartInDB(Model, IDCart, newCart){
-        const cart = await this.getDocumentsByID(Model, IDCart)
+    async updateCartInDB(IDCart, newCart){
+        const cart = await this.getDocumentsByID(IDCart)
         if (cart){
-            const cartUpdated = await this.updateDocument(Model, IDCart, {products: newCart})
+            const cartUpdated = await this.updateDocument(IDCart, {products: newCart})
             return cartUpdated
         }
         else{
@@ -196,8 +173,8 @@ class PersistController{
         }
     }
 
-    async deleteProductCartInDB(Model, IDCart, IDProduct){
-        const cart = await this.getDocumentsByID(Model, IDCart)
+    async deleteProductCartInDB(IDCart, IDProduct){
+        const cart = await this.getDocumentsByID(IDCart)
         if (cart){
             let cartUpdated
             const productFound = cart.products.find(  item => item.product._id.toString() === IDProduct )
@@ -210,7 +187,7 @@ class PersistController{
                     quantity: item.quantity
                 }
             }  )
-            cartUpdated = await this.updateCartInDB(Model, IDCart, cartOnlyID) 
+            cartUpdated = await this.updateCartInDB(IDCart, cartOnlyID) 
             return cartUpdated
         }
         else{
@@ -218,10 +195,10 @@ class PersistController{
         }  
     }
 
-    async deleteFullCartInDB(Model, IDCart){
-        const cart = await this.getDocumentsByID(Model, IDCart)
+    async deleteFullCartInDB(IDCart){
+        const cart = await this.getDocumentsByID(IDCart)
         if(cart){
-           const cartUpdated = await this.updateCartInDB(Model, IDCart, []) 
+           const cartUpdated = await this.updateCartInDB(IDCart, []) 
             return cartUpdated
         }
         else{
