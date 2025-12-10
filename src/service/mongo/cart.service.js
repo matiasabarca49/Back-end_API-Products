@@ -1,28 +1,27 @@
-const PersistController = require('../../dao/mongo/persistController.js')
-const persistController = new PersistController()
 const Cart = require('../../model/carts.model.js')
-const Product = require('../../model/products.model.js')
-const User = require('../../model/users.model.js')
-const Ticket = require('../../model/tickets.model.js')
-const TicketDTO = require('../../dto/ticket.dto.js')
+const BaseService = require('./base.service.js')
+const CartDTO = require('../../dto/cart.dto.js')
 
-class CartService {
+class CartService extends BaseService{
     constructor(){
-
-    }
-
-    getCart(ID){
-        return persistController.getDocumentsByID(Cart ,ID)
+        super(Cart)
     }
 
    async getPurchase(idCart, idUser){
+        //Para evitar dependecinas circulares, importo los servicios acá dentro del método
+        //Los require dentro de funciones no tienen penalización de performance en Node.js
+        const UserService = require('./users.service.js')
+        const ProductService = require('./products.service.js')
+        const TicketService = require('./ticket.service.js')
+
+        const productService = new ProductService()
         const productsWithoutStock = []
         const productsWithStock = []
-        const cartDB = await persistController.getDocumentsByID(Cart,idCart)
-        const products = await persistController.getDocuments(Product)
+        const cartDB = await this.persistController.getDocumentsByID(idCart)
+        const products = await productService.getAll()
         //Separar productos con stock y sin stock
         cartDB.products.forEach( productDB => {
-            const productFound = products.find( product => product._id.toString() === productDB.product._id.toString())
+            const productFound = products.find( product => product.id.toString() === productDB.product._id.toString())
             if (productDB.quantity <= productFound.stock){
                 productsWithStock.push(productDB)
             }else{
@@ -31,50 +30,64 @@ class CartService {
         } )
         //Actualizar stock en DB
         productsWithStock.forEach( async product => {
-            const productFound = await persistController.getDocumentsByID(Product, product.product._id)
-            const productUpdated = await persistController.updateDocument(Product, productFound._id.toString(),{stock: productFound.stock - product.quantity})
+            const productFound = await productService.getById(product.product.id)
+            await productService.update(productFound.id.toString(),{stock: productFound.stock - product.quantity})
         })
-        //Guardar la compra en el usuario
-        const user = await persistController.getDocumentsByID(User, idUser)
+        //Guardar la compra en el usuario y dejar en carrito solo productos sin stock
+        const userService = new UserService()
+        const user = await userService.getById(idUser)
         const purchaseUpdated = [...user.purchases, { dateCart: cartDB.dateCart, cart: productsWithStock}]
-        await persistController.updateDocument(User, idUser, {purchases: purchaseUpdated})
-        //Dejar en carrito solo productos sin stock
-        await persistController.updateDocument(User, idUser, {cart: productsWithoutStock})
+        await userService.update(idUser, {purchases: purchaseUpdated, cart: productsWithoutStock})
+       /*  //Dejar en carrito solo productos sin stock
+        await this.persistController.updateDocument(idUser, {cart: productsWithoutStock}) */
         //Generar Ticket
-        const ticket = new TicketDTO(user, productsWithStock, idCart)
-        await persistController.createNewDocument(Ticket, ticket)
-        return {purchases: purchaseUpdated, cart: productsWithoutStock, purchase: productsWithStock, ticket: ticket}
+        const ticketService = new TicketService()
+        const ticket = { user: user, cart: productsWithStock, idCart: idCart }
+        const newTicket = await ticketService.create(ticket)
+        return {purchases: purchaseUpdated, cart: productsWithoutStock, purchase: productsWithStock, ticket: newTicket}
     }
 
-    postCart(cart){
-        return persistController.createNewDocument(Cart, cart)
-    }
     
-    postProductInCart(cartID, productID){
-        return persistController.addProductToCartInDB(Cart, cartID, productID)
+    async postProductInCart(cartID, productID){
+        return await this.persistController.addProductToCartInDB(cartID, productID)
     }
 
-    putFullCartInDB(cartID, newCart){
-        return persistController.updateCartInDB(Cart, cartID, newCart)
+    async putFullCartInDB(cartID, newCart){
+        return await this.persistController.updateCartInDB(cartID, newCart)
     }
 
-    putProductCartInDB(cartID, productID, quantity){
-        return persistController.addProductToCartInDB(Cart, cartID, productID, quantity)
+    async putProductCartInDB(cartID, productID, quantity){
+        return await this.persistController.addProductToCartInDB(cartID, productID, quantity)
     }
 
-    delCart(cartID){
-        return persistController.deleteDocument(Cart, cartID)
+
+    async delProductInCart(cartID, productID){
+        return await this.persistController.deleteProductCartInDB(cartID, productID )
     }
 
-    delProductInCart(cartID, productID){
-        return persistController.deleteProductCartInDB( Cart, cartID, productID )
+    async delFullCart(cartID){
+        return await this.persistController.deleteFullCartInDB(cartID)
     }
 
-    delFullCart(cartID){
-        return persistController.deleteFullCartInDB(Cart, cartID)
-    }
-    delTicket(tCode){
+    /* delTicket(tCode){
         return persistController.deleteDocumentByFilter(Ticket, {code: tCode})
+    } */
+
+     /**
+     * 
+     *Wrapper Pattern
+        */
+
+    toFormatDTO(cartData) {
+        return new CartDTO(cartData)
+    }
+
+    toDTO(cartData) {
+        return CartDTO.toResponse(cartData) 
+    }
+
+    toManyDTO(carts) {
+        return carts.map(cart => CartDTO.toResponse(cart)) 
     }
 }
 

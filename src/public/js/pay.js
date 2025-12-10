@@ -99,7 +99,7 @@ const finishPurchase = async ()=>{
     })
     const newCartAdded = await res.json()
     //Generamos la compra en el usuario
-    const resPurchase = await fetch(`http://localhost:8080/api/carts/${newCartAdded.cart._id}/purchase`)
+    const resPurchase = await fetch(`http://localhost:8080/api/carts/${newCartAdded.cart.id}/purchase`)
     const purchase = await resPurchase.json()
     //Enviamos el Ticket al mail del usuario
     purchase.ticket.email = user.currentUser.email
@@ -112,7 +112,7 @@ const finishPurchase = async ()=>{
     })
     localStorage.setItem("purchased", true)
     setTimeout(()=>{
-        window.location.href= `http://localhost:8080/products/ticket?code=${purchase.ticket.code}&&cart=${newCartAdded.cart._id}`
+        window.location.href= `http://localhost:8080/products/ticket?code=${purchase.ticket.code}&&cart=${newCartAdded.cart.id}`
     },5000)
 }
 

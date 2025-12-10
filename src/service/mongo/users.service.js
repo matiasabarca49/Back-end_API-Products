@@ -12,18 +12,17 @@ class UsersService extends BaseService{
     }
 
    async postProductToCart(idUser, productToAdded){
-        /* console.log(productToAdded) */
         const userFound = await this.persistController.getDocumentsByID(idUser)
         if(userFound.email === productToAdded.owner){
             return false
         }
-        const productFound = userFound.cart.find( product => product.product._id.toString() === productToAdded._id)
+        const productFound = userFound.cart.find( product => product.product._id.toString() === productToAdded.id)
         productFound 
             ? productFound.quantity++
-            : userFound.cart = [...userFound.cart, {product: productToAdded, quantity: 1 }]
-            
-        const userUpdated = await this.persistController.updateDocument(idUser, {cart: userFound.cart})
-        return userUpdated
+            : userFound.cart = [...userFound.cart, {product: productToAdded.id, quantity: 1 }]
+        await this.persistController.updateDocument(idUser, {cart: userFound.cart})
+
+        return await this.persistController.getDocumentsByID(idUser)
    }
 
    async postDocument(idUser,document){
@@ -118,8 +117,8 @@ class UsersService extends BaseService{
         const userFound = await this.persistController.getDocumentsByID(userID)
         if(userFound){
             const cartFiltered = userFound.cart.filter( product => product.product._id.toString() !== productID )
-            const userUpdated = await this.persistController.updateDocument(userID, {cart: cartFiltered})
-            return userUpdated
+            await this.persistController.updateDocument(userID, {cart: cartFiltered})
+            return cartFiltered
         }else{
             return false
         }

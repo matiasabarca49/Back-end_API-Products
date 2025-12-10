@@ -122,11 +122,12 @@ const delUserForConnectionn = async (req, res) =>{
 
 const delProductFromUser = async(req, res)=>{
     try{
-        const userUpdated = await usersService.delProductFromUser(req.session.passport.user, req.params.id)
+        const cartUpdated = await usersService.delProductFromUser(req.session.passport.user, req.params.id)
+        console.log("Usuario Actualizado: ", cartUpdated)
         //Actualiza el cart del usuario
-        req.session.cart = userUpdated.cart
+        req.session.cart = cartUpdated
         userUpdated
-            ? res.send({status: "Successful", cart: userUpdated.cart})
+            ? res.send({status: "Successful", cart: cartUpdated})
             : res.status(500).send({status: "Error"})
     }catch(error){
         console.log(error)

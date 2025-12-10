@@ -1,16 +1,17 @@
-const Cart = require('../../model/carts.model.js')
 const Ticket = require('../../model/tickets.model.js')
-const PersistController = require('../../dao/mongo/persistController.js')
-const persistController = new PersistController()
+const TicketDTO = require('../../dto/ticket.dto.js')
+const BaseService = require('./base.service.js')
 
-class TicketService{
+class TicketService extends BaseService {
     constructor(){
-
+        super(Ticket)
     }
 
     async getTicket(code, cartID){
-        const ticketFound = await persistController.getDocumentsByFilter(Ticket, {code: code})
-        const cartFound = await persistController.getDocumentsByID(Cart, cartID)
+        const CartService = require('./cart.service.js')
+        const cartService = new CartService()
+        const ticketFound = await this.persistController.getDocumentsByFilter({code: code})
+        const cartFound = await cartService.getById(cartID)
         if(!ticketFound || !cartFound){
             return false
         }
@@ -20,7 +21,24 @@ class TicketService{
     }
 
     async getTicketByIDCart(idCart){
-        return await persistController.getDocumentsByFilter(Ticket, {idCart: idCart})
+        return await this.persistController.getDocumentsByFilter({idCart: idCart})
+    }
+
+     /**
+     * 
+     *Wrapper Pattern
+        */
+
+    toFormatDTO(ticketData) {
+        return new TicketDTO(ticketData)
+    }
+
+    toDTO(ticketData) {
+        return TicketDTO.toResponse(ticketData) 
+    }
+
+    toManyDTO(tickets) {
+        return tickets.map(ticket => TicketDTO.toResponse(ticket)) 
     }
 
 }
