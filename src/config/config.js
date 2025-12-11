@@ -1,5 +1,4 @@
 const dotenv = require('dotenv')
-const nodemailer = require('nodemailer')
 const { Command } = require('commander')
 const program = new Command()
 
@@ -15,32 +14,9 @@ const environment = program.opts().mode;
 dotenv.config({
     path:environment==="production"? "./.env": "./.env"
 });
-//Importar verificacion de variables de entorno
-const reqVars = require("../utils/dotenv.helper.js")
 
-//Crear transporter para enviar mails
-let transporter = {};
-//if(process.env.GMAIL_CREDENTIAL_USER?.trim() && process.env.GMAIL_CREDENTIAL_TOKEN?.trim()){
-if(reqVars.validateEnvVars('gmail')){
-    //Creando trasnporter
-    transporter = nodemailer.createTransport({
-        service: 'gmail',
-        port: 578,
-        auth:{
-            user: process.env.GMAIL_CREDENTIAL_USER,
-            pass: process.env.GMAIL_CREDENTIAL_TOKEN
-        }
-    })
-
-    //Verificar conexion
-    transporter.verify(function (error, success) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Server is ready to take our messages');
-        }
-    });
-}
+//Transporter de mail
+const transporter = require('./mail.config.js')
 
 module.exports = {
     port: program.opts().p,

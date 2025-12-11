@@ -114,6 +114,30 @@ generateFormatEmail = (email, payload) =>{
     return mailOptions
 }
 
+const generateLink = (user) =>{
+    const key = createHash(`Cod!34fdsert${ user.email }`)
+    const secret = `${key}&qui=45604545rgfdt355iuiljhgfds/&>S43&filter=user&type=change&user=notFound` 
+    saveSecret(secret)
+    const mailOptionsChangePassword = {
+        from: `Tienda de Productos  <${process.env.GMAIL_CREDENTIAL_USER}>`,
+        to: `${user.email}`,
+        subject: "Solicitud de cambio de contraseña",
+        html:`
+            <div>  
+                <h1> Restauracion de contraseña </h1>
+                <h4>Hola ${user.name}</h4>
+                <p> Ingrese al siguiente link para cambiar la contraseña: </p>
+                <a href="http://localhost:8080/api/sessions/generatepassword?secret=${secret}&email=${user.email}">Ir a cambiar constraseña</a>
+                <p>El link para cambio de contraseña expirará en 1 hora. En ese caso deberá solicitar de nuevo</p>
+                <p style="margin-top: 20px">En caso de no solicitar cambio de contraseña. Desestime este correo</p>
+            </div>
+        `,
+        attachments: []  
+    }
+
+    return mailOptionsChangePassword
+}
+
 module.exports= {
     createHash,
     isValidPassword,
@@ -121,5 +145,6 @@ module.exports= {
     generateProducts,
     saveSecret,
     searchSecret,
-    generateFormatEmail
+    generateFormatEmail,
+    generateLink
 }

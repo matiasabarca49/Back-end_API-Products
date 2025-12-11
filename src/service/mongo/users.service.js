@@ -1,6 +1,6 @@
 const { createHash, isValidPassword } = require('../../utils/utils.js') 
 const User = require('../../model/users.model.js')
-const { sendUserFormatted, UserDTO } = require('../../dto/user.dto.js')
+const { UserDTO } = require('../../dto/user.dto.js')
 const { transporter } = require('../../config/config.js')
 const { generateFormatEmail } = require('../../utils/utils.js')
 const BaseService = require('./base.service.js')

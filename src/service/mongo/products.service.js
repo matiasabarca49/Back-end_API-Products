@@ -9,21 +9,6 @@ class ProductsService extends BaseService{
         super(Product)
     }
 
-   /*  getProductsPaginate(dftQuery, dftLimit, dftPage, dftSort){
-        return this.persistController.getPaginate(this.model, dftQuery, dftLimit, dftPage, dftSort)
-    } */
-
-    /* getProducts(){
-        return this.persistController.getDocuments(Product)
-    }
-
-    getProductsByID(ID){
-        return this.persistController.getDocumentsByID(Product, ID)
-    }
-    getProductsByFilter(filter){
-        return this.persistController.getDocumentsByFilter(Product, filter)
-    } */
-
     getProductsSearch(query){
         const searchRegex = new RegExp(query, 'i')
         return this.persistController.getDocumentsByQuery( 
@@ -37,18 +22,6 @@ class ProductsService extends BaseService{
                     ]
                 })
     }
-
-    /* postProduct(product){
-        return this.persistController.createNewDocument(this.model, product)
-    } */
-
-    /* postManyProducts(products){
-        return this.persistController.createManyDocuments(this.model, products)
-    } */
-
-    /* putProduct(ID, productToChange){
-        return this.persistController.updateDocument(this.model, ID, productToChange)
-    } */
 
     /* generateFormatEmail = (email, payload) =>{
         const mailOptions = {

@@ -1,14 +1,12 @@
 const nodemailer = require('nodemailer')
 
+//Importar verificacion de variables de entorno
+const reqVars = require("../utils/dotenv.helper.js")
+
 //Crear transporter para enviar mails
 let transporter = {};
-if(!process.env.GMAIL_CREDENTIAL_USER && !process.env.GMAIL_CREDENTIAL_TOKEN){
-    console.log("=================================================")
-    console.log("⚠️ [Info] Envío de emails desactivado")
-    console.log("Faltan Credenciales")
-    console.log("=================================================")
-}else{
-
+//if(process.env.GMAIL_CREDENTIAL_USER?.trim() && process.env.GMAIL_CREDENTIAL_TOKEN?.trim()){
+if(reqVars.validateEnvVars('gmail')){
     //Creando trasnporter
     transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -24,11 +22,9 @@ if(!process.env.GMAIL_CREDENTIAL_USER && !process.env.GMAIL_CREDENTIAL_TOKEN){
         if (error) {
             console.log(error);
         } else {
-            console.log('Server is ready to take our messages');
+            console.log('Server está listo para enviar mails');
         }
     });
 }
 
-module.exports = {
-    transporter
-}
+module.exports = transporter

@@ -1,16 +1,14 @@
 const passport = require('passport')
-const User = require('../model/users.model.js')
-const ServiceMongo = require('../dao/mongo/persistController.js')
+const UsersService = require('../service/mongo/users.service.js')
 const { createHash } = require('../utils/utils.js')
 const { Strategy } = require('passport-github2')
 const githubStrategy = Strategy
-const UserDTO = require('../dto/user.dto.js')
 
 const {validateEnvVars} = require('../utils/dotenv.helper.js')
 
 if(validateEnvVars('github')){
     
-    const serviceMongo = new ServiceMongo()
+    const usersService = new UsersService()
     
     passport.use('auth-github',
     new githubStrategy({
@@ -42,16 +40,16 @@ if(validateEnvVars('github')){
             if (!emailUser){
               done("No se pudo validar el usuario")
             }
-            const userFound = await serviceMongo.getDocumentsByFilter(User,{email: emailUser.email})
+            const userFound = await usersService.getByFilter({email: emailUser.email})
             //Si el usuario no se encontro en la DB, creamos uno nuevo
             if (!userFound){
                 //Creamos el usuario formateado con DTO
-                const newUser = new UserDTO({
+                const newUser = {
                     name: profile._json.name || profile._json.login || "no especificado",
                     email: emailUser.email,
                     password: createHash(Date.now().toString()+ Math.random(99).toString())+ profile._json.login.toString()
-                })
-                const userAdded = await serviceMongo.createNewDocument(User, newUser)
+                }
+                const userAdded = await usersService.create(newUser)
                 //Salimos y pasamos el user nuevo agregado
                 done(null, userAdded)
             }

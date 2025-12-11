@@ -9,14 +9,6 @@ class MessageService extends BaseService {
         super(Message)
     }
 
-    /* getMessage = ()=>{
-        return persistController.getDocuments(Message)
-    } */
-
-    /* postMassage = (message) =>{
-        return persistController.createNewDocument(Message, message)
-    } */
-
     /**
      * Wrapper Pattern
      */

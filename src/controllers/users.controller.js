@@ -100,7 +100,7 @@ const addDocumentsInUser = async (req, res) => {
 */
 const delUser = async (req, res) =>{
     try{
-        const userDeleted = await usersService.delUser(req.params.id)
+        const userDeleted = await usersService.delete(req.params.id)
         userDeleted 
             ? res.status(200).send({status: "Successful", user: userDeleted})
             : res.status(500).send({status: "Error", reason: "El usuario no existe o error en el servidor"})

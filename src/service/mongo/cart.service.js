@@ -38,8 +38,6 @@ class CartService extends BaseService{
         const user = await userService.getById(idUser)
         const purchaseUpdated = [...user.purchases, { dateCart: cartDB.dateCart, cart: productsWithStock}]
         await userService.update(idUser, {purchases: purchaseUpdated, cart: productsWithoutStock})
-       /*  //Dejar en carrito solo productos sin stock
-        await this.persistController.updateDocument(idUser, {cart: productsWithoutStock}) */
         //Generar Ticket
         const ticketService = new TicketService()
         const ticket = { user: user, cart: productsWithStock, idCart: idCart }
