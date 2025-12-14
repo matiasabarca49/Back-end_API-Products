@@ -9,7 +9,7 @@ const getUsersPageController = async (req, res) =>{
     //Reescribimos los documentos para que handlebars los pueda renderizar
     const products = await reWriteDocsDB("products", await productsService.getAll())
     const users = await reWriteDocsDB("users", await usersService.getAll())
-    res.render('home',{ products: products, users: users, userLoged: req.session } )
+    res.render('admin',{ products: products, users: users, userLoged: req.session } )
 } 
 
 module.exports = { getUsersPageController }

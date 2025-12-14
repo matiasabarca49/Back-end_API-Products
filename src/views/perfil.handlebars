@@ -2,7 +2,7 @@
 <header>
     <nav class="navbar">
         <div class="nav-brand">
-          <a class="brand-link" href="http://localhost:8080/products">Tienda</a>
+          <a class="brand-link" href="http://localhost:8080/">Tienda</a>
         </div>
         <div class="nav-actions">
             <div class="user-name">{{userLoged.user}}</div>
@@ -13,16 +13,16 @@
             {{/if}}
             {{#unless userLoged.user}}
                 <div>
-                    <a class="btn btn-light" href="/api/sessions/login">Login</a>
+                    <a class="btn btn-light" href="/users/login">Iniciar Sesión</a>
                 </div>
             {{/unless}}
             {{#ifCond userLoged.rol "Admin"}}
                 <div>
-                    <a class="btn icon-btn" href="/"><img class="nav-icon" src="../../img/configurar.png" alt="home"></a>
+                    <a class="btn icon-btn" href="/admin"><img class="nav-icon" src="../../img/configurar.png" alt="home"></a>
                 </div>
             {{else}}
                 <div>
-                    <a class="btn icon-btn" href="chat"><img class="nav-icon" src="../../img/chat.png" alt="home"></a>
+                    <a class="btn icon-btn" href="../chat"><img class="nav-icon" src="../../img/chat.png" alt="home"></a>
                 </div>
             {{/ifCond}}
             {{#ifCond userLoged.rol "Premium"}}
@@ -34,7 +34,7 @@
     </nav>
 </header>
 <div class="mx-5 mt-5">
-    <a class="back-button" href="/products"> Regresar </a>
+    <a class="back-button" href="/"> Regresar </a>
     <div class="profile-container">
         <h1 class="profile-main-title">Datos del Perfil:</h1>
         <div class="profile-card">

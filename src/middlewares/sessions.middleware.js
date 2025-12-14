@@ -4,13 +4,13 @@ function checkLogin(req, res, next){
         next()
     }
     else{
-        res.redirect("/api/sessions/login")
+        res.redirect("/users/login")
     }
 }
 
 function voidLogAndRegis(req, res, next){
     if(req.session.user){
-        res.redirect("/api/sessions/perfil")
+        res.redirect("/users/perfil")
     }
     else{
         next()

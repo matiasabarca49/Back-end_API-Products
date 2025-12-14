@@ -3,7 +3,7 @@ const getCart = (idCart) =>{
     .then(response => response.json())
     .then( data =>{
         renderProducts(data.cart.products)
-        getUserCart(data.cart._id)
+        getUserCart(data.cart.id)
     } )
 }
 

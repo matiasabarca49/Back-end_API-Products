@@ -10,22 +10,15 @@ const controller = require('../controllers/sessions.controller.js')
 /**
 * GET 
 **/
-router.get("/register", voidLogAndRegis, controller.getRegister)
-router.get("/login", voidLogAndRegis, controller.getLogin)
-router.get("/perfil", checkLogin, controller.getPerfil)
 router.get("/logout", controller.getLogout)
-router.get("/fail", controller.getFail)
 router.get("/current", checkLogin, controller.getUserCurrent)
-router.get("/forgetpassword", controller.getChangePassword)
-router.get("/generatepassword", controller.getGeneratePassword)
 
 /**
 * POST 
 **/
-router.post("/register", passport.authenticate('register',{failureRedirect: "/api/sessions/fail?error=register"}),
-controller.registerUser)
-//email === "adminCoder@coder.com" && password === "adminCod3r123" 
-router.post("/login", passport.authenticate("login", {failureRedirect: "/api/sessions/fail?error=login"}),
+router.post("/register", passport.authenticate('register',{failureRedirect: "/users/fail?error=register"}),
+controller.registerUser) 
+router.post("/login", passport.authenticate("login", {failureRedirect: "/users/fail?error=login"}),
 controller.loginUser)
   
 module.exports = router

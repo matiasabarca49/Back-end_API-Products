@@ -127,7 +127,7 @@ const generateLink = (user) =>{
                 <h1> Restauracion de contraseña </h1>
                 <h4>Hola ${user.name}</h4>
                 <p> Ingrese al siguiente link para cambiar la contraseña: </p>
-                <a href="http://localhost:8080/api/sessions/generatepassword?secret=${secret}&email=${user.email}">Ir a cambiar constraseña</a>
+                <a href="http://localhost:8080/users/generatepassword?secret=${secret}&email=${user.email}">Ir a cambiar constraseña</a>
                 <p>El link para cambio de contraseña expirará en 1 hora. En ese caso deberá solicitar de nuevo</p>
                 <p style="margin-top: 20px">En caso de no solicitar cambio de contraseña. Desestime este correo</p>
             </div>

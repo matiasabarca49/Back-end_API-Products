@@ -32,7 +32,7 @@ const addToCart = async (product)=>{
     }
     catch(error){
         if(!user){
-            window.location.href = "http://localhost:8080/api/sessions/login"
+            window.location.href = "http://localhost:8080/users/login"
         }
         else{
             console.log("Error al Agregar el producto al carrito")

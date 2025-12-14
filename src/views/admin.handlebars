@@ -2,16 +2,16 @@
 <header>
     <nav class="navbar">
         <div class="nav-brand">
-          <a class="brand-link" href="http://localhost:8080/products">Panel</a>
+          <a class="brand-link" href="http://localhost:8080/admin">Panel</a>
         </div>
         <div class="nav-actions">
             <div class="user-name">{{userLoged.user}}</div>
             {{#if userLoged.user}}
                 <div>
-                    <a class="btn btn-light" href="/api/sessions/perfil">Ver Perfil</a>
+                    <a class="btn btn-light" href="/users/perfil">Ver Perfil</a>
                 </div>
                 <div>
-                        <a class="btn btn-light" href="/products">Tienda</a>
+                        <a class="btn btn-light" href="/">Tienda</a>
                 </div>
                 <div>
                     <a class="btn btn-danger" href="/api/sessions/logout">salir</a> 
@@ -19,7 +19,7 @@
             {{/if}}
             {{#unless userLoged.user}}
                 <div>
-                    <a class="btn btn-light" href="/api/sessions/login">Iniciar Sesión</a>
+                    <a class="btn btn-light" href="/users/login">Iniciar Sesión</a>
                 </div>
             {{/unless}}
         </div>
@@ -30,9 +30,9 @@
     <div class="container-fluid">
         <h2>Accesos:</h2>
         <div class="mb-3 mt-3 ms-3">
-            <a class="principal-button" href="/products/manager"> Administración de Productos </a>
-            <a class="principal-button" href="/usersview"> Administración de Usuarios </a>
-            <a class="principal-button" href="http://localhost:8080/carts"> Ver Carritos </a>
+            <a class="principal-button" href="/admin/products"> Administración de Productos </a>
+            <a class="principal-button" href="/admin/users"> Administración de Usuarios </a>
+            <a class="principal-button" href="/admin/carts"> Ver Carritos </a>
             <a class="principal-button" href="http://localhost:8080/apidocs"> Ver Documentación </a>
         </div>
     </div>

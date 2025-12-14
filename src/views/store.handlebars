@@ -2,13 +2,13 @@
 <header>
     <nav class="navbar">
         <div class="nav-brand">
-          <a class="brand-link" href="http://localhost:8080/products">Tienda</a>
+          <a class="brand-link" href="http://localhost:8080/">Tienda</a>
         </div>
         <div class="nav-actions">
             <div class="user-name">{{userLoged.user}}</div>
             {{#if userLoged.user}}
                 <div>
-                    <a class="btn btn-light" href="/api/sessions/perfil">Ver Perfil</a>
+                    <a class="btn btn-light" href="/users/perfil">Ver Perfil</a>
                 </div>
                 <div>
                     <a class="btn btn-danger" href="/api/sessions/logout">salir</a> 
@@ -16,13 +16,13 @@
             {{/if}}
             {{#unless userLoged.user}}
                 <div>
-                    <a class="btn btn-light" href="/api/sessions/login">Iniciar Sesión</a>
+                    <a class="btn btn-light" href="/users/login">Iniciar Sesión</a>
                 </div>
             {{/unless}}
             {{#if userLoged.user}}
                 {{#ifCond userLoged.rol "Admin"}}
                     <div>
-                        <a class="btn icon-btn" href="/"><img class="nav-icon" src="./img/configurar.png" alt="home"></a>
+                        <a class="btn icon-btn" href="/admin"><img class="nav-icon" src="./img/configurar.png" alt="home"></a>
                     </div>
                 {{else}}
                     <div>
@@ -37,7 +37,7 @@
             {{/ifCond}}
         </div>
         <div class="cart-container">
-            <a href="http://localhost:8080/products/pay" class="cart-btn">
+            <a href="http://localhost:8080/pay" class="cart-btn">
                 <img class="cart-icon" src="../img/cart.png" />
                 <span class="cart-badge" id="totalCountNav">
                     
@@ -81,4 +81,4 @@
     </div>
 </main>
 <script src="./js/cart.js"></script>
-<script src="./js/products.js"></script>
+<script src="./js/store.js"></script>

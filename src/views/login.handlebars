@@ -18,13 +18,13 @@
             <input class="w-100" type="password" name="password" required/>
         </div>
         {{#if error}}
-            <div class="text-danger">Constraseña o email erróneos</div>
+            <div class="text-danger">Contraseña o email erróneos</div>
         {{/if}}
         <button class='btn-success my-2'>Ingresar</button>
     </form>
-    <a class="text-decoration-none text-white m-2 " href="/api/sessions/forgetpassword">¿Olvidaste la constraseña?</a>
+    <a class="text-decoration-none text-white m-2 " href="/users/forgetpassword">¿Olvidaste la constraseña?</a>
 </div>
 <div class="container mt-3">
-    <a class="btn btn-danger" href="/api/sessions/register"> Registrarse</a>
-    <a class="btn btn-danger" href="/products"> Ir a la tienda</a>
+    <a class="btn btn-danger" href="/users/register"> Registrarse</a>
+    <a class="btn btn-danger" href="/"> Ir a la tienda</a>
 </div>

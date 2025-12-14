@@ -3,14 +3,9 @@ const { Router } = express
 const router = new Router()
 //middleware
 const { checkLogin } = require('../../middlewares/sessions.middleware.js')
-const { checkPermAdmin } = require('../../middlewares/permissions.middleware.js')
 
 router.get("/", (req,res)=>{
-    res.render("products", {userLoged: req.session})
-})
-
-router.get("/manager", checkPermAdmin ,(req,res)=>{
-    res.render("admProducts", {userLoged: req.session})
+    res.render("store", {userLoged: req.session})
 })
 
 router.get("/productview", (req,res)=>{

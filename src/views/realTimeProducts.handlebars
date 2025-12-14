@@ -2,16 +2,16 @@
 <header>
     <nav class="navbar">
         <div class="nav-brand">
-          <a class="brand-link" href="http://localhost:8080/">Panel</a>
+          <a class="brand-link" href="http://localhost:8080/admin">Panel</a>
         </div>
         <div class="nav-actions">
             <div class="user-name">{{userLoged.user}}</div>
             {{#if userLoged.user}}
                 <div>
-                    <a class="btn btn-light" href="/api/sessions/perfil">Ver Perfil</a>
+                    <a class="btn btn-light" href="/users/perfil">Ver Perfil</a>
                 </div>
                 <div>
-                        <a class="btn btn-light" href="/products">Tienda</a>
+                        <a class="btn btn-light" href="/">Tienda</a>
                 </div>
                 <div>
                     <a class="btn btn-danger" href="/api/sessions/logout">salir</a> 
@@ -19,7 +19,7 @@
             {{/if}}
             {{#unless userLoged.user}}
                 <div>
-                    <a class="btn btn-light" href="/api/sessions/login">Iniciar Sesiónn</a>
+                    <a class="btn btn-light" href="/users/login">Iniciar Sesiónn</a>
                 </div>
             {{/unless}}
         </div>
@@ -27,7 +27,7 @@
 </header>
 <main class="container">
     <div class="mt-5">
-        <a class="back-button" href="/products/manager"> Regresar </a>
+        <a class="back-button" href="/admin/products"> Regresar </a>
     </div>
     <h1>Productos con WebSocket</h1>
     <div class="my-4 px-5">
@@ -75,5 +75,5 @@
         </div>
     </div>
 </main>
-<script src="./socket.io/socket.io.js"></script>
-<script src="./js/realtime.js"></script>
+<script src="../../socket.io/socket.io.js"></script>
+<script src="../../js/realtime.js"></script>

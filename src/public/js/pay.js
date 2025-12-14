@@ -112,7 +112,7 @@ const finishPurchase = async ()=>{
     })
     localStorage.setItem("purchased", true)
     setTimeout(()=>{
-        window.location.href= `http://localhost:8080/products/ticket?code=${purchase.ticket.code}&&cart=${newCartAdded.cart.id}`
+        window.location.href= `http://localhost:8080/ticket?code=${purchase.ticket.code}&&cart=${newCartAdded.cart.id}`
     },5000)
 }
 

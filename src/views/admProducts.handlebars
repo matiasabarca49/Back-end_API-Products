@@ -2,13 +2,13 @@
 <header>
     <nav class="navbar">
         <div class="nav-brand">
-          <a class="brand-link" href="http://localhost:8080/">Panel</a>
+          <a class="brand-link" href="http://localhost:8080/admin">Panel</a>
         </div>
         <div class="nav-actions">
             <div class="user-name">{{userLoged.user}}</div>
             {{#if userLoged.user}}
                 <div>
-                    <a class="btn btn-light" href="/api/sessions/perfil">Ver Perfil</a>
+                    <a class="btn btn-light" href="/users/perfil">Ver Perfil</a>
                 </div>
                 <div>
                     <a class="btn btn-danger" href="/api/sessions/logout">salir</a> 
@@ -16,13 +16,13 @@
             {{/if}}
             {{#unless userLoged.user}}
                 <div>
-                    <a class="btn btn-light" href="/api/sessions/login">Iniciar Sesión</a>
+                    <a class="btn btn-light" href="/users/login">Iniciar Sesión</a>
                 </div>
             {{/unless}}
             {{#if userLoged.user}}
                 {{#ifCond userLoged.rol "Admin"}}
                     <div>
-                        <a class="btn icon-btn" href="/"><img class="nav-icon" src="../img/configurar.png" alt="home"></a>
+                        <a class="btn icon-btn" href="/admin"><img class="nav-icon" src="../img/configurar.png" alt="home"></a>
                     </div>
                 {{/ifCond}}
             {{/if}}
@@ -30,7 +30,7 @@
     </nav>
 </header>
 <main class="main-container">
-    <a class="back-button" href="/"> Regresar </a>
+    <a class="back-button" href="/admin"> Regresar </a>
     <div class="welcome-text">
         Administración de Productos
     </div>
@@ -48,13 +48,14 @@
                 <option value="">Todas</option>
                 <option value="Ropa">Ropa</option>
                 <option value="Tecnología">Tecnología</option>
+                <option value="Bazar">Bazar</option>
+                <option value="Calzado">Calzado</option>
             </select>
         </div>
         
         <div class="filter-group">
             <label for="sortFilter">Ordenar:</label>
             <select id="sortFilter" class="filter-select">
-                <option value="">Por defecto</option>
                 <option value="1">Precio Ascendente</option>
                 <option value="-1">Precio Descendente</option>
             </select>
@@ -71,7 +72,7 @@
                 <option value="48">48</option>
             </select>
         </div>
-        <a class="btn btn-success add-product-btn" href="/realtimeproducts">
+        <a class="btn btn-success add-product-btn" href="/admin/products/add">
             <span>+</span> Agregar producto
         </a>
     </div>

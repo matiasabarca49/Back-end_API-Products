@@ -1,70 +1,11 @@
-const { searchSecret } = require('../utils/utils.js')
 const UsersService = require('../service/mongo/users.service.js')
 const usersService = new UsersService()
-
-const getRegister = (req, res) =>{
-    try{
-        res.render("register")  
-    }catch(error){
-        req.logger.error(`Peticion ${req.method} en "${"http://"+req.headers.host + "/api/sessions/register" +req.url}" a las ${new Date().toLocaleTimeString()} el ${new Date().toLocaleDateString()}\n
-        ERROR: Fallo al cargar la vista de registro. EL error es:\n
-        ${error}`)
-        res.status(500).send({status: "ERROR", reason: error})
-    }
-}
-
-const getLogin = async (req, res) =>{
-    try{
-        res.render("login")
-    }catch(error){
-        req.logger.error(`Peticion ${req.method} en "${"http://"+req.headers.host + "/api/sessions/login" +req.url}" a las ${new Date().toLocaleTimeString()} el ${new Date().toLocaleDateString()}\n
-        ERROR: Fallo al cargar la vista de login. EL error es:\n
-        ${error}`)
-        res.status(500).send({status: "ERROR", reason: error})
-    }
-}
-
-const getPerfil = async (req, res) =>{
-    try{
-        res.render("perfil", {userLoged: req.session})
-    }catch(error){
-        req.logger.error(`Peticion ${req.method} en "${"http://"+req.headers.host + "/api/sessions/perfil" +req.url}" a las ${new Date().toLocaleTimeString()} el ${new Date().toLocaleDateString()}\n
-        ERROR: Fallo al cargar la vista de perfil. EL error es:\n
-        ${error}`)
-        res.status(500).send({status: "ERROR", reason: error})
-    }
-}
-
-const getChangePassword = (req,res)=>{
-    try{
-        res.render('forgetPassword')
-    }catch(error){
-        req.logger.error(`Peticion ${req.method} en "${"http://"+req.headers.host + "/api/sessions/changepassword" +req.url}" a las ${new Date().toLocaleTimeString()} el ${new Date().toLocaleDateString()}\n
-        ERROR: Fallo al cargar la vista de cambio de contraseña. EL error es:\n
-        ${error}`)
-        res.status(500).send({status: "ERROR", reason: error})
-    }
-}
-
-const getGeneratePassword = (req,res)=>{
-    try{
-        const secretFound = searchSecret(req.query.secret, req.query.email)
-        secretFound
-            ?res.render('generatePassword')
-            :res.render('forgetPassword')
-    }catch(error){
-        req.logger.error(`Peticion ${req.method} en "${"http://"+req.headers.host + "/api/sessions/generatepassword" +req.url}" a las ${new Date().toLocaleTimeString()} el ${new Date().toLocaleDateString()}\n
-        ERROR: Fallo al cargar la vista de generar nueva contraseña. EL error es:\n
-        ${error}`)
-        res.status(500).send({status: "ERROR", reason: error})
-    }
-}   
 
 const getLogout = async (req, res) =>{
     try{
         if(req.session.passport?.user) await usersService.putConnectionUser(req.session.passport.user)
         req.session.destroy( async err =>{
-            if(!err) res.redirect("/api/sessions/login")
+            if(!err) res.redirect("/users/login")
             else res.status(500).send({status: "ERROR"})
         })
     }catch(error){ 
@@ -75,19 +16,6 @@ const getLogout = async (req, res) =>{
     }
 }
 
-const getFail = (req,res)=>{
-    try{
-        const {error} = req.query
-        error === "register" && res.render("register", {error: true})
-        error === "login" && res.render("login", {error: true})
-        error === "github" && res.render("login", { githubError: true })
-    }catch(error){
-        req.logger.error(`Peticion ${req.method} en "${"http://"+req.headers.host + "/api/sessions/fail" +req.url}" a las ${new Date().toLocaleTimeString()} el ${new Date().toLocaleDateString()}\n
-        ERROR: Fallo al cargar la vista de fallo de autenticación. EL error es:\n
-        ${error}`)
-        res.status(500).send({status: "ERROR", reason: error})
-    }
-}
 
 const getUserCurrent = (req, res) =>{
     try{
@@ -102,7 +30,7 @@ const getUserCurrent = (req, res) =>{
 
 const registerUser = (req, res) =>{
     try{
-        res.redirect("/api/sessions/login")
+        res.redirect("/users/login")
     }catch(error){
         req.logger.error(`Peticion ${req.method} en "${"http://"+req.headers.host + "/api/sessions/register" +req.url}" a las ${new Date().toLocaleTimeString()} el ${new Date().toLocaleDateString()}\n
         ERROR: Fallo al registrar el usuario. EL error es:\n
@@ -124,9 +52,9 @@ const loginUser = async (req, res)=>{
         req.session.cart = userFound.cart
         req.session.purchases = userFound.purchases
         if(req.session.rol === "Admin"){
-            res.redirect("/")
+            res.redirect("/admin")
         }else{
-            res.redirect("/products")
+            res.redirect("/")
         }
     }catch(error){
         req.logger.error(`Peticion ${req.method} en "${"http://"+req.headers.host + "/api/sessions/login" +req.url}" a las ${new Date().toLocaleTimeString()} el ${new Date().toLocaleDateString()}\n
@@ -137,13 +65,7 @@ const loginUser = async (req, res)=>{
 }
 
 module.exports = {
-    getRegister,
-    getLogin,
-    getPerfil,
     getLogout,
-    getFail,
-    getChangePassword,
-    getGeneratePassword,
     getUserCurrent,
     registerUser, 
     loginUser

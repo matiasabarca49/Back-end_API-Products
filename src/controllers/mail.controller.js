@@ -89,7 +89,7 @@ const changepassword =  async (req, res)=>{
                     attachments: []  
                 })
                 req.logger.info(passwordChanged.reason)
-                res.status(200).redirect("/api/sessions/login")
+                res.status(200).redirect("/users/login")
             }
             else{
                 res.status(500).send({status: "ERROR", reason: passwordChanged.reason })

@@ -2,16 +2,16 @@
 <header>
     <nav class="navbar">
         <div class="nav-brand">
-          <a class="brand-link" href="http://localhost:8080/products">Panel</a>
+          <a class="brand-link" href="http://localhost:8080/admin">Panel</a>
         </div>
         <div class="nav-actions">
             <div class="user-name">{{userLoged.user}}</div>
             {{#if userLoged.user}}
                 <div>
-                    <a class="btn btn-light" href="/api/sessions/perfil">Ver Perfil</a>
+                    <a class="btn btn-light" href="/users/perfil">Ver Perfil</a>
                 </div>
                 <div>
-                        <a class="btn btn-light" href="/products">Tienda</a>
+                        <a class="btn btn-light" href="/">Tienda</a>
                 </div>
                 <div>
                     <a class="btn btn-danger" href="/api/sessions/logout">salir</a> 
@@ -19,7 +19,7 @@
             {{/if}}
             {{#unless userLoged.user}}
                 <div>
-                    <a class="btn btn-light" href="/api/sessions/login">Iniciar Sesión</a>
+                    <a class="btn btn-light" href="/users/login">Iniciar Sesión</a>
                 </div>
             {{/unless}}
         </div>
@@ -31,7 +31,7 @@
             <p class="text-center fs-5">Faltan cargar los documentos necesarios para ser Usuario Premium</p>
     </div>
     <div class="mt-5">
-            <a class="back-button" href="/"> Regresar </a>
+            <a class="back-button" href="/admin"> Regresar </a>
         </div>
     <div class="container-fluid mt-2">
             <h2>Usuarios en la base de datos:</h2>
@@ -40,4 +40,4 @@
             </div>
     </div>
 </section>
-<script src="./js/users.js"></script>
+<script src="../js/users.js"></script>

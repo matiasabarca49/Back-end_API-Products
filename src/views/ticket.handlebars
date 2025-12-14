@@ -2,7 +2,7 @@
 <header>
     <nav class="navbar">
         <div class="nav-brand">
-          <a class="brand-link" href="http://localhost:8080/products">Panel</a>
+          <a class="brand-link" href="http://localhost:8080/">Tienda</a>
         </div>
         <div class="nav-actions">
             <div class="user-name">{{userLoged.user}}</div>
@@ -13,7 +13,7 @@
             {{/if}}
             {{#unless userLoged.user}}
                 <div>
-                    <a class="btn btn-light" href="/api/sessions/login">Login</a>
+                    <a class="btn btn-light" href="/users/login">Login</a>
                 </div>
             {{/unless}}
         </div>
@@ -34,7 +34,7 @@
         <div class="mx-5 fs-1" id="total"></div>
         <div class="m-5 text-center fs-4">
             <div id="mailID"></div>
-            <a  class="btn btn-success" href="http://localhost:8080/products">Seguir Comprando</a>
+            <a  class="btn btn-success" href="http://localhost:8080/">Seguir Comprando</a>
         </div>
     </div>
 </section>

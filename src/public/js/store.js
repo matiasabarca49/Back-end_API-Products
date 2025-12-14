@@ -16,7 +16,7 @@ const renderProducts = (array)=>{
                             </div>
                             <div class="card-footer"> 
                                 <span class="card-price">$ ${product.price}</span>
-                                <a class="btn-success" href="http://localhost:8080/products/productview?id=${product.id}">Ver Más</a>
+                                <a class="btn-success" href="http://localhost:8080/productview?id=${product.id}">Ver Más</a>
                             </div>  
                     `
         contProducts.appendChild(div)

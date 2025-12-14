@@ -52,7 +52,7 @@ const checkPerCart = (req, res, next)=>{
     }
     else{
         /* res.send({status: "ERROR", reason: "No está logueado" }) */
-        res.redirect("/api/sessions/login")
+        res.redirect("/users/login")
     }
 }
 
