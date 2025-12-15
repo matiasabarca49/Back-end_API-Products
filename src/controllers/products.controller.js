@@ -26,6 +26,7 @@ const getProducts = async (req,res) =>{
             : res.status(500).send({status: "Error"})
     }
     catch(error){
+        console.log(error)
         res.status(500).json({success: false, status: "Error",error: "Error interno del servidor"});
     }
 }
@@ -36,6 +37,7 @@ const getProductsByID = async (req,res) =>{
         const productFound = await productsService.getById(id)
         res.status(200).send({status: "Success", producto: productFound})
     }catch(error){
+        console.log(error)
         res.status(500).json({success: false, status: "Error",error: "Error interno del servidor"});
     }
 }
@@ -44,14 +46,54 @@ const getSearchProducts =  async (req, res) =>{
     try{
         const { query } = req.query
         //Si el query viene vacio
-        query === "" || undefined && res.status(400).json({success: false, error: "Parámetro de búsqueda vacío",});
+        if (query === undefined) {
+            return res.status(400).json({
+                success: false,
+                error: "Error en el parametro de busqueda",
+        });
+}
     
-        const productsFounded = await productsService.getProductsSearch(query)
+        const productsFounded = await productsService.getProductsSearch(query, req.session)
         productsFounded
             ? res.status(200).json({success: true, data: productsFounded})
             : res.status(500).json({success: false, error: "Error interno del servidor",
         });
     }catch(error){
+        console.log(error)
+        res.status(500).json({success: false, status: "Error",error: "Error interno del servidor"});
+    }
+}
+
+const getProductsByFilter = async(req, res) =>{
+    try{
+        const productsFound = await productsService.getManyByFilter(req.query)
+        res.status(200).send({status: "Success", producto: productsFound})
+    }catch(error){
+        console.log(error)
+        res.status(500).json({success: false, status: "Error",error: "Error interno del servidor"});
+    }
+}
+
+const getAdmProduct = async(req, res) => {
+    try{
+        const { limit = 10, page = 1, sort = 1 } = req.query;
+        const productsFound = await productsService.getManyProductsUser(req.session, limit,page,{ price: parseInt(sort)})
+        productsFound
+            ? res.status(200).send({
+                status: "success",
+                payload: productsFound.docs,
+                totalPages: productsFound.totalPages,
+                prevPage: productsFound.prevPage,
+                page: productsFound.page,
+                nextPage: productsFound.nextPage,
+                hasPrevPage: productsFound.hasPrevPage,
+                hasNextPage: productsFound.hasNextPage,
+                prevLink:productsFound.hasPrevPage?`http://localhost:8080/api/products/admin?page=${productsFound.prevPage} ` : null,
+                nextLink:productsFound.hasNextPage?`http://localhost:8080/api/products/admin?page=${products.nextPage} `: null,
+                })
+            : res.status(500).send({status: "Error"})
+    }catch(error){
+        console.log(error)
         res.status(500).json({success: false, status: "Error",error: "Error interno del servidor"});
     }
 }
@@ -108,6 +150,7 @@ const updateProduct = async (req,res)=>{
          : res.status(400).send({status: "Error", reason: "Al producto le faltan campos o no existe "})   
     }
     catch(error){
+        console.log(error)
         res.status(500).json({success: false, status: "Error",error: "Error interno del servidor"});
     }
  }
@@ -121,6 +164,7 @@ const deleteProduct = async (req,res) => {
          :res.status(404).send({status: "Error", reason: "El producto no existe o no tienes permiso para borrarlo"})
     }
     catch(error){
+        console.log(error)
         res.status(500).json({success: false, status: "Error",error: "Error interno del servidor"});
     }
 }
@@ -130,6 +174,8 @@ module.exports = {
     getProducts,
     getProductsByID,
     getSearchProducts,
+    getProductsByFilter,
+    getAdmProduct,
     addProduct,
     addManyProducts,
     updateProduct,

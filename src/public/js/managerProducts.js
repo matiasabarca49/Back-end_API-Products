@@ -44,7 +44,7 @@ const renderBotonPage = (data) => {
 //Funcion que nos pemite renderizar los elementos con paginate
 const fetchProducts = (page)=>{
     //Obtenemos los productos de la pagina pasada por parametro
-    fetch(`http://localhost:8080/api/products?page=${page}`)
+    fetch(`http://localhost:8080/api/products/admin?page=${page}`)
     .then( response => response.json())
     .then( data => {
         products = data
@@ -55,7 +55,7 @@ const fetchProducts = (page)=>{
 }
 const fetchProductsOpts = (page,limit, sort, query)=>{
     //Obtenemos los productos de la pagina pasada por parametro
-    fetch(`http://localhost:8080/api/products?page=${page}&&limit=${limit}&&sort=${sort}&&query=${query}`)
+    fetch(`http://localhost:8080/api/products/admin?page=${page}&&limit=${limit}&&sort=${sort}&&query=${query}`)
     .then( response => response.json())
     .then( data => {
         products = data

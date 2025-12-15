@@ -1,8 +1,8 @@
 const express = require('express')
 //controllers
-const {getProducts, getProductsByID, getSearchProducts, addProduct, addManyProducts, updateProduct, deleteProduct} = require('../controllers/products.controller.js')
+const {getProducts, getProductsByID, getSearchProducts, addProduct, addManyProducts, updateProduct, deleteProduct, getProductsByFilter, getAdmProduct} = require('../controllers/products.controller.js')
 //middleware
-const { checkPerAddProduct } = require('../middlewares/permissions.middleware.js')
+const { checkPerAddProduct, checkPermAdminAndPremium } = require('../middlewares/permissions.middleware.js')
 
 //Desestructuramos el objeto para obtener el constructor de Rutas
 const { Router } = express
@@ -14,6 +14,8 @@ const router = new Router()
 * GET
 **/
 router.get("/", getProducts)
+router.get("/filter", getProductsByFilter)
+router.get("/admin", checkPermAdminAndPremium ,getAdmProduct)
 router.get("/search", getSearchProducts)
 router.get("/:id", getProductsByID)
 

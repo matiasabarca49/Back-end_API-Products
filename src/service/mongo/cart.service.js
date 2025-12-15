@@ -17,7 +17,7 @@ class CartService extends BaseService{
         const productService = new ProductService()
         const productsWithoutStock = []
         const productsWithStock = []
-        const cartDB = await this.persistController.getDocumentsByID(idCart)
+        const cartDB = await this.persistController.getDocumentByID(idCart)
         const products = await productService.getAll()
         //Separar productos con stock y sin stock
         cartDB.products.forEach( productDB => {
@@ -66,10 +66,6 @@ class CartService extends BaseService{
     async delFullCart(cartID){
         return await this.persistController.deleteFullCartInDB(cartID)
     }
-
-    /* delTicket(tCode){
-        return persistController.deleteDocumentByFilter(Ticket, {code: tCode})
-    } */
 
      /**
      * 

@@ -12,7 +12,7 @@ class UsersService extends BaseService{
     }
 
    async postProductToCart(idUser, productToAdded){
-        const userFound = await this.persistController.getDocumentsByID(idUser)
+        const userFound = await this.persistController.getDocumentByID(idUser)
         if(userFound.email === productToAdded.owner){
             return false
         }
@@ -22,12 +22,12 @@ class UsersService extends BaseService{
             : userFound.cart = [...userFound.cart, {product: productToAdded.id, quantity: 1 }]
         await this.persistController.updateDocument(idUser, {cart: userFound.cart})
 
-        return await this.persistController.getDocumentsByID(idUser)
+        return await this.persistController.getDocumentByID(idUser)
    }
 
    async postDocument(idUser,document){
     let documentsUpdated
-    const userFound = await this.persistController.getDocumentsByID(idUser)
+    const userFound = await this.persistController.getDocumentByID(idUser)
     //Buscando si ya existe el documento en DB
     const documentFound = userFound.documents.find( documentDB => documentDB.name === document.name)
     if(documentFound){
@@ -47,7 +47,7 @@ class UsersService extends BaseService{
    }
 
    async putChangePasswordFromUser(emailUser, password){
-        const user = await this.persistController.getDocumentsByFilter({ email: emailUser})
+        const user = await this.persistController.getDocumentByFilter({ email: emailUser})
         //Revisar que la contraseña no sea igual a la anterior
         const isRepeated = isValidPassword(user, password)
         if(isRepeated){
@@ -65,7 +65,7 @@ class UsersService extends BaseService{
 
    async putChangeRolFromUser(idUser){
         const documents = ["Identificacion", "Comprobante de domicilio", "Comprobante de estado de cuenta"]
-        const userFound = await this.persistController.getDocumentsByID(idUser)
+        const userFound = await this.persistController.getDocumentByID(idUser)
         if (userFound.rol === "User"){
             let cont=0
             userFound.documents.forEach( document => {
@@ -92,7 +92,7 @@ class UsersService extends BaseService{
 
     async putConnectionUser(idUser){
         const date = new Date().toISOString()
-        const userFound = await this.persistController.getDocumentsByID(idUser)
+        const userFound = await this.persistController.getDocumentByID(idUser)
         if(userFound){
             await this.persistController.updateDocument(idUser,{lastConnection: date})
             userFound.lastConnection = date
@@ -114,7 +114,7 @@ class UsersService extends BaseService{
     }
 
     async delProductFromUser(userID, productID){
-        const userFound = await this.persistController.getDocumentsByID(userID)
+        const userFound = await this.persistController.getDocumentByID(userID)
         if(userFound){
             const cartFiltered = userFound.cart.filter( product => product.product._id.toString() !== productID )
             await this.persistController.updateDocument(userID, {cart: cartFiltered})

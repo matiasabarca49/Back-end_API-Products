@@ -27,7 +27,11 @@
 </header>
 <main class="container">
     <div class="mt-5">
-        <a class="back-button" href="/admin/products"> Regresar </a>
+        {{#if isAdmin}}
+            <a class="back-button" href="/admin">regresar a Dashboard Admin</a>
+        {{else}}
+            <a class="back-button" href="/">regresar a Tienda</a>
+        {{/if}}
     </div>
     <h1>Productos con WebSocket</h1>
     <div class="my-4 px-5">

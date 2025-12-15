@@ -11,7 +11,7 @@ const { getUsersPageController } = require('../../controllers/pages/users.pages.
 //routes
 router.get("/", checkLogin, checkPermAdmin, getUsersPageController)
 
-router.get("/products", checkPermAdmin ,(req,res)=>{
+router.get("/products", checkPermAdminAndPremium ,(req,res)=>{
     res.render("admProducts", {userLoged: req.session})
 })
 

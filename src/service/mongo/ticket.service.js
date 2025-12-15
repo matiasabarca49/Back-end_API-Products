@@ -10,7 +10,7 @@ class TicketService extends BaseService {
     async getTicket(code, cartID){
         const CartService = require('./cart.service.js')
         const cartService = new CartService()
-        const ticketFound = await this.persistController.getDocumentsByFilter({code: code})
+        const ticketFound = await this.persistController.getDocumentByFilter({code: code})
         const cartFound = await cartService.getById(cartID)
         if(!ticketFound || !cartFound){
             return false
@@ -21,7 +21,7 @@ class TicketService extends BaseService {
     }
 
     async getTicketByIDCart(idCart){
-        return await this.persistController.getDocumentsByFilter({idCart: idCart})
+        return await this.persistController.getDocumentByFilter({idCart: idCart})
     }
 
      /**

@@ -11,7 +11,6 @@ const getUserCart = (idCart)=>{
     fetch(`http://localhost:8080/api/ticket/filter?idCart=${idCart}`)
     .then(response => response.json())
     .then( data =>{
-        console.log(data)
         getUser(data.ticket)
 
     } )

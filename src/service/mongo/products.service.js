@@ -3,45 +3,47 @@ const BaseService = require('./base.service.js')
 const { transporter } = require('../../config/config.js')
 const { generateFormatEmail } = require('../../utils/utils.js')
 const ProductDTO = require('../../dto/product.dto.js')
+const mongoose = require('mongoose')
 
 class ProductsService extends BaseService{
     constructor(){
         super(Product)
     }
 
-    getProductsSearch(query){
+    async getProductsSearch(query, user){
         const searchRegex = new RegExp(query, 'i')
-        return this.persistController.getDocumentsByQuery( 
+        const products = await this.persistController.getDocumentsByQuery([ 
                 {
-                    $or: [
-                        { title: searchRegex },
-                        { category: searchRegex },
-                        { code: searchRegex },
-                        { owner: searchRegex},
-                        { _id: query.match(/^[0-9a-fA-F]{24}$/) ? query : null }, // si q parece un ObjectId válido
-                    ]
-                })
+                    $match: {
+                        owner: user.rol === "Premium" ? user.email : "Admin" , // filtro obligatorio
+                        $or: [ // con que coincida alguna. Ya devuelve
+                            { title: searchRegex },
+                            { category: searchRegex },
+                            { code: searchRegex },
+                            { _id: query.match(/^[0-9a-fA-F]{24}$/) ? new mongoose.Types.ObjectId(query): null }
+                        ]
+                    }
+                }])
+
+        if(!products || products.length === 0) return null
+
+        return this.toManyDTO(products)
     }
 
-    /* generateFormatEmail = (email, payload) =>{
-        const mailOptions = {
-            from: `Tienda de Productos  <${process.env.GMAIL_CREDENTIAL_USER}>`,
-            to: `${email}`,
-            subject: `${payload.subject}`,
-            html:`
-                <div>  
-                    <h1> ${payload.head} </h1>
-                    <p> ${payload.body} </p>
-                </div>
-            `,
-            attachments: []  
-        }
-    
-        return mailOptions
-    } */
-    
+
+     async getManyProductsUser(user ,dftLimit, dftPage, dftSort){
+        const owner = user.rol === "Premium" ? user.email : "Admin"
+        const documents = await this.persistController.getPaginate({owner: owner }, dftLimit, dftPage, dftSort)
+        if(!documents || documents.docs.length === 0) return null
+        // Buscar si la clase hija definió toDTO
+        const documentsFormated = this.toManyDTO ? this.toManyDTO(documents.docs) : documents
+        // Reemplazar los documentos originales por los formateados
+        documents.docs = documentsFormated
+        return documents
+    }
+
     async delProduct(ID, user){
-        const productFound = await this.persistController.getDocumentsByID(ID)
+        const productFound = await this.persistController.getDocumentByID(ID)
         //Enviar mail al propietario del producto
         if( productFound.owner !== "Admin"){
             transporter.sendMail(generateFormatEmail(productFound.owner, { subject: "Producto Borrado", head: "El Producto fue borrado correctamente", body: `El producto "${productFound.title}" con código "${productFound.code}" fue borrado. Por el administrador ${user.user} ${user.lastName}. El producto pertenece al usuario con email ${productFound.owner}`}), (error, info)=>{

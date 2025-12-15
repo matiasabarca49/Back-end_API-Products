@@ -30,7 +30,17 @@
     </nav>
 </header>
 <main class="main-container">
-    <a class="back-button" href="/admin"> Regresar </a>
+    {{#if userLoged.user}}
+        {{#ifCond userLoged.rol "Premium"}}
+            <div>
+                <a class="back-button" href="/"> Regresar </a>                    
+            </div>
+        {{else}} 
+            <div>
+                <a class="back-button" href="/admin"> Regresar </a> 
+            </div>
+        {{/ifCond}}
+    {{/if}}
     <div class="welcome-text">
         Administración de Productos
     </div>

@@ -1,111 +1,291 @@
-const renderUsers = (users)=>{
-    const contUsers = document.getElementById('contUsers')
-    contUsers.innerText = ""
-    users.forEach( user => {
-        const div = document.createElement('div')
-        div.className = "col-2 col-6 col-sm-4 card  mb-3 flex-grow-1 shadow"
-        div.style.maxWidth = "18rem"
-        div.innerHTML=  `
-                    <div class="card-header bg-transparent d-flex justify-content-between align-items-center gap-3" id="contHeader${user.id}">
-                        <p class="fw-light opacity-75" style="font-size: 14px; margin-bottom: 0">ID:${user.id}</p>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title fs-4 text-black fw-bold">${user.name}</h5>
-                        <h5 class="card-title fs-4 text-black fw-bold">${user.lastName}</h5>
-                        <p class="card-text text-secondary">${user.email}</p>
-                    </div>
-                    <div class="p-3 d-flex flex-column align-items-center">
-                        <div class="card-footer w-100 d-flex justify-content-between align-items-center bg-transparent fs-4 text ">
-                            <div>
-                                Rol: ${user.rol}
-                            </div>
-                            <div class="fs-6 fw-light opacity-75">Age: ${user.age}</div>
-                        </div>
-                        <div id="changeRol${user.id}"></div>
-                    </div>
+// Base URL - Ajustar según tu configuración
+const API_URL = 'http://localhost:8080/api/users';
 
-        `
-        //Agregar el usuario creado al DOM
-        contUsers.appendChild(div)
-        //Agregar boton cambiar usuario
-        if(user.rol === "Premium" || user.rol === "User"){
-            const btnRol = document.createElement('button')
-            btnRol.className = "btn btn-outline-danger"
-            btnRol.innerText = "Cambiar Rol"
-            btnRol.id = `rol${user.id}`
-            const btnDelete = document.createElement('button')
-            btnDelete.className = "btn btn-outline-danger"
-            btnDelete.innerText = "X"
-            btnDelete.id=`eliminar${user.id}`
-            const divRol = document.getElementById(`changeRol${user.id}`)
-            divRol.appendChild(btnRol)
-            const divDelete = document.getElementById(`contHeader${user.id}`)
-            divDelete.appendChild(btnDelete)
-            //Evento para eliminar usuarios
-            const buttonUser = document.getElementById(`eliminar${user.id}`)
-            buttonUser.addEventListener('click', ()=>{
-                deleteProduct(user.id)
-            })
-            //Evento para cambiar rol de usuario
-            const btn = document.getElementById(`rol${user.id}`)
-            btn.addEventListener('click', ()=>{
-                changeRolUser(user.id)
-            })
+let users = [];
+let currentFilters = {
+    search: '',
+    role: '',
+    sortBy: 'name'
+};
+
+// Cargar usuarios al iniciar
+loadUsers();
+
+// Event Listeners
+document.getElementById('searchInput').addEventListener('input', (e) => {
+    currentFilters.search = e.target.value;
+    applyFilters();
+});
+
+document.getElementById('roleFilter').addEventListener('change', (e) => {
+    currentFilters.role = e.target.value;
+    applyFilters();
+});
+
+document.getElementById('sortBy').addEventListener('change', (e) => {
+    currentFilters.sortBy = e.target.value;
+    applyFilters();
+});
+
+document.getElementById('userForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    saveUser();
+});
+
+document.getElementById('addUserBtn').addEventListener('click', () => {
+    openModal('add');
+});
+
+document.getElementById('closeModalBtn').addEventListener('click', () => {
+    closeModal();
+});
+
+document.getElementById('cancelBtn').addEventListener('click', () => {
+    closeModal();
+});
+
+// Cargar usuarios
+async function loadUsers() {
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        users = data.users || [];
+        applyFilters();
+    } catch (error) {
+        showError('Error al cargar usuarios: ' + error.message);
+    }
+}
+
+// Aplicar filtros
+function applyFilters() {
+    let filteredUsers = [...users];
+
+    // Filtro de búsqueda
+    if (currentFilters.search) {
+        const search = currentFilters.search.toLowerCase();
+        filteredUsers = filteredUsers.filter(user => 
+            user.name?.toLowerCase().includes(search) ||
+            user.lastName?.toLowerCase().includes(search) ||
+            user.email?.toLowerCase().includes(search) ||
+            (user._id && user._id.toLowerCase().includes(search)) ||
+            (user.id && user.id.toString().toLowerCase().includes(search))
+        );
+    }
+
+    // Filtro por rol
+    if (currentFilters.role) {
+        filteredUsers = filteredUsers.filter(user => user.rol === currentFilters.role);
+    }
+
+    // Ordenar
+    filteredUsers.sort((a, b) => {
+        const aVal = a[currentFilters.sortBy] || '';
+        const bVal = b[currentFilters.sortBy] || '';
+        return aVal.toString().localeCompare(bVal.toString());
+    });
+
+    renderUsers(filteredUsers);
+}
+
+// Renderizar usuarios
+function renderUsers(usersToRender) {
+    const grid = document.getElementById('usersGrid');
+    grid.innerHTML = '';
+
+    if (usersToRender.length === 0) {
+        grid.innerHTML = `
+            <div class="empty-state" style="grid-column: 1 / -1;">
+                <h3>No se encontraron usuarios</h3>
+                <p>Intenta ajustar los filtros de búsqueda</p>
+            </div>
+        `;
+        return;
+    }
+
+    usersToRender.forEach(user => {
+        const userId = user._id || user.id;
+        const card = document.createElement('div');
+        card.className = 'user-card';
+        
+        const deleteButton = user.rol !== 'Admin' 
+            ? `<button class="delete-btn" onclick="deleteUser('${userId}')">×</button>` 
+            : '';
+        
+        card.innerHTML = `
+            <div class="card-header">
+                <p class="card-id">ID: ${userId}</p>
+                <div class="header-buttons">
+                    <button class="edit-btn" onclick="openModal('edit', '${userId}')">✏</button>
+                    ${deleteButton}
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-name">${user.name} ${user.lastName}</h5>
+                <p class="card-email">${user.email}</p>
+            </div>
+            <div class="card-footer">
+                <span class="card-role">${user.rol}</span>
+                <span class="card-age">Edad: ${user.age || 'N/A'}</span>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+// Abrir modal
+function openModal(mode, userId = null) {
+    const modal = document.getElementById('userModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const form = document.getElementById('userForm');
+    const passwordGroup = document.getElementById('passwordGroup');
+    const passwordInput = document.getElementById('userPassword');
+    
+    form.reset();
+    
+    if (mode === 'add') {
+        modalTitle.textContent = 'Agregar Usuario';
+        document.getElementById('userId').value = '';
+        passwordInput.required = true;
+        passwordGroup.style.display = 'block';
+    } else {
+        modalTitle.textContent = 'Editar Usuario';
+        const user = users.find(u => (u._id || u.id) === userId);
+        if (user) {
+            document.getElementById('userId').value = user._id || user.id;
+            document.getElementById('userName').value = user.name;
+            document.getElementById('userLastName').value = user.lastName;
+            document.getElementById('userEmail').value = user.email;
+            document.getElementById('userAge').value = user.age || '';
+            document.getElementById('userRole').value = user.rol;
+            passwordInput.required = false;
+            passwordGroup.style.display = 'none';
         }
+    }
+    
+    modal.style.display = 'block';
+}
+
+// Cerrar modal
+function closeModal() {
+    document.getElementById('userModal').style.display = 'none';
+}
+
+// Guardar usuario (crear o editar)
+async function saveUser() {
+    const userId = document.getElementById('userId').value;
+    const userData = {
+        name: document.getElementById('userName').value,
+        lastName: document.getElementById('userLastName').value,
+        email: document.getElementById('userEmail').value,
+        age: parseInt(document.getElementById('userAge').value) || undefined,
+        rol: document.getElementById('userRole').value
+    };
+
+    // Solo incluir password si está presente
+    const password = document.getElementById('userPassword').value;
+    if (password) {
+        userData.password = password;
+    }
+
+    try {
+        let response;
+        if (userId) {
+            // Editar usuario existente
+            response = await fetch(`${API_URL}/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+        } else {
+            // Crear nuevo usuario
+            if (!password) {
+                showError('La contraseña es requerida para nuevos usuarios');
+                return;
+            }
+            response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+        }
+
+        const data = await response.json();
+        
+        if (response.ok) {
+            closeModal();
+            loadUsers();
+            showSuccess(userId ? 'Usuario actualizado exitosamente' : 'Usuario creado exitosamente');
+        } else {
+            showError(data.message || 'Error al guardar usuario');
+        }
+    } catch (error) {
+        showError('Error al guardar usuario: ' + error.message);
+    }
+}
+
+// Eliminar usuario
+async function deleteUser(userId) {
+    if (!confirm('¿Está seguro de eliminar este usuario?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
 
-}
-
-const deleteProduct = (id) =>{
-    fetch(`http://localhost:8080/api/users/${id}`,{
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    })
-    getUser()
-} 
-
-const changeRolUser = (id) => {
-    fetch(`http://localhost:8080/api/users/premium/${id}`,{
-        method: "PUT",
-        headers:{
-            "Content-Type": "aplication/json"
+        if (response.ok) {
+            loadUsers();
+            showSuccess('Usuario eliminado exitosamente');
+        } else {
+            const data = await response.json();
+            showError(data.message || 'Error al eliminar usuario');
         }
-    })
-        .then(res => res.json())
-        .then(data =>{
-            if(data.status === "ERROR"){
-                const contModal = document.getElementById('modalError')
-                contModal.style.display = "block"
-                setTimeout(()=>{
-                    contModal.style.display = "none"
-                },3000)
-            }else{
-                getUser()
-            }
-        })
+    } catch (error) {
+        showError('Error al eliminar usuario: ' + error.message);
+    }
 }
 
-const getUser = () =>{
-    fetch("http://localhost:8080/api/users")
-    .then( res => res.json())
-    .then( data => {
-        renderUsers(data.users)
-    })
+// Mostrar mensaje de error
+function showError(message) {
+    const errorDiv = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    errorText.textContent = message;
+    errorDiv.style.display = 'block';
+    errorDiv.style.background = 'linear-gradient(45deg, #ff6b6b, #ee5a52)';
+    
+    setTimeout(() => {
+        errorDiv.style.display = 'none';
+    }, 4000);
 }
 
+// Mostrar mensaje de éxito
+function showSuccess(message) {
+    const errorDiv = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    const errorTitle = errorDiv.querySelector('h3');
+    errorTitle.textContent = 'Éxito';
+    errorText.textContent = message;
+    errorDiv.style.display = 'block';
+    errorDiv.style.background = 'linear-gradient(45deg, #28a745, #20c997)';
+    
+    setTimeout(() => {
+        errorDiv.style.display = 'none';
+        errorTitle.textContent = 'Error';
+    }, 3000);
+}
 
-/**
- *   Algoritmo Principal
- * */ 
-
-
-/* fetch("http://localhost:8080/api/users")
-    .then( res => res.json())
-    .then( data => {
-        renderUsers(data.users)
-    })
- */
-
-getUser()
+// Cerrar modal al hacer clic fuera
+window.onclick = function(event) {
+    const modal = document.getElementById('userModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}

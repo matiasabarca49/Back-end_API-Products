@@ -17,7 +17,7 @@ class PersistController{
             })
     }
 
-    async getDocumentsByID(ID){
+    async getDocumentByID(ID){
         return await this.model.findOne({_id: ID})
             .catch(error =>{
                 console.log(error)
@@ -26,7 +26,7 @@ class PersistController{
     
     }
 
-    async getDocumentsByFilter(filter){
+    async getDocumentByFilter(filter){
         return await this.model.findOne(filter)
             .catch(error =>{
                 console.log(error)
@@ -35,7 +35,7 @@ class PersistController{
     }
 
     async getDocumentsByQuery(query){
-        return await this.model.find(query)
+        return await this.model.aggregate(query)
             .catch(error =>{
                 console.log(error)
                 throw error

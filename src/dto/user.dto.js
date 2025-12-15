@@ -7,7 +7,7 @@ class UserDTO{
         this.age = user.age || 0
         this.email = user.email
         this.password = createHash(user.password)
-        this.rol = "User"
+        this.rol = user.rol || "User"
         this.documents = []
         this.lastConnection = new Date().toISOString()
         this.purchases = []

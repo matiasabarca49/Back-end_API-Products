@@ -27,6 +27,26 @@ const getUserByFilter = async (req, res) =>{
 
 }
 
+const getUserQuery = async(req, res) =>{
+    try{
+        const {query} = req.query
+        const searchRegex = new RegExp(query, "i")
+        const opAgregations = {
+            $or: [
+                { name: searchRegex },
+                { lastName: searchRegex },
+                { email: searchRegex },
+                { _id: query.match(/^[0-9a-fA-F]{24}$/) ? query : null }, // si q parece un ObjectId válido
+            ]
+        }
+        const gettUser = await usersService.getQuery(opAgregations)
+        res.status(200).json({status: "Succesfull", user: gettedUser})
+    }catch(error){
+        console.log(error)
+        res.status(500).json({})
+    }
+}
+
 const changeRol = async (req, res) =>{
     try{
         const userUpdated = await usersService.putChangeRolFromUser(req.params.uid)
@@ -57,6 +77,17 @@ const createUser = async (req, res) =>{
 /**
 * PUT
 */
+
+const updateUser = async (req, res) =>{
+    try{
+        const { uid } = req.params
+        const userUpdated = await usersService.update(uid, req.body)
+        res.status(200).json({status: "Succesfull", userUpdated})
+    }catch(error){
+        console.log(error)
+        res.status(500).json({status: "Error", reason: error.message || "Error al agregar el producto al carrito"})
+    }
+}
 
 const addProductToCartFromUser = async (req,res) =>{
     try{
@@ -142,6 +173,7 @@ module.exports = {
     createUser,
     addProductToCartFromUser,
     addDocumentsInUser,
+    updateUser,
     delUser,
     delUserForConnectionn,
     delProductFromUser
