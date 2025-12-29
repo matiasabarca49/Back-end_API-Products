@@ -3,7 +3,7 @@ const passport = require('passport')
 const { Router } = express
 const router = new Router()
 //middleware
-const { checkLogin, voidLogAndRegis } = require('../middlewares/sessions.middleware.js')
+const { checkLogin } = require('../middlewares/sessions.middleware.js')
 //controllers
 const controller = require('../controllers/sessions.controller.js')
 

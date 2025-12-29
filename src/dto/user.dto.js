@@ -16,7 +16,7 @@ class UserDTO{
 
     static toResponse(user){
         return {
-            id: user._id, 
+            id: user._id || user.id, 
             name: user.name || "Not Declared",
             lastName: user.lastName || "Not Declared",
             age: user.age || "Not Declared",

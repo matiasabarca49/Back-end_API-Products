@@ -17,7 +17,7 @@ class CartService extends BaseService{
         const productService = new ProductService()
         const productsWithoutStock = []
         const productsWithStock = []
-        const cartDB = await this.persistController.getDocumentByID(idCart)
+        const cartDB = await this.getById(idCart)
         const products = await productService.getAll()
         //Separar productos con stock y sin stock
         cartDB.products.forEach( productDB => {
@@ -45,26 +45,70 @@ class CartService extends BaseService{
         return {purchases: purchaseUpdated, cart: productsWithoutStock, purchase: productsWithStock, ticket: newTicket}
     }
 
-    
-    async postProductInCart(cartID, productID){
-        return await this.persistController.addProductToCartInDB(cartID, productID)
+    //Funcion que agrega un producto en un carrito que ya se encuentre en la DB
+    async addProductInCart(cartID, productID, quantity){
+        //Obtenemos el carrito al que se quiere agregar productos
+        const cart = await this.getById(cartID)
+         if (cart){
+            //verificamos si el producto ya existe en el carrito
+            const productFound = cart.products.find( item => item.product.id.toString() === productID )
+            //Se incrementa la cantidad si existe sino se agrega el producto al array
+            productFound
+                //Si la funcion recibe el parametro "quantty" endpoint(PUT), se modifica la cantidad por lo recibido si no se recibe endpoint(post), se  incrementa.
+                ? quantity? productFound.quantity = quantity : productFound.quantity++
+                : cart.products = [...cart.products, {product: productID, quantity: 1}]
+           //Se actualiza el cart con el metodo creado anteriormente. Este metodo ya no devuelve el documeto actualizado
+           const cartUpdated = await this.update(cartID, {products: cart.products})
+           return this.toDTO? this.toDTO(cartUpdated) : cartUpdated
+        }
+        else{
+            return null
+        }
     }
 
-    async putFullCartInDB(cartID, newCart){
-        return await this.persistController.updateCartInDB(cartID, newCart)
-    }
-
-    async putProductCartInDB(cartID, productID, quantity){
-        return await this.persistController.addProductToCartInDB(cartID, productID, quantity)
+    async updateFullCartInDB(cartID, newCart){
+         const cart = await this.getById(cartID)
+        if (cart){
+            const cartUpdated = await this.update(cartID, {products: newCart})
+            return this.DTO? this.DTO(cartUpdated) : cartUpdated
+        }
+        else{
+            return false
+        }
     }
 
 
     async delProductInCart(cartID, productID){
-        return await this.persistController.deleteProductCartInDB(cartID, productID )
+        const cart = await this.getById(cartID)
+        if (cart){
+            let cartUpdated
+            const productFound = cart.products.find(  item => item.product._id.toString() === productID )
+            productFound
+                ? cart.products = cart.products.filter( item => item.product._id.toString() !== productID)  
+                : cartUpdated = false
+            const cartOnlyID= cart.products.map(  item => {
+                return {
+                    product: item.product._id.toString(),
+                    quantity: item.quantity
+                }
+            }  )
+            cartUpdated = await this.updateFullCartInDB(cartID, cartOnlyID) 
+            return this.DTO? this.DTO(cartUpdated) : cartUpdated
+        }
+        else{
+            return false
+        }  
     }
 
     async delFullCart(cartID){
-        return await this.persistController.deleteFullCartInDB(cartID)
+        const cart = await this.getById(cartID)
+        if(cart){
+           const cartUpdated = await this.updateFullCartInDB(cartID, []) 
+            return this.DTO? this.DTO(cartUpdated) : cartUpdated
+        }
+        else{
+            return false
+        }
     }
 
      /**

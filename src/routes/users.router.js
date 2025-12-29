@@ -4,7 +4,7 @@ const router = new Router()
 //Multer
 const uploader = require('../utils/multer.js')
 //controllers
-const { getUsers, getUserByFilter, changeRol, addPurchaseToUser, addProductToCartFromUser, addDocumentsInUser, delUser, delUserForConnectionn, delProductFromUser, createUser, updateUser } = require('../controllers/users.controller.js')
+const { getAll, getByFilter, updateRol, addProductToCart, addDocument, deleteUser, deleteInactiveUser, removeProductFromCart, create, update } = require('../controllers/users.controller.js')
 //middleware
 const {checkPerAdmCart, CheckPerRol, checkPermAdmin} = require('../middlewares/permissions.middleware.js')
 
@@ -12,27 +12,27 @@ const {checkPerAdmCart, CheckPerRol, checkPermAdmin} = require('../middlewares/p
 /**
 *   GET 
 **/
-router.get("/",checkPermAdmin ,getUsers)
-router.get("/filter", checkPermAdmin, getUserByFilter)
+router.get("/",checkPermAdmin ,getAll)
+router.get("/filter", checkPermAdmin, getByFilter)
 
 /**
 *   POST 
 **/
-router.post('/', createUser)
-router.post( '/addcart', checkPerAdmCart, addProductToCartFromUser)
-router.post( '/:uid/documents',uploader.single('file'),addDocumentsInUser)
+router.post('/', create)
+router.post( '/addcart', checkPerAdmCart, addProductToCart)
+router.post( '/:uid/documents',uploader.single('file'),addDocument)
     
 /**
 *   PUT 
 **/
-router.put('/premium/:uid', CheckPerRol, changeRol)
-router.put('/:uid', checkPermAdmin, updateUser)
+router.put('/premium/:uid', CheckPerRol, updateRol)
+router.put('/:uid', checkPermAdmin, update)
 
 /**
 *   DELETE
 **/
-router.delete("/:id", CheckPerRol, delUser)
-router.delete("/delete/withoutconnection", CheckPerRol, delUserForConnectionn)
-router.delete("/delete/product/:id", delProductFromUser)
+router.delete("/:id", CheckPerRol, deleteUser)
+router.delete("/delete/withoutconnection", CheckPerRol, deleteInactiveUser)
+router.delete("/delete/product/:id", removeProductFromCart)
 
 module.exports = router

@@ -1,4 +1,3 @@
-/* const nodemailer = require('nodemailer') */
 const { searchSecret, generateFormatEmail, generateLink } = require('../utils/utils.js')
 const UsersService = require('../service/mongo/users.service.js')
 const usersService = new UsersService()
@@ -65,14 +64,14 @@ const sendMailRecoverPass = async (req, res)=>{
     }
 }
 
-const changepassword =  async (req, res)=>{
+const updatePassword =  async (req, res)=>{
     try {
         const isValid = searchSecret(req.query.secret, req.query.email)
-        if (isValid === false){
+        if (!isValid){
             req.logger.warning("Intento de manipulacion en restauracion contraseña")
             res.status(500).send({status: "ERROR"})
         }else{
-            const passwordChanged = await usersService.putChangePasswordFromUser(req.query.email, req.body.password)
+            const passwordChanged = await usersService.updatePassword(req.query.email, req.body.password)
             if (passwordChanged.status){
                 const userFound = await usersService.getByFilter({email: req.query.email})
                 let result = transporter.sendMail({
@@ -97,7 +96,8 @@ const changepassword =  async (req, res)=>{
         }
          
 
-    } catch{
+    } catch(error) {
+        console.log(error)
         req.logger.warning("Intento de manipulacion en restauracion contraseña")
         res.status(500).send({status: "ERROR"})
     }
@@ -108,5 +108,5 @@ const changepassword =  async (req, res)=>{
 module.exports= {
     sendMailPurchase,
     sendMailRecoverPass,
-    changepassword
+    updatePassword
 }

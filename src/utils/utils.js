@@ -12,7 +12,6 @@ const createHash = (password) => {
 
 const isValidPassword = (user ,password) =>{
     return bcrypt.compareSync(password, user.password)
-    
 }
 
 //Reescrituras de documentos DB

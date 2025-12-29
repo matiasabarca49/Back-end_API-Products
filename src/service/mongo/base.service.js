@@ -18,21 +18,21 @@ class BaseService{
     //Uso interno
     async getRawByFilter(filter){
         const document = await this.persistController.getDocumentByFilter(filter)
-        if(!document || document.length === 0) return null
+        if(!document || document.length === 0) return []
         // Buscar si la clase hija definió toDTO
         return document
     }
 
     async getByFilter(filter){
         const document = await this.persistController.getDocumentByFilter(filter)
-        if(!document || document.length === 0) return null
+        if(!document || document.length === 0) return []
         // Buscar si la clase hija definió toDTO
         return this.toDTO ? this.toDTO(document) : document
     }
 
     async getManyByFilter(filter){
         const document = await this.persistController.getManyDocumentsByFilter(filter)
-        if(!document || document.length === 0) return null
+        if(!document || document.length === 0) return []
         // Buscar si la clase hija definió toDTO
         return this.toManyDTO ? this.toManyDTO(document) : document
     }
@@ -46,20 +46,19 @@ class BaseService{
 
     async getPaginate(dftQuery, dftLimit, dftPage, dftSort){
         const documents = await this.persistController.getPaginate(dftQuery, dftLimit, dftPage, dftSort)
-        if(!documents || documents.docs.length === 0) return null
         // Buscar si la clase hija definió toManyDTO y formatear los documentos
-        const documentsFormated = this.toManyDTO ? this.toManyDTO(documents.docs) : documents
+        const documentsFormated = this.toManyDTO ? this.toManyDTO(documents.docs) : documents.docs
         // Reemplazar los documentos originales por los formateados
         documents.docs = documentsFormated
         return documents
     }
 
     async getQuery(opAgregations){
-        const usersGetted = await this.persistController.getDocumentsByQuery(opAgregations)
-        if( !usersGetted || usersGetted.length === 0){
-            return null
+        const documentsGetted = await this.persistController.getDocumentsByQuery(opAgregations)
+        if( !documentsGetted || documentsGetted.length === 0){
+            return []
         }else{
-            return this.toManyDTO?  this.toManyDTO(usersGetted) : usersGetted
+            return this.toManyDTO?  this.toManyDTO(documentsGetted) : documentsGetted
         }
     }
 
@@ -93,6 +92,10 @@ class BaseService{
 
     async delete(id){
         return await this.persistController.deleteDocument(id)
+    }
+
+    async deleteManyByFilter(filter){
+        return await this.persistController.deleteManyDocumentByFilter(filter)
     }
 }
 

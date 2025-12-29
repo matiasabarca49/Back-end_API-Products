@@ -6,12 +6,12 @@ const EErrors = require('../utils/errors/ErrorEnums.js')
 const ProductsService = require('../service/mongo/products.service.js')
 const productsService = new ProductsService()
 
+//Obtener todos los productos con paginación, filtro y ordenamiento para la store
 const getProducts = async (req,res) =>{
     try{
         const { limit = 10, page = 1, query, sort = 1 } = req.query;
         const products = await productsService.getPaginate(query ? {category: query} : {}, limit, page, { price: parseInt(sort)});
-        products
-            ? res.status(200).send({
+        res.status(200).send({
                 status: "success",
                 payload: products.docs,
                 totalPages: products.totalPages,
@@ -23,7 +23,6 @@ const getProducts = async (req,res) =>{
                 prevLink:products.hasPrevPage?`http://localhost:8080/api/products?page=${products.prevPage} ` : null,
                 nextLink:products.hasNextPage?`http://localhost:8080/api/products?page=${products.nextPage} `: null,
                 })
-            : res.status(500).send({status: "Error"})
     }
     catch(error){
         console.log(error)
@@ -31,17 +30,20 @@ const getProducts = async (req,res) =>{
     }
 }
 
-const getProductsByID = async (req,res) =>{
+const getById = async (req,res) =>{
     try{
         const {id} = req.params
         const productFound = await productsService.getById(id)
-        res.status(200).send({status: "Success", producto: productFound})
+        productFound
+         ? res.status(200).send({status: "Success", producto: productFound})
+         : res.status(404).send({status: "Error", reason: "El producto no encotrado"})
     }catch(error){
         console.log(error)
         res.status(500).json({success: false, status: "Error",error: "Error interno del servidor"});
     }
 }
 
+//Buscar productos por query de búsqueda
 const getSearchProducts =  async (req, res) =>{
     try{
         const { query } = req.query
@@ -54,17 +56,14 @@ const getSearchProducts =  async (req, res) =>{
 }
     
         const productsFounded = await productsService.getProductsSearch(query, req.session)
-        productsFounded
-            ? res.status(200).json({success: true, data: productsFounded})
-            : res.status(500).json({success: false, error: "Error interno del servidor",
-        });
+        res.status(200).json({success: true, data: productsFounded})
     }catch(error){
         console.log(error)
         res.status(500).json({success: false, status: "Error",error: "Error interno del servidor"});
     }
 }
 
-const getProductsByFilter = async(req, res) =>{
+const getByFilter = async(req, res) =>{
     try{
         const productsFound = await productsService.getManyByFilter(req.query)
         res.status(200).send({status: "Success", producto: productsFound})
@@ -74,12 +73,12 @@ const getProductsByFilter = async(req, res) =>{
     }
 }
 
-const getAdmProduct = async(req, res) => {
+//Obtener productos para el panel de administración (Solo Admin y Premium)
+const getManageableProducts = async(req, res) => {
     try{
-        const { limit = 10, page = 1, sort = 1 } = req.query;
-        const productsFound = await productsService.getManyProductsUser(req.session, limit,page,{ price: parseInt(sort)})
-        productsFound
-            ? res.status(200).send({
+        const { limit = 10, page = 1, sort = 1 , query} = req.query;
+        const productsFound = await productsService.getManageableProducts(req.session, query,limit,page,{ price: parseInt(sort)})
+        res.status(200).send({
                 status: "success",
                 payload: productsFound.docs,
                 totalPages: productsFound.totalPages,
@@ -89,16 +88,15 @@ const getAdmProduct = async(req, res) => {
                 hasPrevPage: productsFound.hasPrevPage,
                 hasNextPage: productsFound.hasNextPage,
                 prevLink:productsFound.hasPrevPage?`http://localhost:8080/api/products/admin?page=${productsFound.prevPage} ` : null,
-                nextLink:productsFound.hasNextPage?`http://localhost:8080/api/products/admin?page=${products.nextPage} `: null,
+                nextLink:productsFound.hasNextPage?`http://localhost:8080/api/products/admin?page=${productsFound.nextPage} `: null,
                 })
-            : res.status(500).send({status: "Error"})
     }catch(error){
         console.log(error)
         res.status(500).json({success: false, status: "Error",error: "Error interno del servidor"});
     }
 }
 
-const addProduct = async (req, res) =>{
+const create = async (req, res) =>{
     const {title, code, stock} = req.body
     try {
         if(!title || !code || !stock || stock < 1){
@@ -142,7 +140,7 @@ const addManyProducts = async (req, res) =>{
     }
 }
 
-const updateProduct = async (req,res)=>{
+const update = async (req,res)=>{
     try{
         const productUpdated = await productsService.update(req.params.id, req.body)
         productUpdated
@@ -172,12 +170,12 @@ const deleteProduct = async (req,res) => {
 
 module.exports = {
     getProducts,
-    getProductsByID,
+    getById,
     getSearchProducts,
-    getProductsByFilter,
-    getAdmProduct,
-    addProduct,
+    getByFilter,
+    getManageableProducts,
+    create,
     addManyProducts,
-    updateProduct,
+    update,
     deleteProduct
 }

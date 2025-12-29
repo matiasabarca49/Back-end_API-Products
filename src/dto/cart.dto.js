@@ -6,7 +6,7 @@ class CartDTO {
 
     static toResponse(cart) {
         return {
-            id: cart._id,
+            id: cart._id || cart.id,
             dateCart: cart.dateCart,
             products: cart.products
         }

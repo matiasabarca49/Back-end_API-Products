@@ -5,7 +5,7 @@ const usersService = new UsersService()
 * GET
 */
 
-const getUsers = async (req, res) =>{
+const getAll = async (req, res) =>{
     try{
         const usersGetted = await usersService.getAll()
         res.status(200).send({status: "Succesfull", users: usersGetted})
@@ -15,7 +15,7 @@ const getUsers = async (req, res) =>{
     }
 }
 
-const getUserByFilter = async (req, res) =>{
+const getByFilter = async (req, res) =>{
     try{
         const filter = req.query
         const userGetted = await usersService.getByFilter(filter)
@@ -47,9 +47,9 @@ const getUserQuery = async(req, res) =>{
     }
 }
 
-const changeRol = async (req, res) =>{
+const updateRol = async (req, res) =>{
     try{
-        const userUpdated = await usersService.putChangeRolFromUser(req.params.uid)
+        const userUpdated = await usersService.updateRol(req.params.uid)
         userUpdated.status
             ? res.status(201).send({status: "Succesfull", userUpdated: userUpdated.userUpdated})
             : res.status(500).send({status: "ERROR", reason: userUpdated.reason ||"Los Administradores no pueden cambiar de rol"})
@@ -62,7 +62,7 @@ const changeRol = async (req, res) =>{
 * POST
 */
 
-const createUser = async (req, res) =>{
+const create = async (req, res) =>{
     try{
         const userCreated = await usersService.create(req.body)
         res.status(201).send({status: "Succesfull", user: userCreated})
@@ -78,7 +78,7 @@ const createUser = async (req, res) =>{
 * PUT
 */
 
-const updateUser = async (req, res) =>{
+const update = async (req, res) =>{
     try{
         const { uid } = req.params
         const userUpdated = await usersService.update(uid, req.body)
@@ -89,9 +89,9 @@ const updateUser = async (req, res) =>{
     }
 }
 
-const addProductToCartFromUser = async (req,res) =>{
+const addProductToCart = async (req,res) =>{
     try{
-        const datedUser = await usersService.postProductToCart(req.session.passport.user, req.body)
+        const datedUser = await usersService.addProductToCart(req.session.passport.user, req.body)
         if (datedUser){
             //Para que se actualice el usuario sin tener que salir y volver entrar a la cuenta
             req.session.cart = datedUser.cart
@@ -106,7 +106,7 @@ const addProductToCartFromUser = async (req,res) =>{
     }
 }
 
-const addDocumentsInUser = async (req, res) => {
+const addDocument = async (req, res) => {
     try{
         const isValid = ["Identificacion", "Comprobante de domicilio", "Comprobante de estado de cuenta"].includes(req.file.originalname.split(".")[0])
         if(isValid){
@@ -114,7 +114,7 @@ const addDocumentsInUser = async (req, res) => {
                 name:req.file.originalname,
                 reference: req.file.path
             }
-            const userUpdated = await usersService.postDocument(req.params.uid, document)
+            const userUpdated = await usersService.addDocument(req.params.uid, document)
             res.status(201).send({status: "Charged", file: userUpdated.documents[userUpdated.documents.length - 1]})
         }
         else{
@@ -129,7 +129,7 @@ const addDocumentsInUser = async (req, res) => {
 /**
 * DELETE
 */
-const delUser = async (req, res) =>{
+const deleteUser = async (req, res) =>{
     try{
         const userDeleted = await usersService.delete(req.params.id)
         userDeleted 
@@ -141,9 +141,9 @@ const delUser = async (req, res) =>{
     }
 }
 
-const delUserForConnectionn = async (req, res) =>{
+const deleteInactiveUser = async (req, res) =>{
     try{
-        const usersUpdated = await usersService.delUserForTimeDisconnection()
+        const usersUpdated = await usersService.deleteInactiveUser()
         res.send(usersUpdated)
     }catch(error){
         console.log(error)
@@ -151,13 +151,12 @@ const delUserForConnectionn = async (req, res) =>{
     }
 }
 
-const delProductFromUser = async(req, res)=>{
+const removeProductFromCart = async(req, res)=>{
     try{
-        const cartUpdated = await usersService.delProductFromUser(req.session.passport.user, req.params.id)
-        console.log("Usuario Actualizado: ", cartUpdated)
+        const cartUpdated = await usersService.removeProductFromCart(req.session.passport.user, req.params.id)
         //Actualiza el cart del usuario
         req.session.cart = cartUpdated
-        userUpdated
+        cartUpdated
             ? res.send({status: "Successful", cart: cartUpdated})
             : res.status(500).send({status: "Error"})
     }catch(error){
@@ -167,14 +166,14 @@ const delProductFromUser = async(req, res)=>{
 }
 
 module.exports = {
-    getUsers,
-    getUserByFilter,
-    changeRol,
-    createUser,
-    addProductToCartFromUser,
-    addDocumentsInUser,
-    updateUser,
-    delUser,
-    delUserForConnectionn,
-    delProductFromUser
+    getAll,
+    getByFilter,
+    updateRol,
+    create,
+    addProductToCart,
+    addDocument,
+    update,
+    deleteUser,
+    deleteInactiveUser,
+    removeProductFromCart
 }

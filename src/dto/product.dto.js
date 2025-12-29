@@ -13,7 +13,7 @@ class ProductDTO {
 
     static toResponse(product){
         return {
-            id: product._id,
+            id: product._id || product.id,
             title: product.title,
             description: product.description,
             code: product.code,

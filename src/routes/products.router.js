@@ -1,6 +1,6 @@
 const express = require('express')
 //controllers
-const {getProducts, getProductsByID, getSearchProducts, addProduct, addManyProducts, updateProduct, deleteProduct, getProductsByFilter, getAdmProduct} = require('../controllers/products.controller.js')
+const {getProducts, getById, getSearchProducts, create, addManyProducts, update, deleteProduct, getByFilter, getManageableProducts} = require('../controllers/products.controller.js')
 //middleware
 const { checkPerAddProduct, checkPermAdminAndPremium } = require('../middlewares/permissions.middleware.js')
 
@@ -14,21 +14,21 @@ const router = new Router()
 * GET
 **/
 router.get("/", getProducts)
-router.get("/filter", getProductsByFilter)
-router.get("/admin", checkPermAdminAndPremium ,getAdmProduct)
+router.get("/filter", getByFilter)
+router.get("/admin", checkPermAdminAndPremium ,getManageableProducts)
 router.get("/search", getSearchProducts)
-router.get("/:id", getProductsByID)
+router.get("/:id", getById)
 
 /**
 * POST
 **/
-router.post("/", checkPerAddProduct,addProduct)
+router.post("/", checkPerAddProduct,create)
 router.post("/manyproducts", checkPerAddProduct,addManyProducts)
 
 /**
 * PUT
 */
-router.put("/:id", checkPerAddProduct,updateProduct)
+router.put("/:id", checkPerAddProduct,update)
 
 /**
 * DELETE

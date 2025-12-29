@@ -96,7 +96,7 @@ class PersistController{
     }
 
     async deleteDocument(ID){
-        const documentToDelete = await this.getDocumentsByID(ID)
+        const documentToDelete = await this.getDocumentByID(ID)
         let documentDeleted 
         await this.model.deleteOne({_id: ID})
             .then( dt =>{
@@ -110,7 +110,7 @@ class PersistController{
     }
     
     async deleteDocumentByFilter(filter){
-        const documentToDelete = await this.getDocumentsByFilter(filter)
+        const documentToDelete = await this.getDocumentByFilter(filter)
         let documentDeleted 
         await this.model.deleteOne(filter)
             .then( dt =>{
@@ -134,76 +134,6 @@ class PersistController{
                 documentsDeleted= false
             } )
         return documentsDeleted
-    }
-
-    /**
-     * Métodos para el cart  
-     **/ 
-
-    //Funcion que agrega un producto en un carrito que ya se encuentre en la DB
-    async addProductToCartInDB(IDCart, IDProduct, quantty){
-        //Obtenemos el carrito al que se quiere agregar productos
-        const cart = await this.getDocumentsByID(IDCart)
-        //Verificamos que el cart exista
-        if (cart){
-            //el "item.product._id.toString()" es debido al formato de id que entrega la DB
-            const productFound = cart.products.find( item => item.product._id.toString() === IDProduct )
-            //Se incrementa la cantidad si existe sino se agrega el producto al array
-            productFound
-                //Si la funcion recibe el parametro "quantty" endpoint(PUT), se modifica la cantidad por lo recibido si no se recibe endpoint(post), se  incrementa.
-                ? quantty? productFound.quantity = quantty : productFound.quantity++
-                : cart.products = [...cart.products, {product: IDProduct, quantity: 1}]
-           //Se actualiza el cart con el metodo creado anteriormente. Este metodo ya no devuelve el documeto actualizado
-           const cartUpdated = await this.updateDocument(IDCart, {products: cart.products})
-           return cartUpdated
-        }
-        else{
-            return false
-        }
-    }
-
-    async updateCartInDB(IDCart, newCart){
-        const cart = await this.getDocumentsByID(IDCart)
-        if (cart){
-            const cartUpdated = await this.updateDocument(IDCart, {products: newCart})
-            return cartUpdated
-        }
-        else{
-            return false
-        }
-    }
-
-    async deleteProductCartInDB(IDCart, IDProduct){
-        const cart = await this.getDocumentsByID(IDCart)
-        if (cart){
-            let cartUpdated
-            const productFound = cart.products.find(  item => item.product._id.toString() === IDProduct )
-            productFound
-                ? cart.products = cart.products.filter( item => item.product._id.toString() !== IDProduct)  
-                : cartUpdated = false
-            const cartOnlyID= cart.products.map(  item => {
-                return {
-                    product: item.product._id.toString(),
-                    quantity: item.quantity
-                }
-            }  )
-            cartUpdated = await this.updateCartInDB(IDCart, cartOnlyID) 
-            return cartUpdated
-        }
-        else{
-            return false
-        }  
-    }
-
-    async deleteFullCartInDB(IDCart){
-        const cart = await this.getDocumentsByID(IDCart)
-        if(cart){
-           const cartUpdated = await this.updateCartInDB(IDCart, []) 
-            return cartUpdated
-        }
-        else{
-            return false
-        }
     }
 }
 

@@ -30,7 +30,7 @@ const addCart = async (req, res) =>{
 
 const addProductInCart = async (req,res) => {
     try{
-        const productAdded = await cartService.postProductInCart(req.params.cid, req.params.pid)
+        const productAdded = await cartService.addProductInCart(req.params.cid, req.params.pid)
         productAdded
             ?res.status(201).send({status: "Success", product: productAdded})
             :res.status(404).send({status: "Error", reason: "El carrito no existe"})
@@ -60,7 +60,7 @@ const getPurchase = async (req, res) =>{
 const updateFullCartInDB = async (req, res) => {
     try{
         const newCart = req.body
-        const cartUpdated = await cartService.putFullCartInDB(req.params.cid, newCart)
+        const cartUpdated = await cartService.updateFullCartInDB(req.params.cid, newCart)
         cartUpdated
             ?res.status(200).send( {status: "Success", cartUpdated: cartUpdated})
             :res.status(404).send({ status: "Error", reason: "El carrito no existe" })
@@ -72,7 +72,7 @@ const updateFullCartInDB = async (req, res) => {
 
 const updateProductCartInDB = async (req,res) => {
     try{
-        const productAdded = await cartService.putProductCartInDB(req.params.cid, req.params.pid, req.body.quantity)
+        const productAdded = await cartService.addProductInCart(req.params.cid, req.params.pid, req.body.quantity)
         productAdded
             ?res.status(200).send({status: "Success", product: productAdded})
             :res.status(404).send({status: "Error", reason: "El carrito no existe o el producto no existe"})

@@ -3,7 +3,7 @@ const usersService = new UsersService()
 
 const getLogout = async (req, res) =>{
     try{
-        if(req.session.passport?.user) await usersService.putConnectionUser(req.session.passport.user)
+        if(req.session.passport?.user) await usersService.updateLastConnection(req.session.passport.user)
         req.session.destroy( async err =>{
             if(!err) res.redirect("/users/login")
             else res.status(500).send({status: "ERROR"})

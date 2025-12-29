@@ -47,7 +47,7 @@ const initializePassport = () =>{
                     const checkPassword = isValidPassword(userFound, userData.password)
                     checkPassword 
                         //Si la contraseña es correcta, se actualiza la fecha de ultima conexion
-                        ? done(null, await usersService.putConnectionUser(userFound._id.toString()))
+                        ? done(null, await usersService.updateLastConnection(userFound._id.toString()))
                         //Si no existe, devolvemos un error
                         : done(null, false, {status: "ERROR", reason: "Contraseña incorrecta"})
                 } 
