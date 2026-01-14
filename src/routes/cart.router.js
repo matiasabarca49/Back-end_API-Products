@@ -15,7 +15,7 @@ const { validateId } = require('../middlewares/validations.middleware.js')
 //Obtener el carritos por ID
 router.get("/:cid", checkPerCart, validateId('cid'), controller.getCartByID )
 //Realiza la compra de los productos almacenados en el carrito del usuario
-router.get("/:cid/purchase", checkPerAdmCart, validateId('cid'), controller.getPurchase)
+router.get("/:cid/purchase", checkPerAdmCart, validateId('cid'), controller.completeCartPurchase)
 
 /** 
  *  POST

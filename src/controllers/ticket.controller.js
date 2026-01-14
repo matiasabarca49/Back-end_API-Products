@@ -1,10 +1,10 @@
-const TicketService = require('../service/mongo/ticket.service')
+const TicketService = require('../service/ticket.service')
 const ticketService = new TicketService()
 
 const getTicket = async (req, res)=>{
     try{
         const { code, cart } = req.query
-        const ticket = await ticketService.getTicket(code, cart)
+        const ticket = await ticketService.findTicket(code, cart)
         if(ticket){
             ticket.user = { 
                 name :req.session.user,
@@ -25,7 +25,7 @@ const getTicket = async (req, res)=>{
 const getTicketByIDCart = async (req,res) =>{
     try{
         const {idCart} = req.query
-        const ticketGetted = await ticketService.getTicketByIDCart(idCart)
+        const ticketGetted = await ticketService.findTicketByIDCart(idCart)
         ticketGetted
             ? res.status(200).send({status:"Success", ticket: ticketGetted})
             : res.status(500).send({status: "ERROR"})

@@ -1,9 +1,9 @@
-const CartService = require('../service/mongo/cart.service')
+const CartService = require('../service/cart.service')
 const cartService = new CartService()
 
 const getCartByID = async (req,res)=>{
     try{
-        const cart = await cartService.getById(req.params.cid)
+        const cart = await cartService.findById(req.params.cid)
         if (cart){
             res.status(200).send({status:"Success", cart: cart})
         } else{
@@ -40,11 +40,11 @@ const addProductInCart = async (req,res) => {
     }
 }
 
-const getPurchase = async (req, res) =>{
+const completeCartPurchase = async (req, res) =>{
     try{
         const idCart = req.params.cid
         const idUser = req.session.passport.user
-        const purchaseState = await cartService.getPurchase(idCart, idUser )
+        const purchaseState = await cartService.completeCartPurchase(idCart, idUser )
         req.session.purchases = purchaseState.purchases
         req.session.cart = purchaseState.cart
         purchaseState.purchase
@@ -113,7 +113,7 @@ module.exports = {
     getCartByID,
     addCart,
     addProductInCart,
-    getPurchase,
+    completeCartPurchase,
     updateFullCartInDB,
     updateProductCartInDB,
     deleteProductInCart,
