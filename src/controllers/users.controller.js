@@ -1,4 +1,5 @@
-const UsersService = require('../service/mongo/users.service.js')
+//const UsersService = require('../service/mongo/users.service.js')
+const UsersService = require('../service/users.service.js')
 const usersService = new UsersService()
 
 /**
@@ -7,7 +8,7 @@ const usersService = new UsersService()
 
 const getAll = async (req, res) =>{
     try{
-        const usersGetted = await usersService.getAll()
+        const usersGetted = await usersService.findAll()
         res.status(200).send({status: "Succesfull", users: usersGetted})
     }catch(error){
         console.log(error)
@@ -18,7 +19,7 @@ const getAll = async (req, res) =>{
 const getByFilter = async (req, res) =>{
     try{
         const filter = req.query
-        const userGetted = await usersService.getByFilter(filter)
+        const userGetted = await usersService.findByFilter(filter)
         res.status(200).send({status: "Succesfull", user: userGetted})
     }catch(error){
         console.log(error)
@@ -39,7 +40,7 @@ const getUserQuery = async(req, res) =>{
                 { _id: query.match(/^[0-9a-fA-F]{24}$/) ? query : null }, // si q parece un ObjectId válido
             ]
         }
-        const gettUser = await usersService.getQuery(opAgregations)
+        const gettUser = await usersService.findByQuery(opAgregations)
         res.status(200).json({status: "Succesfull", user: gettedUser})
     }catch(error){
         console.log(error)

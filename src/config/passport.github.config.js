@@ -1,5 +1,5 @@
 const passport = require('passport')
-const UsersService = require('../service/mongo/users.service.js')
+const UsersService = require('../service/users.service.js')
 const { createHash } = require('../utils/utils.js')
 const { Strategy } = require('passport-github2')
 const githubStrategy = Strategy
@@ -40,7 +40,7 @@ if(validateEnvVars('github')){
             if (!emailUser){
               done("No se pudo validar el usuario")
             }
-            const userFound = await usersService.getByFilter({email: emailUser.email})
+            const userFound = await usersService.findByFilter({email: emailUser.email})
             //Si el usuario no se encontro en la DB, creamos uno nuevo
             if (!userFound){
                 //Creamos el usuario formateado con DTO

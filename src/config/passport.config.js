@@ -2,7 +2,7 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const { isValidPassword } = require('../utils/utils.js')
 //Users Service
-const UsersService = require('../service/mongo/users.service.js')
+const UsersService = require('../service/users.service.js')
 const usersService = new UsersService()
 
 const initializePassport = () =>{
@@ -14,7 +14,7 @@ const initializePassport = () =>{
             if(!name || !lastName || !age || !email || !req.body.password) done({status: "ERROR", reason: "Campos erronéos o faltantes"})
             try {
                 //Verificamos si el usuario existe en la DB 
-                const userFound = await usersService.getRawByFilter({email: email})
+                const userFound = await usersService.findRawByFilter({email: email})
                 //En caso de que el usuario exista. Frenamos la operacion, redirigimos e indicamos que ya existe
                 if(userFound){
                     done(null, false)
@@ -41,7 +41,7 @@ const initializePassport = () =>{
             try {
                 //Verificamos si el usuario existe en la DB
                 const userData = req.body
-                const userFound = await usersService.getRawByFilter({email: userData.email})
+                const userFound = await usersService.findRawByFilter({email: userData.email})
                 //Si existe, verificamos que la "password" proviniente del body, sea correcta.
                 if(userFound){
                     const checkPassword = isValidPassword(userFound, userData.password)
@@ -65,7 +65,7 @@ const initializePassport = () =>{
         done(null, user.id)
     }),
     passport.deserializeUser(async (id, done)=>{
-        const user = await usersService.getById(id)
+        const user = await usersService.findById(id)
         done(null, user)
     })
 }
