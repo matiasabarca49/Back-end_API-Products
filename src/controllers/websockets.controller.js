@@ -4,9 +4,9 @@ const CustomError = require('../utils/errors/customError')
 const { generateProductErrorInfo } = require('../utils/errors/messageCreater.js')
 const EErrors = require('../utils/errors/ErrorEnums.js')
 //Services
-const ProductsService = require('../service/mongo/products.service.js')
-const MessageService = require('../service/mongo/message.service.js')
-const UsersService = require('../service/mongo/users.service.js')
+const ProductsService = require('../service/products.service.js')
+const MessageService = require('../service/message.service.js')
+const UsersService = require('../service/users.service.js')
 
 const productsService = new ProductsService()
 const messageService = new MessageService()
@@ -19,7 +19,7 @@ const webSocket = (server) => {
             //====== Productos ==============
             //enviar al cliente los productos
             console.log("Cliente Conectado al API WebSocket")
-            socket.emit('sendProducts', await productsService.getAll())
+            socket.emit('sendProducts', await productsService.findAll())
             //Agregar producto nuevo a base de datos
             socket.on('newProductToBase', async (data) =>{
                 //Constrolando de errores
@@ -37,7 +37,7 @@ const webSocket = (server) => {
                     }
                     //Verificar que el owner sea un mail valido
                     if(owner !== "Admin") {
-                        const userFound = await usersService.getByFilter({email: owner})
+                        const userFound = await usersService.findByFilter({email: owner})
                         if(!userFound || userFound.rol === "User"){
                             const customError = new CustomError()
                             customError.createError({
@@ -50,16 +50,16 @@ const webSocket = (server) => {
                     }
                     //En caso de que no falten campos y el owner sea válido se procede a agregar el producto
                     await productsService.create(data)
-                    io.sockets.emit('sendProducts',  await productsService.getAll())
+                    io.sockets.emit('sendProducts',  await productsService.findAll())
                 } catch (error) {
                     console.log(error)
                 }
             })
             //====== Mensajes ===============
-            socket.emit("chats", await messageService.getAll())
+            socket.emit("chats", await messageService.findAll())
             socket.on('msg',async (data)=>{
                 await messageService.create(data)
-                io.sockets.emit("chats", await messageService.getAll())
+                io.sockets.emit("chats", await messageService.findAll())
             })
         } )
     }

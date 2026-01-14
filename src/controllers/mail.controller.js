@@ -1,5 +1,5 @@
 const { searchSecret, generateFormatEmail, generateLink } = require('../utils/utils.js')
-const UsersService = require('../service/mongo/users.service.js')
+const UsersService = require('../service/users.service.js')
 const usersService = new UsersService()
 const { transporter } = require('../config/config.js')
 
@@ -38,7 +38,7 @@ const sendMailPurchase = (req, res)=>{
 const sendMailRecoverPass = async (req, res)=>{
     const userMail = req.body.mail
     try {
-        const userFound = await usersService.getByFilter({email: userMail})
+        const userFound = await usersService.findByFilter({email: userMail})
         if (userFound){
             let result = transporter.sendMail(generateLink(userFound), (error, info)=>{
                 if(error){
@@ -73,7 +73,7 @@ const updatePassword =  async (req, res)=>{
         }else{
             const passwordChanged = await usersService.updatePassword(req.query.email, req.body.password)
             if (passwordChanged.status){
-                const userFound = await usersService.getByFilter({email: req.query.email})
+                const userFound = await usersService.findByFilter({email: req.query.email})
                 let result = transporter.sendMail({
                     from: `Tienda de Productos  <${process.env.GMAIL_CREDENTIAL_USER}>`,
                     to: `${userFound.email}`,

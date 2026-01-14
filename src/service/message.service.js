@@ -1,12 +1,12 @@
-const PersistController = require('../../dao/mongo/persistController.js')
-const MessageDTO = require('../../dto/message.dto.js')
-const persistController = new PersistController()
-const Message = require('../../model/messages.model.js') 
+const MessageDTO = require('../dto/message.dto.js')
+const Message = require('../model/messages.model.js') 
 const BaseService = require('./base.service.js')
+const MongoRepository = require('../repositories/implementations/mongoRepository.js')
 
 class MessageService extends BaseService {
     constructor(){
-        super(Message)
+        const mongoRepository = new MongoRepository(Message)
+        super(mongoRepository)
     }
 
     /**

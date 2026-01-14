@@ -1,4 +1,4 @@
-const UsersService = require('../service/mongo/users.service.js')
+const UsersService = require('../service/users.service.js')
 const usersService = new UsersService()
 
 const getLogout = async (req, res) =>{
