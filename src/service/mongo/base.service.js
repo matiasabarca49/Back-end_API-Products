@@ -18,9 +18,9 @@ class BaseService{
     //Uso interno
     async getRawByFilter(filter){
         const document = await this.persistController.getDocumentByFilter(filter)
-        if(!document || document.length === 0) return []
+        if(Array.isArray(document)) return document.length > 0 ? document[0] : null 
         // Buscar si la clase hija definió toDTO
-        return document
+        return document || null
     }
 
     async getByFilter(filter){

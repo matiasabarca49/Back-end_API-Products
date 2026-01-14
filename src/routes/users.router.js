@@ -7,6 +7,7 @@ const uploader = require('../utils/multer.js')
 const { getAll, getByFilter, updateRol, addProductToCart, addDocument, deleteUser, deleteInactiveUser, removeProductFromCart, create, update } = require('../controllers/users.controller.js')
 //middleware
 const {checkPerAdmCart, CheckPerRol, checkPermAdmin} = require('../middlewares/permissions.middleware.js')
+const { validateCreateUser, validateUpdateUser, validateId } = require('../middlewares/validations.middleware.js')
 
 
 /**
@@ -18,7 +19,7 @@ router.get("/filter", checkPermAdmin, getByFilter)
 /**
 *   POST 
 **/
-router.post('/', create)
+router.post('/', validateCreateUser, create)
 router.post( '/addcart', checkPerAdmCart, addProductToCart)
 router.post( '/:uid/documents',uploader.single('file'),addDocument)
     
@@ -26,12 +27,12 @@ router.post( '/:uid/documents',uploader.single('file'),addDocument)
 *   PUT 
 **/
 router.put('/premium/:uid', CheckPerRol, updateRol)
-router.put('/:uid', checkPermAdmin, update)
+router.put('/:uid', checkPermAdmin, validateUpdateUser, update)
 
 /**
 *   DELETE
 **/
-router.delete("/:id", CheckPerRol, deleteUser)
+router.delete("/:id", CheckPerRol, validateId('id'), deleteUser)
 router.delete("/delete/withoutconnection", CheckPerRol, deleteInactiveUser)
 router.delete("/delete/product/:id", removeProductFromCart)
 

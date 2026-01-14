@@ -14,7 +14,7 @@ const initializePassport = () =>{
             if(!name || !lastName || !age || !email || !req.body.password) done({status: "ERROR", reason: "Campos erronéos o faltantes"})
             try {
                 //Verificamos si el usuario existe en la DB 
-                const userFound = await usersService.getByFilter({email: email})
+                const userFound = await usersService.getRawByFilter({email: email})
                 //En caso de que el usuario exista. Frenamos la operacion, redirigimos e indicamos que ya existe
                 if(userFound){
                     done(null, false)
