@@ -3,14 +3,14 @@ const CustomError = require('../utils/errors/customError.js')
 const { generateProductErrorInfo } = require('../utils/errors/messageCreater.js')
 const EErrors = require('../utils/errors/ErrorEnums.js')
 //Administrador de productos
-const ProductsService = require('../service/mongo/products.service.js')
+const ProductsService = require('../service/products.service.js')
 const productsService = new ProductsService()
 
 //Obtener todos los productos con paginación, filtro y ordenamiento para la store
 const getProducts = async (req,res) =>{
     try{
         const { limit = 10, page = 1, query, sort = 1 } = req.query;
-        const products = await productsService.getPaginate(query ? {category: query} : {}, limit, page, { price: parseInt(sort)});
+        const products = await productsService.findPaginate(query ? {category: query} : {}, limit, page, { price: parseInt(sort)});
         res.status(200).send({
                 status: "success",
                 payload: products.docs,
@@ -33,7 +33,7 @@ const getProducts = async (req,res) =>{
 const getById = async (req,res) =>{
     try{
         const {id} = req.params
-        const productFound = await productsService.getById(id)
+        const productFound = await productsService.findById(id)
         productFound
          ? res.status(200).send({status: "Success", producto: productFound})
          : res.status(404).send({status: "Error", reason: "El producto no encotrado"})
@@ -55,7 +55,7 @@ const getSearchProducts =  async (req, res) =>{
         });
 }
     
-        const productsFounded = await productsService.getProductsSearch(query, req.session)
+        const productsFounded = await productsService.findProductsSearch(query, req.session)
         res.status(200).json({success: true, data: productsFounded})
     }catch(error){
         console.log(error)
@@ -65,7 +65,7 @@ const getSearchProducts =  async (req, res) =>{
 
 const getByFilter = async(req, res) =>{
     try{
-        const productsFound = await productsService.getManyByFilter(req.query)
+        const productsFound = await productsService.findManyByFilter(req.query)
         res.status(200).send({status: "Success", producto: productsFound})
     }catch(error){
         console.log(error)
@@ -77,7 +77,7 @@ const getByFilter = async(req, res) =>{
 const getManageableProducts = async(req, res) => {
     try{
         const { limit = 10, page = 1, sort = 1 , query} = req.query;
-        const productsFound = await productsService.getManageableProducts(req.session, query,limit,page,{ price: parseInt(sort)})
+        const productsFound = await productsService.findManageableProducts(req.session, query,limit,page,{ price: parseInt(sort)})
         res.status(200).send({
                 status: "success",
                 payload: productsFound.docs,
