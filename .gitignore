@@ -1,5 +1,9 @@
 #Archivos o carpetas ignorados
 
+#Datos
+/data
+/data/*.json
+
 #Modulos
 /node_modules
 
