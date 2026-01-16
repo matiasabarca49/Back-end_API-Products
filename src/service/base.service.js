@@ -26,7 +26,7 @@ class BaseService{
     async findByFilter(filter){
         //Repository
         const document = await this.repository.findByFilter(filter)
-        if(!document || document.length === 0) return []
+        if(!document || document.length === 0) return null
         // Buscar si la clase hija definió toDTO
         return this.toDTO ? this.toDTO(document) : document
     }

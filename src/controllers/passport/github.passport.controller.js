@@ -6,7 +6,7 @@ function getGithubCallback(req, res) {
     req.session.age = userFound.age || " "
     req.session.rol = userFound.rol
     req.session.carts = userFound.carts
-    res.redirect("/products")
+    res.redirect("/")
   }
 
 module.exports = {
